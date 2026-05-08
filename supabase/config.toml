@@ -1,0 +1,48 @@
+project_id = "99dashboard-local"
+
+[api]
+enabled = true
+port = 55421
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 55422
+shadow_port = 55420
+major_version = 15
+
+[db.pooler]
+enabled = false
+port = 55429
+pool_mode = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+
+[realtime]
+enabled = true
+
+[studio]
+enabled = true
+port = 55423
+api_url = "http://127.0.0.1:55421"
+
+[inbucket]
+enabled = true
+port = 55424
+smtp_port = 55425
+pop3_port = 55426
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:3000"
+additional_redirect_urls = ["http://127.0.0.1:3000"]
+jwt_expiry = 3600
+enable_signup = false
+
+[edge_runtime]
+enabled = false
