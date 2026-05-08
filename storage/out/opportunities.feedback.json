@@ -1,0 +1,2263 @@
+{
+  "generated_from": "/home/abel13/.openclaw/workspace/softwarehouse/out/opportunities.json",
+  "count": 20,
+  "items": [
+    {
+      "source": "99freelas",
+      "source_project_id": "750847",
+      "title": "Instalação e configuração do GeneXus 17 em ambiente desktop",
+      "project_url": "https://www.99freelas.com.br/project/instalacao-e-configuracao-do-genexus-17-em-ambiente-desktop-750847",
+      "category": "Desenvolvimento Desktop",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Preciso de um profissional para instalar e configurar o sistema GeneXus 17 em ambiente desktop, utilizando banco de dados SQL. O serviço inclui: - Instalaç...",
+      "received_at_raw": "Thu, 07 May 2026 18:05:33 +0000",
+      "email_subject": "Novo Projeto: Instalação e configuração do GeneXus 17 em ambiente desktop",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Instalação e configuração do GeneXus 17 em ambiente desktop.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "desktop",
+          "backend",
+          "data_analysis"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 30,
+        "commercial_score": 21,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 9,
+        "final_score": 83,
+        "recommended_action": "high_priority",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Preciso de um profissional para instalar e configurar o sistema GeneXus 17 em ambiente desktop, utilizando banco de dados SQL.\nO serviço inclui:\n- Instalação completa do GeneXus 17;\n- Configuração do ambiente desktop;\n- Integração e configuração do banco de dados SQL;\n- Verificação de funcionamento e acesso ao sistema;\n- Possível suporte inicial para ajustes pós-instalação.\nO sistema será utilizado por cliente final, então preciso de alguém com experiência em GeneXus e configuração de banco de dados SQL.\nHabilidades desejadas:\nGenexus\nMicrosoft SQL Server",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Desktop",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "7",
+        "interested": "9",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 14:55",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 20h44m55s.",
+        "exclusive_remaining_seconds": 74695,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T17:56:48-03:00",
+        "exclusive_until_estimated": "2026-05-08T14:41:43-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 2000,
+        "price_suggested": 5500,
+        "price_max": 9000,
+        "effort_estimate": "pequeno/médio",
+        "delivery_estimate": "2 a 8 dias úteis",
+        "pricing_note": "Projeto desktop/configuração: bom candidato se acesso remoto, licenças e requisitos estiverem claros. Cálculo: 12–40h × R$ 130/h + 25% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 4.000,00. Configuração/desktop: inclui acesso remoto, instalação, validação e suporte curto.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 7,
+          "interested": 9,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "O ambiente será configurado localmente ou via acesso remoto?",
+          "As licenças/instaladores do GeneXus e banco SQL já estão disponíveis?",
+          "Qual versão do Windows/servidor e SQL Server será usada?",
+          "Será necessário configurar apenas uma máquina ou mais de um ambiente?",
+          "Você precisa de documentação ou suporte pós-instalação?"
+        ],
+        "proposal_draft": "Olá! Vi o projeto \"Instalação e configuração do GeneXus 17 em ambiente desktop\" e acredito que posso ajudar.\n\nMinha sugestão é começarmos com instalação, configuração e validação do ambiente desktop com banco SQL, alinhando primeiro os requisitos principais e os limites da entrega. Para esse tipo de configuração desktop, eu costumo trabalhar com uma etapa inicial bem objetiva: entendimento do fluxo, definição do escopo, desenvolvimento, validação e ajustes finais.\n\nPrazo estimado: 3 a 8 dias úteis.\nInvestimento sugerido para referência: a partir de R$ 3.500,00, podendo ajustar conforme detalhes finais do escopo.\n\nAntes de fechar a proposta, eu gostaria de confirmar alguns pontos para evitar orçamento errado e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 2000,
+          "net_target_suggested": 4000,
+          "net_target_max": 7500,
+          "hours_min": 12,
+          "hours_max": 40,
+          "hours_avg": 26.0,
+          "risk_pct": 0.25,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Configuração/desktop: inclui acesso remoto, instalação, validação e suporte curto."
+        },
+        "price_suggested_effective": 5500
+      },
+      "abel_feedback": {
+        "status": "discarded",
+        "status_label": "Descartado por Abel",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel descartou: plataforma GeneXus complicada para uma tarefa desse nível; não tem esse conhecimento",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T18:07:50"
+      },
+      "effective_status": "discarded",
+      "effective_status_label": "Descartado por Abel"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750934",
+      "title": "Aplicativo de registros com Power Apps para Pacote Office",
+      "project_url": "https://www.99freelas.com.br/project/aplicativo-de-registros-com-power-apps-para-pacote-office-750934",
+      "category": "Desenvolvimento Mobile",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Preciso desenvolver um aplicativo usando soluções do Pacote Office para facilitar e automatizar registros. O aplicativo deve ser desenvolvido com Power Apps ...",
+      "received_at_raw": "Thu, 07 May 2026 23:03:33 +0000",
+      "email_subject": "Novo Projeto: Aplicativo de registros com Power Apps para Pacote Office",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Aplicativo de registros com Power Apps para Pacote Office.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "mobile_multiplatform",
+          "data_analysis"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 30,
+        "commercial_score": 21,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 9,
+        "final_score": 83,
+        "recommended_action": "high_priority",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Preciso desenvolver um aplicativo usando soluções do Pacote Office para facilitar e automatizar registros. O aplicativo deve ser desenvolvido com Power Apps e integrado a uma planilha do Pacote Office, de forma que os registros sejam gravados e consultados pela planilha e que seja possível emitir relatórios a partir desses dados.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Mobile",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "10",
+        "interested": "11",
+        "min_value": "R$ 50,00",
+        "last_view": null,
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 22h10m45s.",
+        "exclusive_remaining_seconds": 79845,
+        "status_flags": [],
+        "page_read_at": "2026-05-07T21:45:31-03:00",
+        "exclusive_until_estimated": "2026-05-08T19:56:16-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 5000,
+        "price_suggested": 9000,
+        "price_max": 14500,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "4 a 12 dias úteis",
+        "pricing_note": "Aplicativo/integracão operacional: bom candidato, mas precisa validar ERP, tecnologia atual, acesso ao código e ambiente de testes. Cálculo: 24–60h × R$ 130/h + 35% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 7.500,00. Power Apps/Power Platform: escopo tende a ser menor, mas há risco de curva e licenças.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 10,
+          "interested": 11,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "O aplicativo existente tem código-fonte disponível e em qual tecnologia foi feito?",
+          "Como é feita hoje a integração com o ERP: banco direto, API, arquivo ou outro método?",
+          "O ERP possui documentação técnica ou ambiente de homologação?",
+          "O objetivo é corrigir o app atual ou criar uma nova versão do zero?",
+          "Quais fluxos precisam funcionar no MVP: comanda, pedido, pagamento, caixa e sincronização?"
+        ],
+        "proposal_draft": "Olá! Vi o projeto \"Aplicativo de registros com Power Apps para Pacote Office\" e acredito que posso ajudar.\n\nMinha sugestão é começarmos com uma análise técnica inicial seguida de correção ou MVP do app de autoatendimento integrado ao ERP, alinhando primeiro os requisitos principais e os limites da entrega. Para esse tipo de aplicativo/integracão, eu costumo trabalhar com uma etapa inicial bem objetiva: entendimento do fluxo, definição do escopo, desenvolvimento, validação e ajustes finais.\n\nPrazo estimado: 20 a 40 dias úteis.\nInvestimento sugerido para referência: a partir de R$ 12.000,00, podendo ajustar conforme detalhes finais do escopo.\n\nAntes de fechar a proposta, eu gostaria de confirmar alguns pontos para evitar orçamento errado e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 4000,
+          "net_target_suggested": 7500,
+          "net_target_max": 11500,
+          "hours_min": 24,
+          "hours_max": 60,
+          "hours_avg": 42.0,
+          "risk_pct": 0.35,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Power Apps/Power Platform: escopo tende a ser menor, mas há risco de curva e licenças."
+        },
+        "price_suggested_effective": 9000
+      },
+      "abel_feedback": {
+        "status": "discarded",
+        "status_label": "Descartado por Abel",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel descartou: conhecimento em Power Apps/Power Platform ainda é muito básico para assumir com segurança",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T22:04:29"
+      },
+      "effective_status": "discarded",
+      "effective_status_label": "Descartado por Abel"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750807",
+      "title": "Criar aplicativo de autoatendimento para restaurante",
+      "project_url": "https://www.99freelas.com.br/project/criar-aplicativo-de-autoatendimento-para-restaurante-750807",
+      "category": "Desenvolvimento Desktop",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Tenho um sistema de ERP e já possuo um sistema que cadastra os produtos, registra a comanda e insere os valores no caixa. Porém, preciso que ele seja atualiz...",
+      "received_at_raw": "Thu, 07 May 2026 17:12:04 +0000",
+      "email_subject": "Novo Projeto: Criar aplicativo de autoatendimento para restaurante",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Criar aplicativo de autoatendimento para restaurante.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "mobile_multiplatform",
+          "backend"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 30,
+        "commercial_score": 21,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 9,
+        "final_score": 83,
+        "recommended_action": "high_priority",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Tenho um sistema de ERP e já possuo um sistema que cadastra os produtos, registra a comanda e insere os valores no caixa. Porém, preciso que ele seja atualizado, pois não está sincronizando/atualizando corretamente com o ERP. O sistema é utilizado por um restaurante.\nDesejo criar um aplicativo de autoatendimento (ou corrigir/atualizar o app existente) que integre com o ERP, corrija a sincronização de pedidos e dos lançamentos no caixa, e funcione de forma estável para o fluxo do restaurante. Favor informar experiência com integração em Delphi e apresentar proposta de solução.\nHabilidades desejadas:\nDelphi",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Desktop",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "8",
+        "interested": "12",
+        "min_value": "R$ 50,00",
+        "last_view": null,
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 22h37m15s.",
+        "exclusive_remaining_seconds": 81435,
+        "status_flags": [],
+        "page_read_at": "2026-05-07T15:30:36-03:00",
+        "exclusive_until_estimated": "2026-05-08T14:07:51-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 9000,
+        "price_suggested": 16500,
+        "price_max": 26000,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "8 a 22 dias úteis",
+        "pricing_note": "Aplicativo/integracão operacional: bom candidato, mas precisa validar ERP, tecnologia atual, acesso ao código e ambiente de testes. Cálculo: 45–110h × R$ 130/h + 30% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 13.000,00. Loja/site comercial: depende de catálogo, checkout, meios de pagamento e conteúdo.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 8,
+          "interested": 12,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "O aplicativo existente tem código-fonte disponível e em qual tecnologia foi feito?",
+          "Como é feita hoje a integração com o ERP: banco direto, API, arquivo ou outro método?",
+          "O ERP possui documentação técnica ou ambiente de homologação?",
+          "O objetivo é corrigir o app atual ou criar uma nova versão do zero?",
+          "Quais fluxos precisam funcionar no MVP: comanda, pedido, pagamento, caixa e sincronização?"
+        ],
+        "proposal_draft": "Olá! Vi o projeto \"Criar aplicativo de autoatendimento para restaurante\" e acredito que posso ajudar.\n\nMinha sugestão é começarmos com uma análise técnica inicial seguida de correção ou MVP do app de autoatendimento integrado ao ERP, alinhando primeiro os requisitos principais e os limites da entrega. Para esse tipo de aplicativo/integracão, eu costumo trabalhar com uma etapa inicial bem objetiva: entendimento do fluxo, definição do escopo, desenvolvimento, validação e ajustes finais.\n\nPrazo estimado: 20 a 40 dias úteis.\nInvestimento sugerido para referência: a partir de R$ 12.000,00, podendo ajustar conforme detalhes finais do escopo.\n\nAntes de fechar a proposta, eu gostaria de confirmar alguns pontos para evitar orçamento errado e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 7000,
+          "net_target_suggested": 13000,
+          "net_target_max": 20500,
+          "hours_min": 45,
+          "hours_max": 110,
+          "hours_avg": 77.5,
+          "risk_pct": 0.3,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Loja/site comercial: depende de catálogo, checkout, meios de pagamento e conteúdo."
+        },
+        "price_suggested_effective": 16500
+      },
+      "abel_feedback": {
+        "status": "discarded",
+        "status_label": "Descartado por Abel",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel descartou: não quer atuar em projetos Delphi",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T18:10:09"
+      },
+      "effective_status": "discarded",
+      "effective_status_label": "Descartado por Abel"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750923",
+      "title": "Integração Asaas e n8n para automação de notificações e NF",
+      "project_url": "https://www.99freelas.com.br/project/integracao-asaas-e-n8n-para-automacao-de-notificacoes-e-nf-750923",
+      "category": "Desenvolvimento Web",
+      "level": "Intermediário",
+      "budget": "Aberto",
+      "description_preview": "Busco um desenvolvedor com experiência sólida em n8n e na API do Asaas para criar um fluxo de automação completo para meu processo de faturamento. O Desafio...",
+      "received_at_raw": "Thu, 07 May 2026 21:57:35 +0000",
+      "email_subject": "Novo Projeto: Integração Asaas e n8n para automação de notificações e NF",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Integração Asaas e n8n para automação de notificações e NF.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "website",
+          "backend",
+          "data_analysis"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 30,
+        "commercial_score": 19,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 9,
+        "final_score": 81,
+        "recommended_action": "high_priority",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Busco um desenvolvedor com experiência sólida em n8n e na API do Asaas para criar um fluxo de automação completo para meu processo de faturamento.\nO Desafio:\nPreciso que, a cada novo boleto/cobrança gerada no Asaas, o n8n dispare automaticamente notificações personalizadas por WhatsApp ou e-mail (a definir para cada cliente) e realize a emissão da Nota Fiscal de Serviço se o cliente estiver cadastrado para emissão de nota no Asaas.\nEscopo do Trabalho:\nGatilho (Webhook): configurar o recebimento de eventos do Asaas a cada criação de cobrança.\n- Enviar as notificações por WhatsApp ou por e-mail conforme especificado para cada cliente.\n- Verificar se o cliente está habilitado para receber a NF e, se sim, emitir a nota via requisição HTTP. Nota: não utilizaremos o node pronto do Asaas para a NF, mas sim requisições HTTP para maior controle.\nNotificações multicanal:\nWhatsApp: envio da confirmação e link do boleto/NF com a Evolution API.\nE-mail: envio formatado com as informações de pagamento via Outlook ou SMTP.\nTratamento de erros:\nGarantir que, caso a API do Asaas retorne erro na emissão da NF, o fluxo não quebre e eu receba um alerta informando o erro.\nRequisitos técnicos:\n- Domínio total de JSON e manipulação de dados no n8n.\n- Experiência prévia com a API v3 do Asaas.\n- Conhecimento em chamadas HTTP (REST) e autenticação via header (access_token).\n- Desejável conhecimento em boas práticas de segurança para chaves de API.\nO que espero do profissional:\n- Entrega do workflow (.json) pronto para importação no n8n.\n- Breve explicação das variáveis que precisarei alterar (IDs e tokens).\n- Disponibilidade para testes rápidos de homologação.\nPor favor, ao enviar sua proposta, mencione se já realizou integrações similares com o Asaas ou outros gateways de pagamento.\nHabilidades desejadas:\nAutomação de processos robóticos\nDocumentação de API\nInteligência Artificial\nJSON",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Intermediário",
+        "visibility": "Público",
+        "proposals": "28",
+        "interested": "34",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 18:35",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 20h29m16s.",
+        "exclusive_remaining_seconds": 73756,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T22:06:22-03:00",
+        "exclusive_until_estimated": "2026-05-08T18:35:38-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 7000,
+        "price_suggested": 13000,
+        "price_max": 21000,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "6 a 18 dias úteis",
+        "pricing_note": "Aplicativo/integracão operacional: bom candidato, mas precisa validar ERP, tecnologia atual, acesso ao código e ambiente de testes. Cálculo: 35–90h × R$ 130/h + 30% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 10.500,00. Integração/automações: inclui discovery, credenciais, webhooks, testes de erro e homologação.",
+        "competition_alert": {
+          "level": "média",
+          "proposals": 28,
+          "interested": 34,
+          "note": "Concorrência moderada; vale responder rápido e com escopo bem delimitado."
+        },
+        "questions_to_client": [
+          "A coleta dos resultados virá de API, histórico exportado ou leitura/captura da tela?",
+          "O robô será apenas de alerta ou executará alguma ação automaticamente?",
+          "Qual canal de alerta deseja usar: Telegram, WhatsApp, Discord ou painel web?",
+          "As regras descritas são finais ou haverá ajustes depois dos primeiros testes?",
+          "Você aceita uma entrega com logs e validação estatística, sem promessa de resultado financeiro?"
+        ],
+        "proposal_draft": "Olá! Li a regra do robô de alerta para Bac Bo na Evolution. Entendi que a ideia é monitorar ocorrências específicas por número/cor, validar janelas históricas e disparar alerta apenas quando os critérios estatísticos descritos forem atendidos.\n\nMinha sugestão seria começar por um MVP de monitoramento e alerta, com regras configuráveis, registro das análises em log e validação dos resultados antes de qualquer expansão. O foco seria notificação, não promessa de resultado financeiro.\n\nA parte mais importante é definir a fonte dos dados: API, histórico exportado ou leitura da tela. Isso muda bastante a complexidade e a estabilidade da solução.\n\nPrazo estimado: 6 a 18 dias úteis.\nInvestimento de referência: a partir de R$ 13.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nEu manteria o escopo limitado a alertas e validação das regras, sem automação de apostas.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 5500,
+          "net_target_suggested": 10500,
+          "net_target_max": 17000,
+          "hours_min": 35,
+          "hours_max": 90,
+          "hours_avg": 62.5,
+          "risk_pct": 0.3,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Integração/automações: inclui discovery, credenciais, webhooks, testes de erro e homologação."
+        },
+        "price_suggested_effective": 13000
+      },
+      "abel_feedback": {
+        "status": "discarded",
+        "status_label": "Descartado por Abel",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel descartou: muita concorrência e ainda não aprendeu n8n para assumir com segurança",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T22:08:51"
+      },
+      "effective_status": "discarded",
+      "effective_status_label": "Descartado por Abel"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750962",
+      "title": "Integração Stripe e Gemini (Google AI Studio) - Desenvolvedor Full Stack",
+      "project_url": "https://www.99freelas.com.br/project/integracao-stripe-e-gemini-google-ai-studio-desenvolvedor-full-stack-750962",
+      "category": "Desenvolvimento Web",
+      "level": "Especialista",
+      "budget": "Aberto",
+      "description_preview": "Busca-se um desenvolvedor experiente para configurar o sistema de pagamentos de uma plataforma que utiliza a API do Gemini (Google AI Studio). O projeto já e...",
+      "received_at_raw": "Fri, 08 May 2026 01:56:35 +0000",
+      "email_subject": "Novo Projeto: Integração Stripe e Gemini (Google AI Studio) - Desenvolvedor Full Stack",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Integração Stripe e Gemini (Google AI Studio) - Desenvolvedor Full Stack.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "website",
+          "backend",
+          "ai_agents"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 30,
+        "commercial_score": 19,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 9,
+        "final_score": 81,
+        "recommended_action": "high_priority",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Busca-se um desenvolvedor experiente para configurar o sistema de pagamentos de uma plataforma que utiliza a API do Gemini (Google AI Studio). O projeto já está em andamento (Vite/React) e é necessário finalizar a parte transacional da plataforma.\nTarefas principais:\n1. Configuração de API: conectar a chave do Google AI Studio com segurança no backend.\n2. Integração Stripe: configurar o fluxo completo de checkout (Stripe Checkout ou Elements).\n3. Webhooks: configurar o STRIPE_WEBHOOK_SECRET para liberar o acesso à IA somente após a confirmação do pagamento.\n4. Segurança de variáveis: configurar o arquivo .env corretamente para que as chaves (Stripe Secret e Google Key) não fiquem expostas no frontend.\n5. Deploy inicial: auxiliar no deploy do projeto em uma plataforma de hospedagem (Vercel, Railway ou Render).\nRequisitos técnicos:\n- Experiência com Stripe API (assinaturas ou pagamentos únicos).\n- Domínio de Node.js (ou similar) para o backend.\n- Conhecimento em Vite/React.\n- Experiência com APIs do Google Cloud / AI Studio.\nDiferencial:\n- Ter experiência prévia na integração de sistemas de \"créditos\" para uso de IAs.\nHabilidades desejadas:\nGoogle APIs",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Especialista",
+        "visibility": "Público",
+        "proposals": "2",
+        "interested": "4",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 22:54",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 23h46m41s.",
+        "exclusive_remaining_seconds": 85601,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T23:00:14-03:00",
+        "exclusive_until_estimated": "2026-05-08T22:46:55-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 7000,
+        "price_suggested": 13000,
+        "price_max": 21000,
+        "effort_estimate": "pequeno/médio",
+        "delivery_estimate": "6 a 18 dias úteis",
+        "pricing_note": "Website simples costuma ser bom candidato se escopo, páginas e conteúdo estiverem claros. Cálculo: 35–90h × R$ 130/h + 30% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 10.500,00. Integração/automações: inclui discovery, credenciais, webhooks, testes de erro e homologação.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 2,
+          "interested": 4,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "O fluxo será pagamento único, assinatura recorrente ou compra de créditos?",
+          "O backend Node.js já existe ou precisa ser criado/organizado para proteger chaves e webhooks?",
+          "Como o acesso deve ser liberado após o pagamento: por usuário, plano, assinatura ou crédito?",
+          "O projeto já possui autenticação de usuários funcionando?",
+          "Onde pretende fazer o deploy: Vercel, Railway, Render ou outra plataforma?"
+        ],
+        "proposal_draft": "Olá! Li o projeto \"Integração Stripe e Gemini (Google AI Studio) - Desenvolvedor Full Stack\" e entendi que a plataforma web já está em andamento, mas precisa finalizar uma etapa transacional/de integração com backend seguro.\n\nMinha proposta é atuar nessa parte: organizar o backend para proteger chaves e credenciais, integrar o fluxo de pagamento/checkout quando aplicável, configurar webhooks para confirmar eventos importantes e validar o acesso do usuário conforme a regra de negócio definida.\n\nTambém posso ajudar no deploy inicial, validando o fluxo completo em ambiente publicado: autenticação, integração, confirmação de eventos e liberação correta das funcionalidades contratadas.\n\nPrazo estimado: 6 a 18 dias úteis.\nInvestimento de referência: a partir de R$ 13.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nAntes de fechar, eu só preciso confirmar o modelo de cobrança/liberação de acesso, porque isso muda a regra de persistência e validação dos usuários.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 5500,
+          "net_target_suggested": 10500,
+          "net_target_max": 17000,
+          "hours_min": 35,
+          "hours_max": 90,
+          "hours_avg": 62.5,
+          "risk_pct": 0.3,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Integração/automações: inclui discovery, credenciais, webhooks, testes de erro e homologação."
+        },
+        "price_suggested_effective": 13000
+      },
+      "abel_feedback": {
+        "status": "liked",
+        "status_label": "Gostei",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel gostou e quer lembrete para enviar proposta",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T23:06:49"
+      },
+      "effective_status": "liked",
+      "effective_status_label": "Gostei"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750925",
+      "title": "Desenvolvimento de MVP - Plataforma web para contabilidade digital",
+      "project_url": "https://www.99freelas.com.br/project/desenvolvimento-de-mvp-plataforma-web-para-contabilidade-digital-750925",
+      "category": "Desenvolvimento Web",
+      "level": "Especialista",
+      "budget": "Aberto",
+      "description_preview": "# Desenvolvimento MVP - Plataforma Web para Contabilidade Digital ## Objetivo do Projeto Busco desenvolvedor fullstack para construção de um MVP web seguro...",
+      "received_at_raw": "Thu, 07 May 2026 21:58:34 +0000",
+      "email_subject": "Novo Projeto: Desenvolvimento de MVP - Plataforma web para contabilidade digital",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Desenvolvimento de MVP - Plataforma web para contabilidade digital.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "website",
+          "backend",
+          "data_analysis",
+          "ai_agents"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 30,
+        "commercial_score": 19,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 9,
+        "final_score": 81,
+        "recommended_action": "high_priority",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "# Desenvolvimento MVP - Plataforma Web para Contabilidade Digital\n## Objetivo do Projeto\nBusco desenvolvedor fullstack para construção de um MVP web seguro, voltado para a operação de uma contabilidade digital moderna.\nO objetivo NÃO é desenvolver um ERP contábil completo, mas sim uma plataforma própria para melhorar a experiência do cliente, a organização operacional e permitir automações futuras.\nA ideia é iniciar o projeto de forma estruturada, segura e preparada para crescimento gradual.\n---\n# Objetivo Final do Projeto\nDesejo contratar as ferramentas/serviços externos necessários e que o profissional realize toda a integração delas dentro do sistema, entregando o ambiente funcional ponta a ponta.\nA expectativa é finalizar o projeto já com:\n* ambiente publicado;\n* sistema funcionando;\n* integrações operacionais;\n* fluxo completo validado;\n* autenticação segura;\n* deploy realizado;\n* ambiente minimamente estabilizado.\n---\n# Funcionalidades Iniciais (MVP)\n## Área Cliente (Portal Logado)\nO cliente deverá conseguir:\n* realizar login seguro;\n* consultar débitos pendentes;\n* visualizar status de pagamentos;\n* acessar documentos/notas anexadas;\n* solicitar emissão de nota fiscal;\n* visualizar histórico básico;\n* acessar suporte via WhatsApp.\n---\n## Área Administrativa\nO administrador deverá conseguir:\n* cadastrar clientes;\n* cadastrar débitos;\n* alterar status de pagamentos;\n* anexar documentos/PDF/XML;\n* gerenciar solicitações de emissão de nota;\n* acompanhar informações operacionais;\n* gerenciar usuários/clientes.\n---\n# Segurança (Prioridade Máxima)\nDesejo um sistema desenvolvido com foco forte em segurança e boas práticas.\nItens obrigatórios:\n* autenticação JWT;\n* senha criptografada (bcrypt);\n* autenticação em duas etapas (OTP/email);\n* expiração de sessão/token;\n* separação de permissões (admin/cliente);\n* HTTPS/SSL;\n* logs básicos;\n* proteção contra brute force/rate limit;\n* backup automatizado.\nDiferenciais:\n* experiência com Cloudflare;\n* hardening de VPS/Linux;\n* Docker;\n* deploy seguro.\n---\n# Stack / Conhecimentos Esperados\n## Frontend\n* React\n* Next.js\n* TailwindCSS\n## Backend\n* Node.js\n* NestJS ou Express\n## Banco\n* PostgreSQL\n## Infraestrutura\n* VPS Linux\n* GitHub\n* Deploy\n* APIs REST\n* Webhooks\n* Nginx\n---\n# Integrações Desejadas\nPretendo contratar ferramentas externas e preciso que o profissional realize as integrações dentro do sistema.\nExemplos:\n* emissão fiscal;\n* pagamentos;\n* WhatsApp/API;\n* notificações.\nO foco é deixar a operação prática, organizada e minimamente automatizada desde o início.\n---\n# Hospedagem\nInicialmente o projeto será hospedado em VPS própria.\nDesejo ajuda/orientação sobre:\n* deploy;\n* estrutura do ambiente;\n* organização da aplicação;\n* manutenção futura;\n* segurança do servidor.\n---\n# O Que NÃO Precisa Neste MVP\n* IA avançada;\n* dashboards complexos;\n* ERP completo;\n* múltiplos módulos;\n* automações extremamente sofisticadas.\nO foco é:\n* MVP funcional;\n* seguro;\n* estável;\n* organizado;\n* preparado para escalar.\n---\n# Entregáveis Esperados\n* código-fonte completo;\n* acesso total ao projeto;\n* GitHub organizado;\n* deploy funcional;\n* integrações operacionais;\n* documentação básica;\n* orientação inicial de manutenção;\n* período inicial de suporte/correções pós entrega.\n---\n# Diferencial Importante\nProcuro profissional com visão de produto/SaaS e não apenas criação de website institucional.\nTambém valorizo bastante:\n* comunicação;\n* acompanhamento próximo;\n* suporte;\n* parceria no crescimento do projeto.\nHabilidades desejadas:\nDesenvolvimento de API\nLinux\nNodeJS\nPostgreSQL\nReact",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Especialista",
+        "visibility": "Público",
+        "proposals": "34",
+        "interested": "43",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 18:38",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 20h52m12s.",
+        "exclusive_remaining_seconds": 75132,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T21:45:34-03:00",
+        "exclusive_until_estimated": "2026-05-08T18:37:46-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 18500,
+        "price_suggested": 34000,
+        "price_max": 53500,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "15 a 44 dias úteis",
+        "pricing_note": "Aplicativo/integracão operacional: bom candidato, mas precisa validar ERP, tecnologia atual, acesso ao código e ambiente de testes. Cálculo: 90–220h × R$ 130/h + 35% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 27.000,00. MVP web com autenticação, portal, admin, documentos, integrações e deploy: precisa ser fatiado por módulos.",
+        "competition_alert": {
+          "level": "alta",
+          "proposals": 34,
+          "interested": 43,
+          "note": "Concorrência alta; proposta precisa ser muito objetiva, consultiva e com diferencial claro."
+        },
+        "questions_to_client": [
+          "Quais módulos entram obrigatoriamente no MVP: portal do cliente, upload de documentos, solicitações, tarefas internas, notificações e admin?",
+          "Quais ferramentas externas você já pretende contratar/integrar no início?",
+          "A autenticação precisa ter perfis diferentes para cliente, equipe interna e administrador?",
+          "Os documentos terão armazenamento em cloud com controle de acesso e histórico?",
+          "Você já tem fluxos operacionais desenhados ou devemos mapear isso na etapa inicial?"
+        ],
+        "proposal_draft": "Olá! Li a descrição do projeto \"Desenvolvimento de MVP - Plataforma web para contabilidade digital\" e gostei do direcionamento: construir um MVP próprio para uma contabilidade digital, sem tentar transformar isso em um ERP contábil completo logo de início.\n\nMinha proposta seria começar por uma fase de definição técnica curta, para fechar o escopo do MVP, os perfis de acesso e as ferramentas externas que serão integradas. Depois disso, eu seguiria com a implementação do portal web com autenticação segura, área do cliente, área administrativa/operacional, upload/organização de documentos e as integrações prioritárias para deixar o fluxo ponta a ponta funcionando.\n\nTambém posso cuidar da publicação/deploy e validação inicial do ambiente, deixando uma base preparada para evoluções futuras, sem amarrar o projeto em uma arquitetura difícil de manter.\n\nPrazo estimado: 15 a 44 dias úteis.\nInvestimento de referência: a partir de R$ 34.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nEu trataria essa primeira entrega como MVP por fases, priorizando segurança, clareza operacional e estabilidade antes de adicionar automações mais avançadas.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 14500,
+          "net_target_suggested": 27000,
+          "net_target_max": 43000,
+          "hours_min": 90,
+          "hours_max": 220,
+          "hours_avg": 155.0,
+          "risk_pct": 0.35,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "MVP web com autenticação, portal, admin, documentos, integrações e deploy: precisa ser fatiado por módulos."
+        },
+        "price_suggested_effective": 34000
+      },
+      "abel_feedback": {
+        "status": "liked",
+        "status_label": "Gostei",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel gostou e quer enviar proposta quando o projeto for liberado",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T22:23:20"
+      },
+      "effective_status": "liked",
+      "effective_status_label": "Gostei"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750853",
+      "title": "Otimização de acesso remoto mobile com noVNC e redroid",
+      "project_url": "https://www.99freelas.com.br/project/otimizacao-de-acesso-remoto-mobile-com-novnc-e-redroid-750853",
+      "category": "Desenvolvimento Mobile",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Descrição: Estamos buscando um especialista para otimizar nosso sistema de acesso remoto mobile, que atualmente apresenta desafios na experiência do usuário ...",
+      "received_at_raw": "Thu, 07 May 2026 18:27:33 +0000",
+      "email_subject": "Novo Projeto: Otimização de acesso remoto mobile com noVNC e redroid",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Otimização de acesso remoto mobile com noVNC e redroid.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "mobile_multiplatform",
+          "desktop",
+          "backend"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [
+          "vague_or_open_scope"
+        ],
+        "technical_score": 30,
+        "commercial_score": 21,
+        "scope_clarity_score": 10,
+        "risk_score": 10,
+        "interest_score": 9,
+        "final_score": 80,
+        "recommended_action": "high_priority",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Descrição:\nEstamos buscando um especialista para otimizar nosso sistema de acesso remoto mobile, que atualmente apresenta desafios na experiência do usuário e na funcionalidade. O objetivo principal é permitir a abertura direta de aplicações específicas em um ambiente Android virtualizado, eliminando a necessidade de navegar pela tela inicial do Android remoto e ajustando a visualização para uma experiência mobile otimizada.\nO fluxo atual do sistema é o seguinte: o aplicativo mobile (desenvolvido para Android e iOS) utiliza uma WebView para carregar uma URL de acesso remoto. Este acesso é intermediado por um painel WHMCS, que, por sua vez, carrega uma sessão noVNC. Esta sessão noVNC conecta-se a um ambiente Android remoto hospedado em um servidor/VPS via Proxmox e executa o redroid. Atualmente, o aplicativo mobile abre tudo isso dentro de uma WebView, resultando no seguinte comportamento: App -> WebView -> WHMCS -> noVNC -> Android remoto (redroid - tela inicial).\nOs problemas identificados com o fluxo atual são:\n1. Fluxo incorreto: ao acessar, o usuário é direcionado para a tela inicial do Android remoto, em vez de abrir diretamente a aplicação desejada.\n2. Problema de visualização mobile: a tela é exibida em formato desktop (quadrada), com bordas pretas, não ocupando toda a tela do dispositivo mobile, o que resulta em uma experiência de uso insatisfatória.\nNosso objetivo é resolver esses problemas para:\n- Permitir a abertura automática de aplicações específicas (por exemplo, WhatsApp e outros apps instalados) diretamente no ambiente redroid.\n- Evitar a exibição da tela inicial do Android remoto.\n- Possibilitar a abertura direta de diferentes aplicativos sob demanda.\n- Ajustar a experiência mobile, incluindo escala, resolução e usabilidade, para que a interface se adapte perfeitamente à tela do dispositivo.\nO escopo técnico esperado para esta otimização inclui:\n- Implementação de auto inicialização de aplicativos no ambiente redroid.\n- Automação do processo de boot/start do ambiente Android virtualizado.\n- Ajustes no noVNC para melhorias de scaling e resize.\n- Otimização e ajustes na configuração da WebView dentro do aplicativo mobile.\n- Diagnóstico e resolução do problema de renderização que causa a má visualização em dispositivos mobile.\nEstamos abertos a sugestões técnicas e abordagens inovadoras para aprimorar a forma como o WhatsApp virtualizado e outros aplicativos são exibidos dentro do aplicativo, buscando sempre a melhor performance e experiência do usuário. A entrega esperada é uma solução que proporcione a abertura direta de aplicações, uma interface totalmente ajustada para mobile e uma solução estável e utilizável dentro do aplicativo.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Mobile",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "4",
+        "interested": "6",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 16:31",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 22h27m52s.",
+        "exclusive_remaining_seconds": 80872,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T16:43:19-03:00",
+        "exclusive_until_estimated": "2026-05-08T15:11:11-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 13500,
+        "price_suggested": 30000,
+        "price_max": 50000,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "10 a 37 dias úteis",
+        "pricing_note": "Aplicativo/integracão operacional: bom candidato, mas precisa validar ERP, tecnologia atual, acesso ao código e ambiente de testes. Cálculo: 60–187h × R$ 130/h + 50% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 24.000,00. Infra/app remoto virtualizado: envolve várias camadas técnicas e alto risco de diagnóstico. Escopo vago: acrescentei margem de risco.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 4,
+          "interested": 6,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "O aplicativo existente tem código-fonte disponível e em qual tecnologia foi feito?",
+          "Como é feita hoje a integração com o ERP: banco direto, API, arquivo ou outro método?",
+          "O ERP possui documentação técnica ou ambiente de homologação?",
+          "O objetivo é corrigir o app atual ou criar uma nova versão do zero?",
+          "Quais fluxos precisam funcionar no MVP: comanda, pedido, pagamento, caixa e sincronização?"
+        ],
+        "proposal_draft": "Olá! Vi o projeto \"Otimização de acesso remoto mobile com noVNC e redroid\" e acredito que posso ajudar.\n\nMinha sugestão é começarmos com uma análise técnica inicial seguida de correção ou MVP do app de autoatendimento integrado ao ERP, alinhando primeiro os requisitos principais e os limites da entrega. Para esse tipo de aplicativo/integracão, eu costumo trabalhar com uma etapa inicial bem objetiva: entendimento do fluxo, definição do escopo, desenvolvimento, validação e ajustes finais.\n\nPrazo estimado: 20 a 40 dias úteis.\nInvestimento sugerido para referência: a partir de R$ 12.000,00, podendo ajustar conforme detalhes finais do escopo.\n\nAntes de fechar a proposta, eu gostaria de confirmar alguns pontos para evitar orçamento errado e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 11000,
+          "net_target_suggested": 24000,
+          "net_target_max": 40000,
+          "hours_min": 60,
+          "hours_max": 187,
+          "hours_avg": 123.5,
+          "risk_pct": 0.5,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Infra/app remoto virtualizado: envolve várias camadas técnicas e alto risco de diagnóstico. Escopo vago: acrescentei margem de risco."
+        },
+        "price_suggested_effective": 30000
+      },
+      "abel_feedback": {
+        "status": "discarded",
+        "status_label": "Descartado por Abel",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel descartou: muita tecnologia que não domina no escopo (noVNC, redroid, Proxmox/VPS, WebView/WHMCS)",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T21:46:32"
+      },
+      "effective_status": "discarded",
+      "effective_status_label": "Descartado por Abel"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750929",
+      "title": "Site de apresentação de jogo com área de download",
+      "project_url": "https://www.99freelas.com.br/project/site-de-apresentacao-de-jogo-com-area-de-download-750929",
+      "category": "Desenvolvimento Web",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Site de jogo com download é uma plataforma criada para apresentar um game de forma atrativa e permitir que os usuários façam o download de maneira rápida e s...",
+      "received_at_raw": "Thu, 07 May 2026 22:21:34 +0000",
+      "email_subject": "Novo Projeto: Site de apresentação de jogo com área de download",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Site de apresentação de jogo com área de download.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "mobile_multiplatform",
+          "website",
+          "desktop"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [
+          "vague_or_open_scope"
+        ],
+        "technical_score": 30,
+        "commercial_score": 20,
+        "scope_clarity_score": 10,
+        "risk_score": 10,
+        "interest_score": 9,
+        "final_score": 79,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Site de jogo com download é uma plataforma criada para apresentar um game de forma atrativa e permitir que os usuários façam o download de maneira rápida e segura. O visual do site geralmente possui um estilo moderno e imersivo, utilizando cores vibrantes, efeitos visuais e imagens do jogo para chamar a atenção dos visitantes.\nA página inicial normalmente destaca o nome do jogo, trailers, capturas de tela, descrição da história e principais recursos do gameplay. Também pode incluir informações sobre personagens, modos de jogo, requisitos mínimos e novidades de atualizações.\nO HTML é utilizado para estruturar os elementos do site, como menus, seções de download, galerias de imagens e áreas informativas. O CSS é responsável pelo design visual, criando um layout responsivo, animações, botões estilizados e uma aparência inspirada no universo do jogo. Já o JavaScript adiciona funcionalidades interativas, como sliders de imagens, efeitos dinâmicos, menus animados e sistemas de navegação mais fluidos.\nO botão de download costuma ficar em destaque para facilitar o acesso dos usuários. Além disso, o site pode oferecer versões para diferentes plataformas, como Windows, Android e iOS, juntamente com instruções de instalação e suporte técnico.\nO principal objetivo do site é criar uma experiência envolvente para os jogadores, transmitir a identidade do game e incentivar o download por meio de uma apresentação moderna, organizada e interativa.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "35",
+        "interested": "42",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 20:55",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 21h18m57s.",
+        "exclusive_remaining_seconds": 76737,
+        "status_flags": [
+          "cancelado",
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T21:45:35-03:00",
+        "exclusive_until_estimated": "2026-05-08T19:04:32-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 5000,
+        "price_suggested": 12000,
+        "price_max": 21000,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "4 a 17 dias úteis",
+        "pricing_note": "Aplicativo/integracão operacional: bom candidato, mas precisa validar ERP, tecnologia atual, acesso ao código e ambiente de testes. Cálculo: 24–87h × R$ 130/h + 35% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 9.500,00. Website/landing: varia conforme número de páginas, conteúdo, formulário e acabamento visual. Escopo vago: acrescentei margem de risco.",
+        "competition_alert": {
+          "level": "alta",
+          "proposals": 35,
+          "interested": 42,
+          "note": "Concorrência alta; proposta precisa ser muito objetiva, consultiva e com diferencial claro."
+        },
+        "questions_to_client": [
+          "O jogo já possui identidade visual, imagens, trailer e arquivo de download final?",
+          "O download será hospedado no próprio servidor, Google Drive/Itch.io/Steam ou outro serviço?",
+          "Precisa de captura de e-mail, contador de downloads ou área de novidades/atualizações?",
+          "O site será estático ou precisa de painel para editar conteúdo depois?",
+          "Há requisitos de segurança para evitar link quebrado, arquivo antigo ou download indevido?"
+        ],
+        "proposal_draft": "Olá! Li o projeto \"Site de apresentação de jogo com área de download\". A necessidade aqui parece ser um site de apresentação para o jogo, com visual imersivo e uma área de download clara, rápida e segura.\n\nMinha proposta é desenvolver uma página/site responsivo com seções para apresentação do game, trailer ou imagens, história/recursos, requisitos mínimos, novidades e chamada principal para download. Também posso estruturar o botão de download com rastreio básico, orientação visual clara e proteção contra links confusos ou quebrados.\n\nA parte visual seria pensada para combinar com o universo do jogo, usando efeitos e interações com moderação para não prejudicar performance, principalmente no mobile.\n\nPrazo estimado: 4 a 17 dias úteis.\nInvestimento de referência: a partir de R$ 12.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nSe o conteúdo do jogo ainda não estiver fechado, posso deixar a estrutura editável para facilitar futuras atualizações.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 4000,
+          "net_target_suggested": 9500,
+          "net_target_max": 17000,
+          "hours_min": 24,
+          "hours_max": 87,
+          "hours_avg": 55.5,
+          "risk_pct": 0.35,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Website/landing: varia conforme número de páginas, conteúdo, formulário e acabamento visual. Escopo vago: acrescentei margem de risco."
+        },
+        "price_suggested_effective": 12000
+      },
+      "abel_feedback": {
+        "status": "lost",
+        "status_label": "Perdeu",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Projeto cancelado pelo cliente; não seguir com proposta",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": "cancelled_by_client",
+        "updated_at": "2026-05-08T18:05:00"
+      },
+      "effective_status": "lost",
+      "effective_status_label": "Perdeu"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750927",
+      "title": "Criação de loja online para venda de semijoias",
+      "project_url": "https://www.99freelas.com.br/project/criacao-de-loja-online-para-venda-de-semijoias-750927",
+      "category": "Desenvolvimento Web",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Preciso criar uma loja online elegante e moderna para venda de semijoias. A plataforma será desenvolvida para apresentar coleções de acessórios femininos e m...",
+      "received_at_raw": "Thu, 07 May 2026 22:20:36 +0000",
+      "email_subject": "Novo Projeto: Criação de loja online para venda de semijoias",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Criação de loja online para venda de semijoias.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "website",
+          "backend"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [
+          "vague_or_open_scope"
+        ],
+        "technical_score": 30,
+        "commercial_score": 19,
+        "scope_clarity_score": 10,
+        "risk_score": 10,
+        "interest_score": 9,
+        "final_score": 78,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Preciso criar uma loja online elegante e moderna para venda de semijoias. A plataforma será desenvolvida para apresentar coleções de acessórios femininos e masculinos.\nO design deve transmitir luxo e delicadeza, utilizando cores refinadas como dourado e prata, além de imagens de alta qualidade para destacar os detalhes das peças.\nO site deve possuir uma página inicial atrativa, com banners promocionais, lançamentos e categorias organizadas, como anéis, colares, pulseiras e brincos. A navegação deve ser simples e intuitiva, permitindo que os clientes encontrem facilmente os produtos desejados.\nNa parte visual, o HTML será utilizado para estruturar o conteúdo, o CSS será responsável pelo estilo e pela responsividade, e o JavaScript adicionará interatividade, como filtros de busca, carrinho de compras dinâmico e efeitos modernos durante a navegação.\nAlém da apresentação dos produtos, o site pode incluir avaliações de clientes, integração com redes sociais e uma área de contato para atendimento personalizado. O objetivo principal é oferecer uma experiência elegante, prática e segura para os usuários, valorizando a beleza e a qualidade das semijoias.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "37",
+        "interested": "44",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 20:55",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 21h14m49s.",
+        "exclusive_remaining_seconds": 76489,
+        "status_flags": [
+          "cancelado",
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T21:45:33-03:00",
+        "exclusive_until_estimated": "2026-05-08T19:00:22-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 9500,
+        "price_suggested": 20500,
+        "price_max": 34500,
+        "effort_estimate": "pequeno/médio",
+        "delivery_estimate": "8 a 27 dias úteis",
+        "pricing_note": "Website simples costuma ser bom candidato se escopo, páginas e conteúdo estiverem claros. Cálculo: 45–137h × R$ 130/h + 40% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 16.500,00. Loja/site comercial: depende de catálogo, checkout, meios de pagamento e conteúdo. Escopo vago: acrescentei margem de risco.",
+        "competition_alert": {
+          "level": "alta",
+          "proposals": 37,
+          "interested": 44,
+          "note": "Concorrência alta; proposta precisa ser muito objetiva, consultiva e com diferencial claro."
+        },
+        "questions_to_client": [
+          "Você já possui identidade visual, fotos dos produtos e textos das categorias?",
+          "Quantos produtos/categorias entram na primeira versão?",
+          "Precisa de pagamento online, cálculo de frete e gestão de estoque já no MVP?",
+          "Prefere uma loja editável em plataforma pronta ou desenvolvimento customizado?",
+          "Haverá integração com Instagram/WhatsApp para atendimento e vendas?"
+        ],
+        "proposal_draft": "Olá! Vi o projeto \"Criação de loja online para venda de semijoias\". Entendi que a loja precisa transmitir uma percepção mais premium para semijoias, com visual elegante, categorias bem organizadas e uma experiência simples para o cliente encontrar e comprar as peças.\n\nMinha proposta é criar uma loja responsiva e editável, com página inicial, categorias como anéis/colares/pulseiras/brincos, vitrine de produtos, página de produto, carrinho/checkout conforme a plataforma escolhida, integração com WhatsApp/redes sociais e estrutura preparada para fotos de alta qualidade.\n\nEu também cuidaria para que o layout não pareça genérico: cores, espaçamento, banners e hierarquia visual precisam reforçar luxo e delicadeza, como você descreveu.\n\nPrazo estimado: 8 a 27 dias úteis.\nInvestimento de referência: a partir de R$ 20.500,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nO valor pode variar bastante se houver pagamento online, frete, estoque e cadastro inicial de muitos produtos.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 7500,
+          "net_target_suggested": 16500,
+          "net_target_max": 27500,
+          "hours_min": 45,
+          "hours_max": 137,
+          "hours_avg": 91.0,
+          "risk_pct": 0.4,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Loja/site comercial: depende de catálogo, checkout, meios de pagamento e conteúdo. Escopo vago: acrescentei margem de risco."
+        },
+        "price_suggested_effective": 20500
+      },
+      "abel_feedback": {
+        "status": "lost",
+        "status_label": "Perdeu",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Projeto cancelado pelo cliente; não seguir com proposta",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": "cancelled_by_client",
+        "updated_at": "2026-05-08T18:05:00"
+      },
+      "effective_status": "lost",
+      "effective_status_label": "Perdeu"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750961",
+      "title": "Deploy de site na Hostinger e configuração de hospedagem",
+      "project_url": "https://www.99freelas.com.br/project/deploy-de-site-na-hostinger-e-configuracao-de-hospedagem-750961",
+      "category": "Desenvolvimento Web",
+      "level": "Intermediário",
+      "budget": "Aberto",
+      "description_preview": "Olá, preciso de alguém para fazer o deploy de um site na Hostinger e configurar a hospedagem. Tenho muitos trabalhos na área de TI.",
+      "received_at_raw": "Fri, 08 May 2026 01:55:36 +0000",
+      "email_subject": "Novo Projeto: Deploy de site na Hostinger e configuração de hospedagem",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Deploy de site na Hostinger e configuração de hospedagem.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "website"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 30,
+        "commercial_score": 15,
+        "scope_clarity_score": 8,
+        "risk_score": 13,
+        "interest_score": 9,
+        "final_score": 75,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Olá, preciso de alguém para fazer o deploy de um site na Hostinger e configurar a hospedagem. Tenho muitos trabalhos na área de TI.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Intermediário",
+        "visibility": "Público",
+        "proposals": "10",
+        "interested": "14",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 22:46",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 23h45m33s.",
+        "exclusive_remaining_seconds": 85533,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T23:00:01-03:00",
+        "exclusive_until_estimated": "2026-05-08T22:45:34-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 4500,
+        "price_suggested": 9500,
+        "price_max": 16000,
+        "effort_estimate": "pequeno/médio",
+        "delivery_estimate": "4 a 14 dias úteis",
+        "pricing_note": "Website simples costuma ser bom candidato se escopo, páginas e conteúdo estiverem claros. Cálculo: 24–70h × R$ 130/h + 25% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 7.500,00. Website/landing: varia conforme número de páginas, conteúdo, formulário e acabamento visual.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 10,
+          "interested": 14,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "O layout está em Figma, imagem, PDF ou outro formato editável?",
+          "A entrega precisa ser obrigatoriamente em WordPress/Elementor na Hostinger?",
+          "Há animações ou efeitos específicos além do sticky menu e botão fixo de WhatsApp?",
+          "Os textos, imagens, links de WhatsApp/Instagram/e-mail já estão finais?",
+          "Você espera apenas montagem fiel do layout ou também ajustes de copy/performance?"
+        ],
+        "proposal_draft": "Olá! Li a descrição da landing page e entendi que o layout desktop/mobile já está pronto; o foco não é criar do zero, mas montar fielmente, deixar responsivo e editável.\n\nMinha proposta é implementar a landing na estrutura indicada, preferencialmente WordPress/Elementor na Hostinger se esse for o caminho desejado, respeitando o layout existente, imagens, espaçamentos, botões e comportamento mobile. Também incluiria os links para WhatsApp, Instagram e e-mail, botão fixo lateral de WhatsApp e menu sticky com efeito de scroll.\n\nComo o visual já está definido, eu trabalharia com atenção em fidelidade, organização dos blocos e facilidade para futuras alterações de textos, títulos, botões e imagens.\n\nPrazo estimado: 4 a 14 dias úteis.\nInvestimento de referência: a partir de R$ 9.500,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nConsidero importante validar antes o formato do layout e se todos os assets/links finais já estão prontos.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 3500,
+          "net_target_suggested": 7500,
+          "net_target_max": 12500,
+          "hours_min": 24,
+          "hours_max": 70,
+          "hours_avg": 47.0,
+          "risk_pct": 0.25,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Website/landing: varia conforme número de páginas, conteúdo, formulário e acabamento visual."
+        },
+        "price_suggested_effective": 9500
+      },
+      "abel_feedback": {
+        "status": "lost",
+        "status_label": "Perdeu",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Cliente aceitou proposta de outro freelancer; não seguir com proposta",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": "accepted_by_other_freelancer",
+        "updated_at": "2026-05-08T18:06:00"
+      },
+      "effective_status": "lost",
+      "effective_status_label": "Perdeu"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750889",
+      "title": "Suporte remoto para Outlook Classic",
+      "project_url": "https://www.99freelas.com.br/project/suporte-remoto-para-outlook-classic-750889",
+      "category": "Desenvolvimento Web",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Preciso restaurar o Outlook Classic exatamente como estava antes. Os e-mails desapareceram após desinstalação e reinstalação do Microsoft 365. Quero recupera...",
+      "received_at_raw": "Thu, 07 May 2026 19:50:36 +0000",
+      "email_subject": "Novo Projeto: Suporte remoto para Outlook Classic",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Suporte remoto para Outlook Classic.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "website"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [
+          "vague_or_open_scope"
+        ],
+        "technical_score": 30,
+        "commercial_score": 15,
+        "scope_clarity_score": 10,
+        "risk_score": 10,
+        "interest_score": 9,
+        "final_score": 74,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Preciso restaurar o Outlook Classic exatamente como estava antes. Os e-mails desapareceram após desinstalação e reinstalação do Microsoft 365. Quero recuperar perfis, contas, arquivos PST/OST e a estrutura antiga do Outlook.\nAtendimento remoto e urgente.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "2",
+        "interested": "7",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 17:28",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 22h44m57s.",
+        "exclusive_remaining_seconds": 81897,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T17:53:42-03:00",
+        "exclusive_until_estimated": "2026-05-08T16:38:39-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 2500,
+        "price_suggested": 7000,
+        "price_max": 12000,
+        "effort_estimate": "pequeno/médio",
+        "delivery_estimate": "2 a 10 dias úteis",
+        "pricing_note": "Website simples costuma ser bom candidato se escopo, páginas e conteúdo estiverem claros. Cálculo: 12–50h × R$ 130/h + 35% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 5.500,00. Configuração/desktop: inclui acesso remoto, instalação, validação e suporte curto. Escopo vago: acrescentei margem de risco.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 2,
+          "interested": 7,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "Quantas páginas serão entregues na primeira versão?",
+          "Você já possui textos, imagens, domínio e hospedagem?",
+          "Precisa de formulário de contato, blog ou integração com WhatsApp?"
+        ],
+        "proposal_draft": "Olá! Vi o projeto \"Suporte remoto para Outlook Classic\" e acredito que posso ajudar.\n\nMinha sugestão é começarmos com um site responsivo com boa estrutura, performance e SEO básico, alinhando primeiro os requisitos principais e os limites da entrega. Para esse tipo de website, eu costumo trabalhar com uma etapa inicial bem objetiva: entendimento do fluxo, definição do escopo, desenvolvimento, validação e ajustes finais.\n\nPrazo estimado: 7 a 15 dias úteis.\nInvestimento sugerido para referência: a partir de R$ 4.500,00, podendo ajustar conforme detalhes finais do escopo.\n\nAntes de fechar a proposta, eu gostaria de confirmar alguns pontos para evitar orçamento errado e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 2000,
+          "net_target_suggested": 5500,
+          "net_target_max": 10000,
+          "hours_min": 12,
+          "hours_max": 50,
+          "hours_avg": 31.0,
+          "risk_pct": 0.35,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Configuração/desktop: inclui acesso remoto, instalação, validação e suporte curto. Escopo vago: acrescentei margem de risco."
+        },
+        "price_suggested_effective": 7000
+      },
+      "abel_feedback": {
+        "status": "discarded",
+        "status_label": "Descartado por Abel",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel descartou: projeto muito vago e complexo para assumir com segurança",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T22:48:13"
+      },
+      "effective_status": "discarded",
+      "effective_status_label": "Descartado por Abel"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750773",
+      "title": "Aplicativo de intermediação de serviços",
+      "project_url": "https://www.99freelas.com.br/project/aplicativo-de-intermediacao-de-servicos-750773",
+      "category": "Desenvolvimento Mobile",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Aplicativo de serviços, como o GetNinja. Deve ter dois lados: um para quem publica/oferece o serviço (prestador) e outro para quem contrata (cliente).",
+      "received_at_raw": "Thu, 07 May 2026 14:41:33 +0000",
+      "email_subject": "Novo Projeto: Aplicativo de intermediação de serviços",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Aplicativo de intermediação de serviços .eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "priority",
+        "matched_groups": [
+          "mobile_multiplatform"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [
+          "large_marketplace_scope",
+          "vague_or_open_scope"
+        ],
+        "technical_score": 30,
+        "commercial_score": 21,
+        "scope_clarity_score": 3,
+        "risk_score": 3,
+        "interest_score": 9,
+        "final_score": 66,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Orçamento aberto: valor comercial precisa ser confirmado.",
+          "Risco alto de escopo grande: marketplace/app com múltiplos lados; só propor com limites e fases muito explícitos."
+        ]
+      },
+      "full_description": "Aplicativo de serviços, como o GetNinja. Deve ter dois lados: um para quem publica/oferece o serviço (prestador) e outro para quem contrata (cliente).",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Mobile",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "32",
+        "interested": "42",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 15:10",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 12h42m34s.",
+        "exclusive_remaining_seconds": 45754,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T22:50:46-03:00",
+        "exclusive_until_estimated": "2026-05-08T11:33:20-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 32000,
+        "price_suggested": 63000,
+        "price_max": 100500,
+        "effort_estimate": "alto",
+        "delivery_estimate": "23 a 75 dias úteis",
+        "pricing_note": "Aplicativo/marketplace com dois lados precisa ser vendido por fases. Não propor app completo fechado sem discovery. Cálculo: 140–375h × R$ 130/h + 50% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 50.000,00. Marketplace/app com múltiplos perfis deve ser vendido por fase; estimativa é para MVP controlado. Escopo vago: acrescentei margem de risco.",
+        "competition_alert": {
+          "level": "alta",
+          "proposals": 32,
+          "interested": 42,
+          "note": "Concorrência alta; proposta precisa ser muito objetiva, consultiva e com diferencial claro."
+        },
+        "questions_to_client": [
+          "No MVP, o cliente apenas solicita orçamento ou já haverá pagamento/contratação dentro da plataforma?",
+          "Quais perfis precisam existir na primeira fase: cliente, prestador e painel admin?",
+          "O matching será por categoria/cidade ou precisa de geolocalização em tempo real?",
+          "Será necessário chat, avaliações, agenda, notificações push ou cobrança de comissão já no MVP?",
+          "A prioridade é validar o negócio rapidamente ou lançar Android/iOS completo desde o início?"
+        ],
+        "proposal_draft": "Olá! Vi o projeto \"Aplicativo de intermediação de serviços\". Pelo que descreveu, a ideia é uma plataforma de intermediação de serviços no modelo GetNinjas, com dois lados: prestadores que oferecem/publicam serviços e clientes que buscam/contratam.\n\nEsse tipo de produto costuma crescer bastante se tentar nascer completo, então minha sugestão é começar com um MVP bem delimitado: cadastro/login, perfis de cliente e prestador, cadastro de serviços/categorias, fluxo de solicitação de orçamento/contato e um painel administrativo para acompanhar usuários e solicitações.\n\nFuncionalidades como chat interno, pagamento, avaliações, geolocalização avançada e notificações podem entrar em fases seguintes, depois que o fluxo principal estiver validado. Assim você reduz custo inicial e evita investir em um aplicativo grande antes de validar a operação.\n\nPrazo estimado: 23 a 75 dias úteis.\nInvestimento de referência: a partir de R$ 63.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nEu não recomendaria fechar como app completo estilo marketplace desde o primeiro pacote; entraria com escopo fechado por fase.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 25500,
+          "net_target_suggested": 50000,
+          "net_target_max": 80500,
+          "hours_min": 140,
+          "hours_max": 375,
+          "hours_avg": 257.5,
+          "risk_pct": 0.5,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Marketplace/app com múltiplos perfis deve ser vendido por fase; estimativa é para MVP controlado. Escopo vago: acrescentei margem de risco."
+        },
+        "price_suggested_effective": 63000
+      },
+      "abel_feedback": {
+        "status": "review",
+        "status_label": "Revisar",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel enviou perguntas ao cliente; aguardando respostas antes de preparar/enviar proposta",
+        "notes": "Perguntas enviadas; Abel confirmou em 2026-05-08 14:45 que está aguardando as respostas.",
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-08T14:45:00"
+      },
+      "effective_status": "review",
+      "effective_status_label": "Revisar"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750780",
+      "title": "Site institucional para empresa de consultoria - até 6 páginas",
+      "project_url": "https://www.99freelas.com.br/project/site-institucional-para-empresa-de-consultoria-ate-6-paginas-750780",
+      "category": "Desenvolvimento Web",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Preciso de um site institucional para uma empresa de consultoria empresarial. São até 6 páginas: Home, Sobre, Serviços, Cases ou Resultados, Blog (estrutura ...",
+      "received_at_raw": "Thu, 07 May 2026 14:56:38 +0000",
+      "email_subject": "Novo Projeto: Site institucional para empresa de consultoria - até 6 páginas",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Site institucional para empresa de consultoria - até 6 páginas.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "conditional_high_price",
+        "matched_groups": [
+          "website",
+          "cms_editable_content"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [
+          "vague_or_open_scope"
+        ],
+        "technical_score": 22,
+        "commercial_score": 19,
+        "scope_clarity_score": 10,
+        "risk_score": 10,
+        "interest_score": 4,
+        "final_score": 65,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Site com edição de conteúdo/CMS: candidato apenas se bem precificado e sem virar WordPress por padrão.",
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Preciso de um site institucional para uma empresa de consultoria empresarial. São até 6 páginas: Home, Sobre, Serviços, Cases ou Resultados, Blog (estrutura básica) e Contato.\nO site precisa ser responsivo, rápido e com boa estrutura para SEO básico. Já tenho o domínio registrado.\nNão tenho identidade visual definida, então preciso de um profissional que consiga trabalhar a partir de uma referência de estilo ou sugerir uma identidade adequada ao segmento.\nAo enviar sua proposta, informe qual plataforma você recomenda (WordPress, Webflow ou outra) e por quê. Também quero saber como funciona a entrega: vou conseguir editar o conteúdo sozinho depois?",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "38",
+        "interested": "43",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 12:41",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 21h08m01s.",
+        "exclusive_remaining_seconds": 76081,
+        "status_flags": [
+          "cancelado",
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T14:37:01-03:00",
+        "exclusive_until_estimated": "2026-05-08T11:45:02-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 8000,
+        "price_suggested": 16500,
+        "price_max": 27500,
+        "effort_estimate": "médio",
+        "delivery_estimate": "7 a 22 dias úteis",
+        "pricing_note": "Site editável/CMS: bom candidato se usar plataforma adequada e limitar páginas, SEO e identidade visual. Cálculo: 40–112h × R$ 130/h + 35% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 13.500,00. Site editável/CMS: inclui estrutura, responsividade, SEO básico e treinamento leve. Escopo vago: acrescentei margem de risco.",
+        "competition_alert": {
+          "level": "alta",
+          "proposals": 38,
+          "interested": 43,
+          "note": "Concorrência alta; proposta precisa ser muito objetiva, consultiva e com diferencial claro."
+        },
+        "questions_to_client": [
+          "Você tem referências visuais de sites que combinam com a consultoria?",
+          "Quem fornecerá textos e imagens das até 6 páginas?",
+          "O blog precisa ser publicável/editável desde a primeira entrega?",
+          "Você prefere WordPress, Webflow ou aceita uma recomendação com base em facilidade de edição?",
+          "Precisa de configuração de domínio, hospedagem, formulário e integração com WhatsApp/e-mail?"
+        ],
+        "proposal_draft": "Olá! Vi que você precisa de um site institucional para consultoria empresarial com até 6 páginas, SEO básico, boa performance e possibilidade de edição futura.\n\nMinha sugestão é construir uma estrutura profissional para Home, Sobre, Serviços, Cases/Resultados, Blog básico e Contato, já pensando em responsividade, clareza comercial e facilidade de manutenção. Como você ainda não tem identidade visual definida, eu posso partir de referências de estilo e propor uma linha visual adequada ao segmento de consultoria.\n\nSobre a plataforma: se a prioridade for edição simples e autonomia, eu recomendaria WordPress com uma estrutura leve e bem organizada; se a prioridade for acabamento visual e menos manutenção técnica, podemos avaliar Webflow ou uma alternativa estática/editável.\n\nPrazo estimado: 7 a 22 dias úteis.\nInvestimento de referência: a partir de R$ 16.500,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nNa entrega eu incluiria orientação para você conseguir alterar textos/imagens e publicar conteúdos básicos depois.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 6500,
+          "net_target_suggested": 13500,
+          "net_target_max": 22000,
+          "hours_min": 40,
+          "hours_max": 112,
+          "hours_avg": 76.0,
+          "risk_pct": 0.35,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Site editável/CMS: inclui estrutura, responsividade, SEO básico e treinamento leve. Escopo vago: acrescentei margem de risco."
+        },
+        "price_suggested_effective": 16500
+      },
+      "abel_feedback": {
+        "status": "lost",
+        "status_label": "Perdeu",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Projeto cancelado pelo cliente; não seguir com proposta",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": "cancelled_by_client",
+        "updated_at": "2026-05-08T18:07:00"
+      },
+      "effective_status": "lost",
+      "effective_status_label": "Perdeu"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750854",
+      "title": "Desenvolvedor Python para scripts, APIs e pipelines de dados",
+      "project_url": "https://www.99freelas.com.br/project/desenvolvedor-python-para-scripts-apis-e-pipelines-de-dados-750854",
+      "category": "Outra - Web, Mobile & Software",
+      "level": "Intermediário",
+      "budget": "Aberto",
+      "description_preview": "Estamos buscando um(a) desenvolvedor(a) Python para atuar em projeto de 6 meses a 1 ano, focado no desenvolvimento de scripts, APIs e integrações; na constru...",
+      "received_at_raw": "Thu, 07 May 2026 18:28:33 +0000",
+      "email_subject": "Novo Projeto: Desenvolvedor Python para scripts, APIs e pipelines de dados",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Desenvolvedor Python para scripts, APIs e pipelines de dados.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "conditional_high_price",
+        "matched_groups": [
+          "backend",
+          "data_analysis"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 22,
+        "commercial_score": 16,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 4,
+        "final_score": 65,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Área aceita se houver bom potencial financeiro.",
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Estamos buscando um(a) desenvolvedor(a) Python para atuar em projeto de 6 meses a 1 ano, focado no desenvolvimento de scripts, APIs e integrações; na construção e manutenção de pipelines de dados; na modelagem e consultas em Data Warehouse; na integração com ambientes cloud; e no desenvolvimento de front-end básico para interfaces simples.\nRequisitos:\n- Domínio de Python (POO, APIs, boas práticas)\n- Experiência com SQL e NoSQL (PostgreSQL, MySQL, MongoDB)\n- Experiência com Data Warehouse\n- Vivência em Azure, AWS ou Snowflake\nDiferenciais:\n- Power Platform\n- JavaScript / TypeScript\n- Machine Learning\n- Docker\nEnviar: GitHub/portfólio, projetos similares e proposta de valor (por hora)\nHabilidades desejadas:\nPython",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Outra - Web, Mobile & Software",
+        "budget": "Aberto",
+        "level": "Intermediário",
+        "visibility": "Público",
+        "proposals": "10",
+        "interested": "14",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 15:11",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 22h41m00s.",
+        "exclusive_remaining_seconds": 81660,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T16:43:20-03:00",
+        "exclusive_until_estimated": "2026-05-08T15:24:20-03:00"
+      },
+      "decision_support": {
+        "status_manual": "revisar",
+        "price_min": 5000,
+        "price_suggested": 9000,
+        "price_max": 14500,
+        "effort_estimate": "a confirmar",
+        "delivery_estimate": "4 a 12 dias úteis",
+        "pricing_note": "Projeto fora das categorias principais; precisa de avaliação manual. Cálculo: 24–60h × R$ 130/h + 35% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 7.500,00. Power Apps/Power Platform: escopo tende a ser menor, mas há risco de curva e licenças.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 10,
+          "interested": 14,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "A contratação será por pacote mensal de horas ou por entregas fechadas?",
+          "Quais stacks serão usadas no início: banco, cloud, orquestração e repositório?",
+          "Já existe backlog de scripts/APIs/pipelines ou será definido semana a semana?",
+          "Há ambiente de desenvolvimento, homologação e produção separados?",
+          "Qual disponibilidade semanal esperada e como será feita a priorização das demandas?"
+        ],
+        "proposal_draft": "Olá! Vi que a demanda é para desenvolvimento Python em um projeto contínuo, envolvendo scripts, APIs, integrações, pipelines de dados, Data Warehouse e cloud.\n\nPara esse tipo de trabalho, eu recomendaria organizar a contratação por pacote de horas ou sprint mensal, com backlog priorizado. Posso atuar em criação/manutenção de scripts e APIs, integrações entre serviços, consultas/modelagem de dados, automações e interfaces simples quando necessário.\n\nTambém considero importante manter boas práticas desde o início: versionamento, documentação mínima, tratamento de erros, logs e separação entre ambiente de desenvolvimento e produção.\n\nPrazo estimado: 4 a 12 dias úteis.\nInvestimento de referência: a partir de R$ 9.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nComo o projeto é de 6 meses a 1 ano, o ideal é alinharmos disponibilidade semanal, stack principal e forma de priorização das demandas.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 4000,
+          "net_target_suggested": 7500,
+          "net_target_max": 11500,
+          "hours_min": 24,
+          "hours_max": 60,
+          "hours_avg": 42.0,
+          "risk_pct": 0.35,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Power Apps/Power Platform: escopo tende a ser menor, mas há risco de curva e licenças."
+        },
+        "price_suggested_effective": 9000
+      },
+      "abel_feedback": {
+        "status": "discarded",
+        "status_label": "Descartado por Abel",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel descartou: não tem portfólio em Python para essa oportunidade",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-07T23:13:33"
+      },
+      "effective_status": "discarded",
+      "effective_status_label": "Descartado por Abel"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750874",
+      "title": "Bot para pagamentos e liberação automática em grupo privado (+18)",
+      "project_url": "https://www.99freelas.com.br/project/bot-para-pagamentos-e-liberacao-automatica-em-grupo-privado-18-750874",
+      "category": "Outra - Web, Mobile & Software",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Preciso de um programador para desenvolver e configurar comigo um bot de automação para venda de conteúdo adulto (+18). O sistema deve: Receber pagamentos ...",
+      "received_at_raw": "Thu, 07 May 2026 18:56:10 +0000",
+      "email_subject": "Novo Projeto: Bot para pagamentos e liberação automática em grupo privado (+18)",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Bot para pagamentos e liberação automática em grupo privado (+18).eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "conditional_high_price",
+        "matched_groups": [
+          "backend",
+          "data_analysis"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 22,
+        "commercial_score": 16,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 4,
+        "final_score": 65,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "Área aceita se houver bom potencial financeiro.",
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Preciso de um programador para desenvolver e configurar comigo um bot de automação para venda de conteúdo adulto (+18).\nO sistema deve:\nReceber pagamentos automaticamente\nConfirmar pagamentos via PIX/cartão\nLiberar entrada automática em grupos privados após confirmação\nGerenciar assinaturas/membros\nRemover acesso de usuários inadimplentes (se possível)\nPainel simples de gerenciamento\nIntegração com Telegram e/ou Discord (informar experiência)\nConfiguração completa junto comigo após entrega\nTambém preciso:\nInstalação no servidor/VPS\nExplicação básica de uso\nSuporte inicial pós-entrega\nTecnologias desejadas\nAceito sugestões, mas prefiro:\nPython ou Node.js\nIntegração com APIs de pagamento\nBanco de dados simples\nExperiência com bots e automações\nImportante\nO projeto é para conteúdo adulto legalizado (+18)\nPreciso de alguém experiente e discreto\nFavor enviar portfólio ou projetos similares\nOrçamento\nAberto a propostas\nHabilidades desejadas:\nNodeJS\nPython",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Outra - Web, Mobile & Software",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "13",
+        "interested": "17",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 15:51",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 23h07m28s.",
+        "exclusive_remaining_seconds": 83248,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T16:43:21-03:00",
+        "exclusive_until_estimated": "2026-05-08T15:50:49-03:00"
+      },
+      "decision_support": {
+        "status_manual": "revisar",
+        "price_min": 7000,
+        "price_suggested": 13000,
+        "price_max": 21000,
+        "effort_estimate": "a confirmar",
+        "delivery_estimate": "6 a 18 dias úteis",
+        "pricing_note": "Projeto fora das categorias principais; precisa de avaliação manual. Cálculo: 35–90h × R$ 130/h + 30% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 10.500,00. Integração/automações: inclui discovery, credenciais, webhooks, testes de erro e homologação.",
+        "competition_alert": {
+          "level": "média",
+          "proposals": 13,
+          "interested": 17,
+          "note": "Concorrência moderada; vale responder rápido e com escopo bem delimitado."
+        },
+        "questions_to_client": [
+          "O grupo privado será no Telegram, Discord ou ambos?",
+          "Qual gateway de pagamento deseja usar para PIX/cartão e assinaturas?",
+          "A liberação/remoção de membros precisa ser totalmente automática ou com aprovação manual?",
+          "O painel precisa apenas listar usuários/pagamentos ou também permitir ações administrativas?",
+          "Você já tem VPS/domínio/contas das APIs ou precisa incluir essa configuração na entrega?"
+        ],
+        "proposal_draft": "Olá! Li o projeto \"Bot para pagamentos e liberação automática em grupo privado (+18)\" e entendi que você precisa de um bot para automatizar a venda de acesso a grupos privados, com confirmação de pagamento, liberação de membros e controle de assinaturas/inadimplência.\n\nConsigo desenvolver essa solução em Node.js, com um backend simples para centralizar a lógica, integração com gateway de pagamento para PIX/cartão, webhooks para confirmar pagamentos automaticamente, banco de dados para registrar usuários/pagamentos/status e integração com Telegram e/ou Discord para liberar ou remover membros conforme as regras combinadas.\n\nTambém posso incluir um painel administrativo básico para consulta de membros, pagamentos e status das assinaturas, além da instalação em VPS e uma explicação de uso após a entrega.\n\nPrazo estimado: 6 a 18 dias úteis.\nInvestimento de referência: a partir de R$ 13.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nPonto importante: eu manteria o escopo bem delimitado e discreto, principalmente nas regras de assinatura, liberação automática e remoção de inadimplentes.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 5500,
+          "net_target_suggested": 10500,
+          "net_target_max": 17000,
+          "hours_min": 35,
+          "hours_max": 90,
+          "hours_avg": 62.5,
+          "risk_pct": 0.3,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Integração/automações: inclui discovery, credenciais, webhooks, testes de erro e homologação."
+        },
+        "price_suggested_effective": 13000
+      },
+      "abel_feedback": {
+        "status": "review",
+        "status_label": "Revisar",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel enviou perguntas ao cliente; aguardando respostas antes de preparar/enviar proposta",
+        "notes": "Perguntas enviadas em 2026-05-08 18:11 (America/Sao_Paulo).",
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-08T18:11:00"
+      },
+      "effective_status": "review",
+      "effective_status_label": "Revisar"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750802",
+      "title": "Estruturação de landing page premium para desktop e mobile",
+      "project_url": "https://www.99freelas.com.br/project/estruturacao-de-landing-page-premium-para-desktop-e-mobile-750802",
+      "category": "Desenvolvimento Web",
+      "level": "Especialista",
+      "budget": "Aberto",
+      "description_preview": "Estou procurando um profissional para finalizar e estruturar uma landing page já pronta visualmente. O que já tenho: * Layout completo da versão Desktop; *...",
+      "received_at_raw": "Thu, 07 May 2026 17:09:35 +0000",
+      "email_subject": "Novo Projeto: Estruturação de landing page premium para desktop e mobile",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Estruturação de landing page premium para desktop e mobile.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "conditional_high_price",
+        "matched_groups": [
+          "mobile_multiplatform",
+          "website",
+          "desktop"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [],
+        "technical_score": 18,
+        "commercial_score": 20,
+        "scope_clarity_score": 10,
+        "risk_score": 13,
+        "interest_score": 3,
+        "final_score": 64,
+        "recommended_action": "prepare_or_review_proposal",
+        "notes": [
+          "WordPress/Elementor permitido apenas como landing page simples/editável, caso a caso e se pagar bem.",
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Estou procurando um profissional para finalizar e estruturar uma landing page já pronta visualmente.\nO que já tenho:\n* Layout completo da versão Desktop;\n* Layout completo da versão Mobile;\n* Estrutura visual definida;\n* Todas as imagens e elementos;\n* Referências completas do site;\n* Hospedagem já ativa na Hostinger.\nO que preciso:\n* Montar a landing page seguindo fielmente o layout já criado;\n* Deixar tudo organizado e responsivo;\n* Estruturar de forma editável para futuras alterações de textos, títulos, botões e imagens;\n* Ajustar detalhes visuais e refinamentos finais;\n* Entregar funcionando corretamente no WordPress/Elementor (ou estrutura similar editável).\nFuncionalidades necessárias:\n* Botões de encaminhamento para WhatsApp;\n* Encaminhamento para Instagram;\n* Encaminhamento para e-mail;\n* Botão flutuante/fixo do WhatsApp na lateral direita;\n* Menu superior fixo com efeito scroll (sticky menu);\n* Funcionamento correto no Desktop e Mobile.\nIMPORTANTE:\nO layout já está pronto. NÃO é criação do zero. O objetivo é reproduzir o visual já definido com fidelidade e acabamento profissional.\nO projeto possui:\n* 1 versão Desktop;\n* 2 versões Mobile;\n* Visual premium/moderno.\nTambém fornecerei:\n* Pasta com logos;\n* Imagens;\n* Elementos visuais;\n* Referências completas;\n* Imagem/layout final do site já pronto.\nEntrega rápida será diferencial.\nEnvie:\n* Portfólio;\n* Últimos trabalhos;\n* Principalmente projetos de landing pages premium/responsivas.\nProcuro alguém com atenção aos detalhes visuais e boa experiência em responsividade/mobile.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Especialista",
+        "visibility": "Público",
+        "proposals": "26",
+        "interested": "29",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 12:43",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 22h34m47s.",
+        "exclusive_remaining_seconds": 81287,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T15:30:32-03:00",
+        "exclusive_until_estimated": "2026-05-08T14:05:19-03:00"
+      },
+      "decision_support": {
+        "status_manual": "preparar_proposta",
+        "price_min": 4500,
+        "price_suggested": 9500,
+        "price_max": 16000,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "4 a 14 dias úteis",
+        "pricing_note": "Aplicativo/integracão operacional: bom candidato, mas precisa validar ERP, tecnologia atual, acesso ao código e ambiente de testes. Cálculo: 24–70h × R$ 130/h + 25% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 7.500,00. Landing/site: depende de conteúdo, acabamento visual, responsividade e formulário/SEO básico.",
+        "competition_alert": {
+          "level": "média",
+          "proposals": 26,
+          "interested": 29,
+          "note": "Concorrência moderada; vale responder rápido e com escopo bem delimitado."
+        },
+        "questions_to_client": [
+          "O layout está em Figma, imagem, PDF ou outro formato editável?",
+          "A entrega precisa ser obrigatoriamente em WordPress/Elementor na Hostinger?",
+          "Há animações ou efeitos específicos além do sticky menu e botão fixo de WhatsApp?",
+          "Os textos, imagens, links de WhatsApp/Instagram/e-mail já estão finais?",
+          "Você espera apenas montagem fiel do layout ou também ajustes de copy/performance?"
+        ],
+        "proposal_draft": "Olá! Li a descrição da landing page e entendi que o layout desktop/mobile já está pronto; o foco não é criar do zero, mas montar fielmente, deixar responsivo e editável.\n\nMinha proposta é implementar a landing na estrutura indicada, preferencialmente WordPress/Elementor na Hostinger se esse for o caminho desejado, respeitando o layout existente, imagens, espaçamentos, botões e comportamento mobile. Também incluiria os links para WhatsApp, Instagram e e-mail, botão fixo lateral de WhatsApp e menu sticky com efeito de scroll.\n\nComo o visual já está definido, eu trabalharia com atenção em fidelidade, organização dos blocos e facilidade para futuras alterações de textos, títulos, botões e imagens.\n\nPrazo estimado: 4 a 14 dias úteis.\nInvestimento de referência: a partir de R$ 9.500,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nConsidero importante validar antes o formato do layout e se todos os assets/links finais já estão prontos.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 3500,
+          "net_target_suggested": 7500,
+          "net_target_max": 12500,
+          "hours_min": 24,
+          "hours_max": 70,
+          "hours_avg": 47.0,
+          "risk_pct": 0.25,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Landing/site: depende de conteúdo, acabamento visual, responsividade e formulário/SEO básico."
+        },
+        "price_suggested_effective": 9500
+      },
+      "abel_feedback": {
+        "status": "review",
+        "status_label": "Revisar",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Abel enviou perguntas ao cliente; aguardando respostas antes de preparar/enviar proposta",
+        "notes": "Perguntas enviadas em 2026-05-08 18:13 (America/Sao_Paulo).",
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": "2026-05-08T18:13:00"
+      },
+      "effective_status": "review",
+      "effective_status_label": "Revisar"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750776",
+      "title": "Detectar padrões e probabilidades em Bac Bo (Plataforma Evolution)",
+      "project_url": "https://www.99freelas.com.br/project/detectar-padroes-e-probabilidades-em-bac-bo-plataforma-evolution-750776",
+      "category": "Outra - Web, Mobile & Software",
+      "level": "Especialista",
+      "budget": "Aberto",
+      "description_preview": "Criar um robô de alerta para Bac Bo na plataforma Evolution Descrição do projeto: Criar uma ferramenta para me notificar quando ocorrer o seguinte: Toda ve...",
+      "received_at_raw": "Thu, 07 May 2026 14:53:33 +0000",
+      "email_subject": "Novo Projeto: Detectar padrões e probabilidades em Bac Bo (Plataforma Evolution)",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Detectar padrões e probabilidades em Bac Bo (Plataforma Evolution).eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "conditional_high_price",
+        "matched_groups": [
+          "data_analysis"
+        ],
+        "blocked_reasons": [],
+        "risk_flags": [
+          "gambling_or_betting"
+        ],
+        "technical_score": 19,
+        "commercial_score": 16,
+        "scope_clarity_score": 10,
+        "risk_score": 4,
+        "interest_score": 4,
+        "final_score": 53,
+        "recommended_action": "discard_or_case_by_case",
+        "notes": [
+          "Área aceita se houver bom potencial financeiro.",
+          "Orçamento aberto: valor comercial precisa ser confirmado.",
+          "Risco alto: projeto relacionado a aposta/cassino ou automação de jogo."
+        ]
+      },
+      "full_description": "Criar um robô de alerta para Bac Bo na plataforma Evolution\nDescrição do projeto:\nCriar uma ferramenta para me notificar quando ocorrer o seguinte:\nToda vez que aparecer um número X na cor AZUL ou VERMELHO, onde nas últimas 8 ocorrências esteja com 100% de assertividade. Exemplo:\nPeríodo de análise - últimas 260 rodadas.\n1. Se o 7 AZUL puxou a cor (AZUL ou VERMELHO) nas últimas 8 (oito) ocorrências em 100% das vezes, e a cor oposta desse número 7 tiver puxado a mesma cor das ocorrências de 100% em, no mínimo, 75% das vezes neste mesmo período.\n2. A análise será feita para até G1, mas o alerta só será disparado se as ocorrências no G1 tiverem sido, no máximo, 15% das vezes.\n3. Quando ocorrer a 8ª ocorrência da análise na última hora, o número em questão deve ter saído pelo menos 2 vezes.\nOutras opções serão conversadas no início das possíveis tratativas.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Outra - Web, Mobile & Software",
+        "budget": "Aberto",
+        "level": "Especialista",
+        "visibility": "Público",
+        "proposals": "9",
+        "interested": "11",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 15:42",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 12h13m08s.",
+        "exclusive_remaining_seconds": 43988,
+        "status_flags": [
+          "aberto",
+          "em andamento"
+        ],
+        "page_read_at": "2026-05-07T23:28:01-03:00",
+        "exclusive_until_estimated": "2026-05-08T11:41:09-03:00"
+      },
+      "decision_support": {
+        "status_manual": "caso_a_caso",
+        "price_min": 3500,
+        "price_suggested": 8000,
+        "price_max": 13500,
+        "effort_estimate": "médio/alto",
+        "delivery_estimate": "3 a 12 dias úteis",
+        "pricing_note": "Risco alto por envolver aposta/cassino/automação de jogo. Só avançar se escopo e responsabilidade forem muito claros. Cálculo: 20–60h × R$ 130/h + 25% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. O valor líquido-alvo sugerido é R$ 6.500,00. Estimativa genérica: precisa de perguntas para reduzir incerteza.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 9,
+          "interested": 11,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [
+          "A coleta dos resultados virá de API, histórico exportado ou leitura/captura da tela?",
+          "O robô será apenas de alerta ou executará alguma ação automaticamente?",
+          "Qual canal de alerta deseja usar: Telegram, WhatsApp, Discord ou painel web?",
+          "As regras descritas são finais ou haverá ajustes depois dos primeiros testes?",
+          "Você aceita uma entrega com logs e validação estatística, sem promessa de resultado financeiro?"
+        ],
+        "proposal_draft": "Olá! Li a regra do robô de alerta para Bac Bo na Evolution. Entendi que a ideia é monitorar ocorrências específicas por número/cor, validar janelas históricas e disparar alerta apenas quando os critérios estatísticos descritos forem atendidos.\n\nMinha sugestão seria começar por um MVP de monitoramento e alerta, com regras configuráveis, registro das análises em log e validação dos resultados antes de qualquer expansão. O foco seria notificação, não promessa de resultado financeiro.\n\nA parte mais importante é definir a fonte dos dados: API, histórico exportado ou leitura da tela. Isso muda bastante a complexidade e a estabilidade da solução.\n\nPrazo estimado: 3 a 12 dias úteis.\nInvestimento de referência: a partir de R$ 8.000,00, sujeito a ajuste após alinharmos os detalhes finais.\n\nEu manteria o escopo limitado a alertas e validação das regras, sem automação de apostas.\n\nAntes de fechar, eu gostaria de confirmar alguns pontos para evitar proposta subestimada e garantir uma entrega segura.",
+        "pricing_calc": {
+          "hourly_rate": 130,
+          "platform_fee_pct": 0.2,
+          "platform_fee_multiplier": 1.25,
+          "net_target_min": 3000,
+          "net_target_suggested": 6500,
+          "net_target_max": 11000,
+          "hours_min": 20,
+          "hours_max": 60,
+          "hours_avg": 40.0,
+          "risk_pct": 0.25,
+          "formula": "preço ao cliente = (horas estimadas × R$ 130/h × margem de risco) ÷ (1 - 20% taxa da plataforma)",
+          "note": "Estimativa genérica: precisa de perguntas para reduzir incerteza."
+        },
+        "price_suggested_effective": 8000
+      },
+      "abel_feedback": {
+        "status": "lost",
+        "status_label": "Perdeu",
+        "abel_score": null,
+        "price_override": null,
+        "reason": "Cliente aceitou proposta de outro freelancer; não seguir com proposta",
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": "accepted_by_other_freelancer",
+        "updated_at": "2026-05-08T18:14:00"
+      },
+      "effective_status": "lost",
+      "effective_status_label": "Perdeu"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750811",
+      "title": "Configuração de blog WordPress com foco em performance e SEO técnico",
+      "project_url": "https://www.99freelas.com.br/project/configuracao-de-blog-wordpress-com-foco-em-performance-e-seo-tecnico-750811",
+      "category": "Desenvolvimento Web",
+      "level": "Intermediário",
+      "budget": "Aberto",
+      "description_preview": "Busco um desenvolvedor WordPress com foco em performance e SEO para configurar e implementar um template de blog em um domínio que já possui um site instituc...",
+      "received_at_raw": "Thu, 07 May 2026 17:15:37 +0000",
+      "email_subject": "Novo Projeto: Configuração de blog WordPress com foco em performance e SEO técnico",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Configuração de blog WordPress com foco em performance e SEO técnico.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "blocked",
+        "matched_groups": [
+          "mobile_multiplatform",
+          "website",
+          "backend"
+        ],
+        "blocked_reasons": [
+          "wordpress"
+        ],
+        "risk_flags": [
+          "vague_or_open_scope"
+        ],
+        "technical_score": 0,
+        "commercial_score": 24,
+        "scope_clarity_score": 10,
+        "risk_score": 4,
+        "interest_score": 0,
+        "final_score": 38,
+        "recommended_action": "discard",
+        "notes": [
+          "Bloqueado por preferência explícita de Abel.",
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Busco um desenvolvedor WordPress com foco em performance e SEO para configurar e implementar um template de blog em um domínio que já possui um site institucional.\nO objetivo principal é que o blog seja extremamente leve, totalmente rastreável pelo Google e que não prejudique o carregamento das páginas principais do site.\nEscopo do Trabalho:\n1. Arquitetura e Estrutura: Instalação/configuração do blog em subdiretório (/blog). Configuração de links permanentes amigáveis. Criação de taxonomia (categorias e tags) otimizada para SEO.\n2. Design e Template (performance-first): Implementação de template (preferência por Astra, GeneratePress ou Hello Elementor) focado em Core Web Vitals. Configuração do editor Gutenberg para os posts (evitar construtores pesados como Elementor nos artigos, se possível). Garantia de pontuação 90+ no Mobile PageSpeed Insights.\n3. SEO Técnico e Rastreamento: Configuração completa do plugin Rank Math (incluindo sitemap, Instant Indexing e schema markup). Instalação e verificação via Google Site Kit (Search Console e GA4). Configuração técnica de tags de rastreamento (GTM) para conversões no blog.\n4. Otimização de Servidor e Manutenção: Implementação de cache avançado (LiteSpeed ou WP Rocket). Otimização automática de imagens (conversão para WebP e lazy load). Configuração de segurança básica (Wordfence/Cloudflare).\nDomínio de plugins de SEO e ferramentas de análise do Google. Portfólio de blogs com bom desempenho no mobile. Capacidade de entregar um código limpo (sem excesso de plugins desnecessários).",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Intermediário",
+        "visibility": "Público",
+        "proposals": "14",
+        "interested": "14",
+        "min_value": "R$ 50,00",
+        "last_view": null,
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 21h36m34s.",
+        "exclusive_remaining_seconds": 77794,
+        "status_flags": [],
+        "page_read_at": "2026-05-07T15:30:38-03:00",
+        "exclusive_until_estimated": "2026-05-08T13:07:12-03:00"
+      },
+      "decision_support": {
+        "status_manual": "descartar",
+        "price_min": null,
+        "price_suggested": null,
+        "price_max": null,
+        "effort_estimate": "não estimado",
+        "delivery_estimate": "não recomendado",
+        "pricing_note": "Bloqueado por preferência explícita: WordPress.",
+        "competition_alert": {
+          "level": "média",
+          "proposals": 14,
+          "interested": 14,
+          "note": "Concorrência moderada; vale responder rápido e com escopo bem delimitado."
+        },
+        "questions_to_client": [],
+        "proposal_draft": "Projeto bloqueado pela régua atual do Softwarehouse. Não preparar proposta, salvo desbloqueio manual do Abel.",
+        "price_suggested_effective": null
+      },
+      "abel_feedback": {
+        "status": null,
+        "status_label": null,
+        "abel_score": null,
+        "price_override": null,
+        "reason": null,
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": null
+      },
+      "effective_status": "descartar",
+      "effective_status_label": "Descartar"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750794",
+      "title": "Correção, gestão e SEO de site WordPress",
+      "project_url": "https://www.99freelas.com.br/project/correcao-gestao-e-seo-de-site-wordpress-750794",
+      "category": "Desenvolvimento Web",
+      "level": "Iniciante",
+      "budget": "Aberto",
+      "description_preview": "Preciso contratar um profissional especializado em WordPress para realizar manutenção, correção e gestão do meu site profissional da empresa Máxima Computado...",
+      "received_at_raw": "Thu, 07 May 2026 15:13:36 +0000",
+      "email_subject": "Novo Projeto: Correção, gestão e SEO de site WordPress",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Correção, gestão e SEO de site WordPress.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "blocked",
+        "matched_groups": [
+          "website",
+          "backend",
+          "cms_editable_content"
+        ],
+        "blocked_reasons": [
+          "wordpress"
+        ],
+        "risk_flags": [],
+        "technical_score": 0,
+        "commercial_score": 19,
+        "scope_clarity_score": 10,
+        "risk_score": 4,
+        "interest_score": 0,
+        "final_score": 33,
+        "recommended_action": "discard",
+        "notes": [
+          "Bloqueado por preferência explícita de Abel.",
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Preciso contratar um profissional especializado em WordPress para realizar manutenção, correção e gestão do meu site profissional da empresa Máxima Computadores.\nSite:\nhttps://maximacomputadores.com\nO site utiliza:\n- WordPress\n- Elementor Pro\n- Rank Math SEO\n- WP Rocket\n- Slider Revolution\n- LiteSpeed Server\n- Plugins premium e otimização SEO\nRecentemente realizei atualização de plugins e o site começou a apresentar erro crítico no WordPress, afetando o painel administrativo e funcionamento do site.\nPreciso de um profissional para:\n- Identificar e corrigir o erro crítico atual;\n- Verificar incompatibilidade entre plugins;\n- Restaurar estabilidade do site;\n- Fazer backup completo;\n- Atualizar plugins e WordPress com segurança;\n- Verificar segurança e possíveis vulnerabilidades;\n- Otimizar velocidade e desempenho;\n- Revisar cache e configurações do LiteSpeed/WP Rocket;\n- Auxiliar na organização do domínio, DNS e hospedagem;\n- Fazer manutenção preventiva contínua.\nDiferenciais desejados:\n- Experiência avançada com WordPress e Elementor;\n- Conhecimento em SEO;\n- Experiência com servidores LiteSpeed;\n- Conhecimento em segurança WordPress;\n- Facilidade de comunicação e suporte rápido.\nO site é comercial e utilizado pela empresa diariamente, então preciso de alguém confiável e com experiência real em WordPress profissional.",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Iniciante",
+        "visibility": "Público",
+        "proposals": "27",
+        "interested": "28",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 12:07",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 21h30m25s.",
+        "exclusive_remaining_seconds": 77425,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T14:37:02-03:00",
+        "exclusive_until_estimated": "2026-05-08T12:07:27-03:00"
+      },
+      "decision_support": {
+        "status_manual": "descartar",
+        "price_min": null,
+        "price_suggested": null,
+        "price_max": null,
+        "effort_estimate": "não estimado",
+        "delivery_estimate": "não recomendado",
+        "pricing_note": "Bloqueado por preferência explícita: WordPress.",
+        "competition_alert": {
+          "level": "média",
+          "proposals": 27,
+          "interested": 28,
+          "note": "Concorrência moderada; vale responder rápido e com escopo bem delimitado."
+        },
+        "questions_to_client": [],
+        "proposal_draft": "Projeto bloqueado pela régua atual do Softwarehouse. Não preparar proposta, salvo desbloqueio manual do Abel.",
+        "price_suggested_effective": null
+      },
+      "abel_feedback": {
+        "status": null,
+        "status_label": null,
+        "abel_score": null,
+        "price_override": null,
+        "reason": null,
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": null
+      },
+      "effective_status": "descartar",
+      "effective_status_label": "Descartar"
+    },
+    {
+      "source": "99freelas",
+      "source_project_id": "750824",
+      "title": "Especialista em SEO para migração para WordPress sem perder ranking",
+      "project_url": "https://www.99freelas.com.br/project/especialista-em-seo-para-migracao-para-wordpress-sem-perder-ranking-750824",
+      "category": "Desenvolvimento Web",
+      "level": "Especialista",
+      "budget": "Aberto",
+      "description_preview": "Olá pessoal, estou com uma cliente que possui um site muito antigo, mas muito bem posicionado no Google de forma orgânica. Queremos desenvolver um novo site,...",
+      "received_at_raw": "Thu, 07 May 2026 17:25:36 +0000",
+      "email_subject": "Novo Projeto: Especialista em SEO para migração para WordPress sem perder ranking",
+      "email_from": "99Freelas <no-reply@99freelas.com.br>",
+      "email_to": "\"abel.o.d@outlook.com\" <abel.o.d@outlook.com>",
+      "raw_email_path": "/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse/Novo Projeto_ Especialista em SEO para migração para WordPress sem perder ranking.eml",
+      "auth": {
+        "gmail_dmarc_fail": true,
+        "gmail_spf_pass": true,
+        "outlook_redirect_seen": true,
+        "amazon_ses_seen": true,
+        "original_99freelas_dkim_pass_seen": true,
+        "auth_status": "redirect_validated_partial"
+      },
+      "analysis": {
+        "preference_class": "blocked",
+        "matched_groups": [
+          "website",
+          "data_analysis"
+        ],
+        "blocked_reasons": [
+          "wordpress"
+        ],
+        "risk_flags": [],
+        "technical_score": 0,
+        "commercial_score": 19,
+        "scope_clarity_score": 10,
+        "risk_score": 4,
+        "interest_score": 0,
+        "final_score": 33,
+        "recommended_action": "discard",
+        "notes": [
+          "Bloqueado por preferência explícita de Abel.",
+          "Orçamento aberto: valor comercial precisa ser confirmado."
+        ]
+      },
+      "full_description": "Olá pessoal, estou com uma cliente que possui um site muito antigo, mas muito bem posicionado no Google de forma orgânica. Queremos desenvolver um novo site, porém agora no WordPress, utilizando o Elementor e templates da Envato, para termos dinamismo e poder alterar o layout sempre que quisermos.\nMas estamos com receio de perder SEO com essa migração.\nEstou em busca de um especialista para atuar somente na parte técnica dessa migração. Não irá atuar na criação do layout nem na produção de conteúdo. Só queremos que nos instrua sobre as melhores práticas de migração de URLs e demais aspectos técnicos a serem feitos dentro do WordPress, e que acompanhe o projeto nesse sentido.\nFavor não mandar propostas genéricas com textos prontos. Quero realmente saber quem tem experiência com cases desse tipo, que já tenha trabalhado anteriormente em projetos dessa complexidade técnica.\nHabilidades desejadas:\nArmazenagem de Dados\nAtualização De Site\nOtimização de Website\nSEO\nWordpress",
+      "page_details": {
+        "category": "Web, Mobile & Software",
+        "subcategory": "Desenvolvimento Web",
+        "budget": "Aberto",
+        "level": "Especialista",
+        "visibility": "Público",
+        "proposals": "4",
+        "interested": "9",
+        "min_value": "R$ 50,00",
+        "last_view": "hoje às 13:44",
+        "is_exclusive": true,
+        "exclusive_note": "Projeto Exclusivo. Ficará disponível para todos os profissionais em 22h50m25s.",
+        "exclusive_remaining_seconds": 82225,
+        "status_flags": [
+          "aberto"
+        ],
+        "page_read_at": "2026-05-07T15:30:39-03:00",
+        "exclusive_until_estimated": "2026-05-08T14:21:04-03:00"
+      },
+      "decision_support": {
+        "status_manual": "descartar",
+        "price_min": null,
+        "price_suggested": null,
+        "price_max": null,
+        "effort_estimate": "não estimado",
+        "delivery_estimate": "não recomendado",
+        "pricing_note": "Bloqueado por preferência explícita: WordPress.",
+        "competition_alert": {
+          "level": "baixa",
+          "proposals": 4,
+          "interested": 9,
+          "note": "Concorrência ainda baixa/moderada; boa janela para proposta cuidadosa."
+        },
+        "questions_to_client": [],
+        "proposal_draft": "Projeto bloqueado pela régua atual do Softwarehouse. Não preparar proposta, salvo desbloqueio manual do Abel.",
+        "price_suggested_effective": null
+      },
+      "abel_feedback": {
+        "status": null,
+        "status_label": null,
+        "abel_score": null,
+        "price_override": null,
+        "reason": null,
+        "notes": null,
+        "proposal_sent_price": null,
+        "proposal_sent_at": null,
+        "outcome": null,
+        "updated_at": null
+      },
+      "effective_status": "descartar",
+      "effective_status_label": "Descartar"
+    }
+  ],
+  "feedback_applied_at": "2026-05-08T18:43:09",
+  "feedback_source": "/home/abel13/.openclaw/workspace/softwarehouse/data/feedback.json"
+}
