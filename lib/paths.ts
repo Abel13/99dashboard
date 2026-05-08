@@ -1,8 +1,15 @@
-export const paths = {
-  workspace: process.env.SOFTWAREHOUSE_WORKSPACE || '/home/abel13/.openclaw/workspace/softwarehouse',
-  pipeline: process.env.SOFTWAREHOUSE_PIPELINE || '/home/abel13/.openclaw/workspace/softwarehouse/scripts/update_pipeline.sh',
-  feedback: process.env.SOFTWAREHOUSE_FEEDBACK || '/home/abel13/.openclaw/workspace/softwarehouse/data/feedback.json',
-  opportunities: process.env.SOFTWAREHOUSE_OPPORTUNITIES || '/home/abel13/.openclaw/workspace/softwarehouse/out/opportunities.feedback.json',
-  emlDir: process.env.SOFTWAREHOUSE_EML_DIR || '/mnt/c/Users/abelo/OneDrive/Workspace/Softwarehouse',
+import path from 'node:path'
+
+function resolvePath(value: string) {
+  return path.isAbsolute(value) ? value : path.join(/* turbopackIgnore: true */ process.cwd(), value)
 }
 
+const workspace = resolvePath(process.env.SOFTWAREHOUSE_WORKSPACE || './storage')
+
+export const paths = {
+  workspace,
+  pipeline: resolvePath(process.env.SOFTWAREHOUSE_PIPELINE || './scripts/update_pipeline.sh'),
+  feedback: resolvePath(process.env.SOFTWAREHOUSE_FEEDBACK || './storage/data/feedback.json'),
+  opportunities: resolvePath(process.env.SOFTWAREHOUSE_OPPORTUNITIES || './storage/out/opportunities.feedback.json'),
+  emlDir: resolvePath(process.env.SOFTWAREHOUSE_EML_DIR || './storage/emls'),
+}

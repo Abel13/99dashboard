@@ -5,3 +5,12 @@ out
 .env*.local
 .DS_Store
 npm-debug.log*
+
+# Dados locais gerados em runtime
+storage/emls/*.eml
+storage/pages/*
+!storage/pages/.gitkeep
+storage/out/*
+!storage/out/opportunities.feedback.json
+storage/data/*
+!storage/data/feedback.json

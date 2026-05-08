@@ -9,7 +9,7 @@ export type Opportunity = Record<string, any> & { source_project_id: string; tit
 export async function readJson<T>(file: string, fallback: T): Promise<T> {
   try { return JSON.parse(await fs.readFile(file, 'utf8')) as T } catch { return fallback }
 }
-export async function writeJson(file: string, data: unknown) { await fs.writeFile(file, JSON.stringify(data, null, 2) + '\n', 'utf8') }
+export async function writeJson(file: string, data: unknown) { await fs.mkdir((await import('node:path')).dirname(file), { recursive: true }); await fs.writeFile(file, JSON.stringify(data, null, 2) + '\n', 'utf8') }
 export async function getOpportunities() {
   return readJson<{ items: Opportunity[]; feedback_applied_at?: string }>(paths.opportunities, { items: [] })
 }
@@ -23,7 +23,18 @@ export async function updateFeedback(projectId: string, patch: Feedback) {
 }
 export function runPipeline(): Promise<{ ok: boolean; code: number | null; output: string }> {
   return new Promise((resolve) => {
-    const child = spawn(paths.pipeline, { cwd: paths.workspace, shell: true })
+    const child = spawn(paths.pipeline, {
+      cwd: paths.workspace,
+      shell: true,
+      env: {
+        ...process.env,
+        SOFTWAREHOUSE_WORKSPACE: paths.workspace,
+        SOFTWAREHOUSE_PIPELINE: paths.pipeline,
+        SOFTWAREHOUSE_FEEDBACK: paths.feedback,
+        SOFTWAREHOUSE_OPPORTUNITIES: paths.opportunities,
+        SOFTWAREHOUSE_EML_DIR: paths.emlDir,
+      },
+    })
     let output = ''
     child.stdout.on('data', d => output += d.toString())
     child.stderr.on('data', d => output += d.toString())

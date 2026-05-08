@@ -1,6 +1,6 @@
 # 99Dashboard
 
-Dashboard moderno para acompanhar oportunidades 99Freelas do Softwarehouse.
+Dashboard moderno e self-contained para acompanhar oportunidades 99Freelas do Softwarehouse.
 
 ## Stack
 
@@ -9,7 +9,9 @@ Dashboard moderno para acompanhar oportunidades 99Freelas do Softwarehouse.
 - Dark mode com `next-themes`
 - Componentes estilo shadcn/ui
 - Zustand persist para filtros/preferências locais
-- API routes para ler dados, rodar pipeline e registrar ações
+- API routes para ler dados, rodar pipeline, importar Gmail e registrar ações
+- Pipeline Python embutido em `scripts/`
+- Storage local em `storage/`
 
 ## Rodar localmente
 
@@ -21,11 +23,31 @@ npm run dev
 
 Abra `http://localhost:3000`.
 
+Por padrão, o app já funciona com caminhos relativos:
+
+```env
+SOFTWAREHOUSE_WORKSPACE=./storage
+SOFTWAREHOUSE_PIPELINE=./scripts/update_pipeline.sh
+SOFTWAREHOUSE_FEEDBACK=./storage/data/feedback.json
+SOFTWAREHOUSE_OPPORTUNITIES=./storage/out/opportunities.feedback.json
+SOFTWAREHOUSE_EML_DIR=./storage/emls
+```
+
+Ou seja: você pode clonar em outro computador e rodar sem depender dos caminhos do ambiente Oracle/WSL.
+
+## Pastas importantes
+
+- `storage/emls/`: coloque aqui arquivos `.eml` do 99Freelas ou deixe a importação Gmail salvar automaticamente.
+- `storage/data/feedback.json`: feedback/status salvo pelos botões.
+- `storage/out/opportunities.feedback.json`: JSON final lido pelo dashboard.
+- `storage/pages/`: cache das páginas enriquecidas.
+- `scripts/update_pipeline.sh`: executa parse → enrich → decisão → feedback.
+
 ## Integrações
 
-### Pipeline local existente
+### Pipeline self-contained
 
-`POST /api/pipeline` roda o pipeline configurado em `SOFTWAREHOUSE_PIPELINE`.
+`POST /api/pipeline` roda `./scripts/update_pipeline.sh` e atualiza `storage/out/opportunities.feedback.json`.
 
 ### Feedback / botões de ação
 
@@ -61,3 +83,7 @@ curl -X POST "https://SEU_DOMINIO/api/import/gmail?token=$AUTO_IMPORT_CRON_SECRE
 ```
 
 ou use `Authorization: Bearer $AUTO_IMPORT_CRON_SECRET`.
+
+## Observação de persistência
+
+Em produção, garanta que a pasta `storage/` esteja em volume persistente. Em plataformas serverless com filesystem efêmero, prefira montar volume, usar VPS, ou adaptar para banco/objeto externo.
