@@ -43,6 +43,53 @@ Ou seja: você pode clonar em outro computador e rodar sem depender dos caminhos
 - `storage/pages/`: cache das páginas enriquecidas.
 - `scripts/update_pipeline.sh`: executa parse → enrich → decisão → feedback.
 
+## Banco de dados
+
+O app funciona em dois modos:
+
+```env
+DATA_BACKEND=local
+```
+
+usa `storage/` como MVP self-contained.
+
+```env
+DATA_BACKEND=supabase
+```
+
+usa Supabase para oportunidades, feedback e estado de importação.
+
+### Supabase local
+
+As portas foram alteradas para não conflitar com outros projetos:
+
+- API: `55421`
+- Postgres: `55422`
+- Studio: `55423`
+- Inbucket: `55424`
+
+Para subir:
+
+```bash
+npx supabase start
+```
+
+Depois copie as chaves exibidas para o `.env`:
+
+```env
+DATA_BACKEND=supabase
+SUPABASE_URL=http://127.0.0.1:55421
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:55421
+SUPABASE_SERVICE_ROLE_KEY=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+Para aplicar/resetar schema local:
+
+```bash
+npx supabase db reset
+```
+
 ## Integrações
 
 ### Precificação com IA opcional
