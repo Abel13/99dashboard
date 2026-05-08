@@ -1,6 +1,6 @@
 # 99Dashboard
 
-Dashboard moderno e self-contained para acompanhar oportunidades 99Freelas do Softwarehouse.
+Dashboard moderno para acompanhar oportunidades 99Freelas do Softwarehouse, com Supabase como fonte de dados.
 
 ## Stack
 
@@ -11,53 +11,40 @@ Dashboard moderno e self-contained para acompanhar oportunidades 99Freelas do So
 - Zustand persist para filtros/preferências locais
 - API routes para ler dados, rodar pipeline, importar Gmail e registrar ações
 - Pipeline Python embutido em `scripts/`
-- Storage local em `storage/`
+- Supabase local/remoto como banco principal
+- `.runtime/` apenas para arquivos temporários do pipeline, ignorado pelo git
 
 ## Rodar localmente
 
 ```bash
 cp .env.example .env
 npm install
+npx supabase start
+npx supabase db reset
 npm run dev
 ```
 
 Abra `http://localhost:3000`.
 
-Por padrão, o app já funciona com caminhos relativos:
-
-```env
-SOFTWAREHOUSE_WORKSPACE=./storage
-SOFTWAREHOUSE_PIPELINE=./scripts/update_pipeline.sh
-SOFTWAREHOUSE_FEEDBACK=./storage/data/feedback.json
-SOFTWAREHOUSE_OPPORTUNITIES=./storage/out/opportunities.feedback.json
-SOFTWAREHOUSE_EML_DIR=./storage/emls
-```
-
-Ou seja: você pode clonar em outro computador e rodar sem depender dos caminhos do ambiente Oracle/WSL.
-
-## Pastas importantes
-
-- `storage/emls/`: coloque aqui arquivos `.eml` do 99Freelas ou deixe a importação Gmail salvar automaticamente.
-- `storage/data/feedback.json`: feedback/status salvo pelos botões.
-- `storage/out/opportunities.feedback.json`: JSON final lido pelo dashboard.
-- `storage/pages/`: cache das páginas enriquecidas.
-- `scripts/update_pipeline.sh`: executa parse → enrich → decisão → feedback.
-
-## Banco de dados
-
-O app funciona em dois modos:
-
-```env
-DATA_BACKEND=local
-```
-
-usa `storage/` como MVP self-contained.
+Depois do `npx supabase start`, copie as chaves exibidas para o `.env`:
 
 ```env
 DATA_BACKEND=supabase
+SUPABASE_URL=http://127.0.0.1:55421
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:55421
+SUPABASE_SERVICE_ROLE_KEY=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
-usa Supabase para oportunidades, feedback e estado de importação.
+## Pastas importantes
+
+- `scripts/update_pipeline.sh`: executa parse → enrich → decisão → feedback.
+- `supabase/`: configuração e migrations do banco local.
+- `.runtime/`: temporário, ignorado pelo git; não é fonte de dados.
+
+## Banco de dados
+
+O app usa Supabase para oportunidades, feedback e estado de importação.
 
 ### Supabase local
 
@@ -72,16 +59,6 @@ Para subir:
 
 ```bash
 npx supabase start
-```
-
-Depois copie as chaves exibidas para o `.env`:
-
-```env
-DATA_BACKEND=supabase
-SUPABASE_URL=http://127.0.0.1:55421
-NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:55421
-SUPABASE_SERVICE_ROLE_KEY=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
 Para aplicar/resetar schema local:
@@ -121,13 +98,13 @@ OPENAI_API_KEY=sk-...
 
 Você pode conversar sobre preço, prazo, riscos, perguntas para o cliente, proposta e decisão comercial. O chat não envia propostas automaticamente.
 
-### Pipeline self-contained
+### Pipeline
 
-`POST /api/pipeline` roda `./scripts/update_pipeline.sh` e atualiza `storage/out/opportunities.feedback.json`.
+`POST /api/pipeline` roda `./scripts/update_pipeline.sh`, usa `.runtime/` como área temporária e sincroniza o resultado com Supabase.
 
 ### Feedback / botões de ação
 
-`POST /api/feedback` atualiza `feedback.json` e regenera o pipeline. O dashboard já usa esses botões:
+`POST /api/feedback` atualiza o feedback no Supabase. O dashboard já usa estes botões:
 
 - Proposta enviada
 - Perguntas enviadas
@@ -136,7 +113,7 @@ Você pode conversar sobre preço, prazo, riscos, perguntas para o cliente, prop
 - Perdido
 - Copiar proposta
 
-### Importação automática Gmail → EML → Pipeline
+### Importação automática Gmail → Pipeline → Supabase
 
 `GET|POST /api/import/gmail?token=...`
 
@@ -146,9 +123,8 @@ Usa as envs:
 - `GMAIL_CLIENT_SECRET`
 - `GMAIL_REFRESH_TOKEN`
 - `GMAIL_LABEL_OR_QUERY`
-- `SOFTWAREHOUSE_EML_DIR`
 
-A rota baixa mensagens como `.eml` na pasta configurada e roda o pipeline quando houver arquivos novos.
+A rota baixa mensagens como `.eml` temporário em `.runtime/emls`, roda o pipeline e grava oportunidades/estado no Supabase.
 
 ## Deploy
 
@@ -159,7 +135,3 @@ curl -X POST "https://SEU_DOMINIO/api/import/gmail?token=$AUTO_IMPORT_CRON_SECRE
 ```
 
 ou use `Authorization: Bearer $AUTO_IMPORT_CRON_SECRET`.
-
-## Observação de persistência
-
-Em produção, garanta que a pasta `storage/` esteja em volume persistente. Em plataformas serverless com filesystem efêmero, prefira montar volume, usar VPS, ou adaptar para banco/objeto externo.
