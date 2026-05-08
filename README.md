@@ -54,6 +54,7 @@ As portas foram alteradas para não conflitar com outros projetos:
 - Postgres: `55422`
 - Studio: `55423`
 - Inbucket: `55424`
+- Analytics: `55427`
 
 Para subir:
 
