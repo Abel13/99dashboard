@@ -21,6 +21,17 @@ export async function updateFeedback(projectId: string, patch: Feedback) {
   await writeJson(paths.feedback, data)
   return data.items[projectId]
 }
+export async function readImportState() {
+  return readJson<Record<string, any>>(paths.importState, {})
+}
+
+export async function updateImportState(patch: Record<string, any>) {
+  const current = await readImportState()
+  const next = { ...current, ...patch, updated_at: new Date().toISOString() }
+  await writeJson(paths.importState, next)
+  return next
+}
+
 export function runPipeline(): Promise<{ ok: boolean; code: number | null; output: string }> {
   return new Promise((resolve) => {
     const child = spawn(paths.pipeline, {
@@ -38,6 +49,10 @@ export function runPipeline(): Promise<{ ok: boolean; code: number | null; outpu
     let output = ''
     child.stdout.on('data', d => output += d.toString())
     child.stderr.on('data', d => output += d.toString())
-    child.on('close', code => resolve({ ok: code === 0, code, output }))
+    child.on('close', async code => {
+      const result = { ok: code === 0, code, output }
+      await updateImportState({ last_pipeline_at: new Date().toISOString(), last_pipeline_ok: result.ok, last_pipeline_code: code })
+      resolve(result)
+    })
   })
 }

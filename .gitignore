@@ -14,6 +14,7 @@ storage/out/*
 !storage/out/opportunities.feedback.json
 storage/data/*
 !storage/data/feedback.json
+!storage/data/import-state.json
 
 __pycache__/
 *.py[cod]

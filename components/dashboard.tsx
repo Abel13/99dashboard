@@ -13,9 +13,9 @@ const statuses = [
 ]
 function statusKind(status:string){ if(['liked','won','proposal_sent'].includes(status)) return 'ok'; if(['lost','discarded','descartar'].includes(status)) return 'bad'; if(['review','prepare_proposal','preparar_proposta','caso_a_caso'].includes(status)) return 'warn'; return '' }
 export function Dashboard(){
-  const [items,setItems]=useState<Opportunity[]>([]); const [loading,setLoading]=useState(true); const [busy,setBusy]=useState(''); const [toast,setToast]=useState('')
+  const [items,setItems]=useState<Opportunity[]>([]); const [status,setStatus]=useState<any>(null); const [loading,setLoading]=useState(true); const [busy,setBusy]=useState(''); const [toast,setToast]=useState('')
   const {query,minScore,statuses:activeStatuses,setQuery,setMinScore,toggleStatus,clearStatuses}=useDashboardStore()
-  async function load(){setLoading(true); const r=await fetch('/api/opportunities',{cache:'no-store'}); const data=await r.json(); setItems(data.items||[]); setLoading(false)}
+  async function load(){setLoading(true); const [r,s]=await Promise.all([fetch('/api/opportunities',{cache:'no-store'}), fetch('/api/status',{cache:'no-store'})]); const data=await r.json(); setItems(data.items||[]); if(s.ok) setStatus(await s.json()); setLoading(false)}
   useEffect(()=>{load()},[])
   async function runPipeline(){setBusy('pipeline'); const r=await fetch('/api/pipeline',{method:'POST'}); setBusy(''); setToast(r.ok?'Pipeline atualizado':'Erro ao atualizar pipeline'); await load()}
   async function action(item:Opportunity,status:string,reason:string,outcome?:string){setBusy(item.source_project_id+status); const r=await fetch('/api/feedback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({projectId:item.source_project_id,status,reason,outcome})}); setBusy(''); setToast(r.ok?'Status salvo e dashboard regenerado':'Erro ao salvar status'); await load()}
@@ -25,6 +25,7 @@ export function Dashboard(){
   return <main className="container">
     <section className="hero"><div><span className="kicker">🔮 Oracle · Softwarehouse</span><h1>99Dashboard</h1><p>Radar moderno de oportunidades 99Freelas com dark mode, persistência local de filtros, ações rápidas e integração automática com o pipeline atual.</p></div><div className="actions"><ThemeToggle/><Button variant="primary" onClick={runPipeline} disabled={!!busy}>{busy==='pipeline'?<Loader2 size={16}/>:<RefreshCw size={16}/>} Atualizar</Button></div></section>
     <section className="metrics"><div className="metric glass"><span>Total</span><b>{metrics.total}</b></div><div className="metric glass"><span>Visíveis</span><b>{metrics.visible}</b></div><div className="metric glass"><span>Com proposta</span><b>{metrics.proposals}</b></div><div className="metric glass"><span>Score médio</span><b>{metrics.avg}</b></div></section>
+    <StatusStrip status={status}/>
     <section className="toolbar glass"><input className="input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar por título, descrição ou status…"/><select className="select" value={minScore} onChange={e=>setMinScore(Number(e.target.value))}><option value={0}>Qualquer score</option><option value={40}>Score ≥ 40</option><option value={60}>Score ≥ 60</option><option value={75}>Score ≥ 75</option></select><Button onClick={clearStatuses}>Limpar status</Button><div className="statusBar">{statuses.map(([s,l])=><label className="pill" key={s}><input type="checkbox" checked={activeStatuses.includes(s)} onChange={()=>toggleStatus(s)}/>{l}</label>)}</div></section>
     {loading?<div className="empty glass"><Loader2/> Carregando…</div>:<section className="grid">{filtered.map(item=><Card key={item.source_project_id} item={item} busy={busy} onAction={action}/>)}</section>}
     {!loading&&!filtered.length&&<div className="empty glass">Nenhuma oportunidade com esses filtros.</div>}
@@ -32,6 +33,8 @@ export function Dashboard(){
     {toast&&<div className="toast" onAnimationEnd={()=>setToast('')}>{toast}</div>}
   </main>
 }
+function fmtDate(value?: string){ if(!value) return 'Nunca'; const d=new Date(value); return Number.isNaN(d.getTime()) ? value : d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) }
+function StatusStrip({status}:{status:any}){ const s=status?.import_state||{}; return <section className="statusStrip glass"><span><b>Última busca Gmail</b>{fmtDate(s.last_import_at)} · {s.last_import_ok===false?'falhou':`${s.last_saved ?? 0} novos / ${s.last_found ?? 0} encontrados`}</span><span><b>Último pipeline</b>{fmtDate(s.last_pipeline_at)} · {s.last_pipeline_ok===false?'falhou':'ok'}</span>{s.last_query&&<span><b>Filtro</b>{s.last_query}</span>}</section> }
 function Card({item,busy,onAction}:{item:Opportunity;busy:string;onAction:(item:Opportunity,status:string,reason:string,outcome?:string)=>void}){
   const ds=item.decision_support||{}; const pd=item.page_details||{}; const status=item.effective_status||ds.status_manual||'review'; const price=ds.price_suggested_effective??ds.price_suggested; const calc=ds.pricing_calc||{}
   async function copyProposal(){await navigator.clipboard.writeText(ds.proposal_draft||'');}

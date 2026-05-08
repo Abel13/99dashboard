@@ -12,4 +12,5 @@ export const paths = {
   feedback: resolvePath(process.env.SOFTWAREHOUSE_FEEDBACK || './storage/data/feedback.json'),
   opportunities: resolvePath(process.env.SOFTWAREHOUSE_OPPORTUNITIES || './storage/out/opportunities.feedback.json'),
   emlDir: resolvePath(process.env.SOFTWAREHOUSE_EML_DIR || './storage/emls'),
+  importState: resolvePath(process.env.SOFTWAREHOUSE_IMPORT_STATE || './storage/data/import-state.json'),
 }

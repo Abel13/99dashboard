@@ -2,7 +2,7 @@ import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { NextRequest, NextResponse } from 'next/server'
 import { paths } from '@/lib/paths'
-import { runPipeline } from '@/lib/softwarehouse'
+import { runPipeline, updateImportState } from '@/lib/softwarehouse'
 
 function authorized(req: NextRequest){
   const secret = process.env.AUTO_IMPORT_CRON_SECRET || process.env.DASHBOARD_API_TOKEN
@@ -41,7 +41,19 @@ export async function POST(req: NextRequest){
       saved.push(out)
     }
     const pipeline = saved.length ? await runPipeline() : undefined
-    return NextResponse.json({ ok:true, query, found:messages.length, saved:saved.length, files:saved, pipeline })
-  }catch(err:any){ return NextResponse.json({ ok:false, error:err.message || String(err) }, { status:500 }) }
+    const state = await updateImportState({
+      last_import_at: new Date().toISOString(),
+      last_query: query,
+      last_found: messages.length,
+      last_saved: saved.length,
+      last_files: saved,
+      last_import_ok: true,
+      last_import_error: null,
+    })
+    return NextResponse.json({ ok:true, query, found:messages.length, saved:saved.length, files:saved, pipeline, state })
+  }catch(err:any){
+    await updateImportState({ last_import_at: new Date().toISOString(), last_import_ok: false, last_import_error: err.message || String(err) })
+    return NextResponse.json({ ok:false, error:err.message || String(err) }, { status:500 })
+  }
 }
 export async function GET(req: NextRequest){ return POST(req) }
