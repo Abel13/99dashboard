@@ -45,6 +45,24 @@ Ou seja: você pode clonar em outro computador e rodar sem depender dos caminhos
 
 ## Integrações
 
+### Precificação com IA opcional
+
+Por padrão, a precificação usa a régua local determinística. Para adicionar uma camada de IA que leia cada projeto e revise horas, riscos, perguntas e justificativa:
+
+```env
+AI_PRICING_ENABLED=true
+AI_PRICING_MODEL=gpt-4o-mini
+OPENAI_API_KEY=sk-...
+```
+
+A IA respeita as regras fixas:
+
+- valor-hora configurado em `PRICING_HOURLY_RATE`;
+- taxa da plataforma configurada em `PRICING_PLATFORM_FEE_PCT`;
+- preço ao cliente = líquido alvo ÷ `(1 - taxa)`.
+
+Se a IA falhar ou a chave não estiver configurada, o pipeline mantém a heurística como fallback.
+
 ### Pipeline self-contained
 
 `POST /api/pipeline` roda `./scripts/update_pipeline.sh` e atualiza `storage/out/opportunities.feedback.json`.

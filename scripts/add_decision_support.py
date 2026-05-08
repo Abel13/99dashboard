@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -218,8 +220,11 @@ def proposal(title: str, kind: str, deliverable: str, deadline: str, price: int,
     )
 
 
-HOURLY_RATE = 130
-PLATFORM_FEE_PCT = 0.20
+HOURLY_RATE = int(os.getenv("PRICING_HOURLY_RATE", "130"))
+PLATFORM_FEE_PCT = float(os.getenv("PRICING_PLATFORM_FEE_PCT", "0.20"))
+AI_PRICING_ENABLED = os.getenv("AI_PRICING_ENABLED", "false").lower() in {"1", "true", "yes", "on"}
+AI_PRICING_MODEL = os.getenv("AI_PRICING_MODEL", "gpt-4o-mini")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 def round_money(value: float, step: int = 500) -> int:
@@ -505,25 +510,138 @@ def contextual_proposal(item: dict[str, Any], decision: dict[str, Any]) -> str:
     return decision.get("proposal_draft") or proposal(title, "solução sob medida", "uma primeira versão bem delimitada conforme o objetivo do projeto", deadline, decision.get("price_suggested") or 0)
 
 
+def apply_pricing_note(decision: dict[str, Any]) -> None:
+    calc = decision.get("pricing_calc", {})
+    source = calc.get("source") or "heuristic"
+    prefix = "Precificação por IA" if source == "ai" else "Precificação heurística"
+    decision["pricing_note"] = (
+        f"{decision.get('pricing_note', '')} {prefix}: {calc.get('hours_min')}–{calc.get('hours_max')}h × R$ {HOURLY_RATE}/h "
+        f"+ {int((calc.get('risk_pct') or 0)*100)}% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. "
+        f"O valor líquido-alvo sugerido é {money(calc.get('net_target_suggested') or 0)}. {calc.get('note', '')}"
+    ).strip()
+
+
+def ai_prompt(item: dict[str, Any], heuristic: dict[str, Any]) -> str:
+    title = item.get("title") or ""
+    desc = item.get("full_description") or item.get("description_preview") or ""
+    a = item.get("analysis", {})
+    pd = item.get("page_details", {})
+    compact = desc[:7000]
+    return f"""
+Você é um consultor técnico/comercial para propostas 99Freelas do Abel.
+Calcule uma estimativa realista e defensável para o projeto abaixo.
+
+Regras fixas:
+- Valor-hora do Abel: R$ {HOURLY_RATE}/h.
+- A plataforma cobra {int(PLATFORM_FEE_PCT*100)}%; o preço ao cliente deve ser gross-up: líquido alvo ÷ {1-PLATFORM_FEE_PCT:.2f}.
+- Não superestime nem subestime; pense em escopo, riscos, tecnologia, integrações, segurança, deploy, testes, comunicação e margem.
+- Se o projeto estiver vago, aumente risco e faça perguntas melhores.
+- Responda SOMENTE JSON válido, sem markdown.
+
+JSON esperado:
+{{
+  "hours_min": 10,
+  "hours_max": 40,
+  "risk_pct": 0.25,
+  "effort_estimate": "pequeno/médio",
+  "delivery_estimate": "5 a 12 dias úteis",
+  "pricing_note": "justificativa curta da estimativa",
+  "risks": ["risco 1", "risco 2"],
+  "questions_to_client": ["pergunta 1", "pergunta 2", "pergunta 3", "pergunta 4", "pergunta 5"],
+  "proposal_summary": "orientação curta para a proposta"
+}}
+
+Projeto:
+Título: {title}
+Categoria: {item.get('category')}
+Orçamento informado: {item.get('budget')}
+Score heurístico: {a.get('final_score')}
+Status sugerido: {heuristic.get('status_manual')}
+Concorrência: {pd.get('proposals')} propostas / {pd.get('interested')} interessados
+Estimativa heurística atual: {heuristic.get('pricing_calc', {}).get('hours_min')}–{heuristic.get('pricing_calc', {}).get('hours_max')}h, risco {heuristic.get('pricing_calc', {}).get('risk_pct')}
+Descrição:
+{compact}
+""".strip()
+
+
+def call_openai_json(prompt: str) -> dict[str, Any] | None:
+    if not (AI_PRICING_ENABLED and OPENAI_API_KEY):
+        return None
+    payload = {
+        "model": AI_PRICING_MODEL,
+        "messages": [
+            {"role": "system", "content": "Responda sempre JSON válido e nada além de JSON."},
+            {"role": "user", "content": prompt},
+        ],
+        "temperature": 0.2,
+        "response_format": {"type": "json_object"},
+    }
+    req = urllib.request.Request(
+        "https://api.openai.com/v1/chat/completions",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Authorization": f"Bearer {OPENAI_API_KEY}", "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=45) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        content = data["choices"][0]["message"]["content"]
+        return json.loads(content)
+    except Exception as exc:
+        return {"_error": str(exc)}
+
+
+def refine_with_ai(item: dict[str, Any], decision: dict[str, Any]) -> dict[str, Any]:
+    ai = call_openai_json(ai_prompt(item, decision))
+    if not ai:
+        decision["ai_pricing"] = {"enabled": AI_PRICING_ENABLED, "used": False, "reason": "OPENAI_API_KEY ausente ou IA desativada"}
+        return decision
+    if ai.get("_error"):
+        decision["ai_pricing"] = {"enabled": True, "used": False, "error": ai.get("_error"), "fallback": "heuristic"}
+        return decision
+
+    try:
+        hours_min = max(1, int(ai.get("hours_min")))
+        hours_max = max(hours_min, int(ai.get("hours_max")))
+        risk_pct = min(max(float(ai.get("risk_pct", 0.25)), 0.05), 1.0)
+    except Exception as exc:
+        decision["ai_pricing"] = {"enabled": True, "used": False, "error": f"JSON inválido: {exc}", "raw": ai, "fallback": "heuristic"}
+        return decision
+
+    refined = pricing_from_hours(hours_min, hours_max, risk_pct, str(ai.get("pricing_note") or "Estimativa revisada por IA."))
+    refined["pricing_calc"]["source"] = "ai"
+    refined["pricing_calc"]["model"] = AI_PRICING_MODEL
+    decision.update(refined)
+    decision["effort_estimate"] = ai.get("effort_estimate") or decision.get("effort_estimate")
+    decision["delivery_estimate"] = ai.get("delivery_estimate") or delivery_from_hours(hours_min, hours_max)
+    if isinstance(ai.get("questions_to_client"), list) and ai["questions_to_client"]:
+        decision["questions_to_client"] = [str(q) for q in ai["questions_to_client"][:7]]
+    decision["ai_pricing"] = {
+        "enabled": True,
+        "used": True,
+        "model": AI_PRICING_MODEL,
+        "risks": ai.get("risks") or [],
+        "proposal_summary": ai.get("proposal_summary"),
+    }
+    return decision
+
+
 def classify(item: dict[str, Any]) -> dict[str, Any]:
     decision = classify_base(item)
     if decision.get("price_suggested") is None or decision.get("status_manual") == "descartar":
+        decision["ai_pricing"] = {"enabled": AI_PRICING_ENABLED, "used": False, "reason": "projeto bloqueado/sem preço"}
         return decision
 
     refined = estimate_pricing(item)
+    refined["pricing_calc"]["source"] = "heuristic"
     decision.update(refined)
     calc_for_delivery = decision.get("pricing_calc", {})
     decision["delivery_estimate"] = delivery_from_hours(calc_for_delivery.get("hours_min"), calc_for_delivery.get("hours_max"))
 
     decision["questions_to_client"] = contextual_questions(item, decision)
+    decision = refine_with_ai(item, decision)
     decision["proposal_draft"] = contextual_proposal(item, decision)
-
-    calc = decision.get("pricing_calc", {})
-    decision["pricing_note"] = (
-        f"{decision.get('pricing_note', '')} Cálculo: {calc.get('hours_min')}–{calc.get('hours_max')}h × R$ {HOURLY_RATE}/h "
-        f"+ {int((calc.get('risk_pct') or 0)*100)}% de margem de risco, dividido por 0,80 para cobrir os 20% de intermediação da plataforma. "
-        f"O valor líquido-alvo sugerido é {money(calc.get('net_target_suggested') or 0)}. {calc.get('note', '')}"
-    ).strip()
+    apply_pricing_note(decision)
     return decision
 
 
