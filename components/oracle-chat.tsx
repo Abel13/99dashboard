@@ -1,6 +1,9 @@
 'use client'
 import { FormEvent, useMemo, useState } from 'react'
 import { Bot, Loader2, MessageCircle, Send, X } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import rehypeSanitize from 'rehype-sanitize'
+import remarkGfm from 'remark-gfm'
 import { Button } from './ui/button'
 
 type Message = { role: 'user' | 'assistant'; content: string }
@@ -51,7 +54,7 @@ export function OracleChat({ projects }: { projects: ProjectOption[] }) {
       {projects.map(p => <option key={p.id} value={p.id}>#{p.id} · {p.title}</option>)}
     </select>
     <div className="chatMessages">
-      {messages.map((m, i) => <div key={i} className={`chatBubble ${m.role}`}>{m.content}</div>)}
+      {messages.map((m, i) => <div key={i} className={`chatBubble ${m.role}`}><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{m.content}</ReactMarkdown></div>)}
       {loading && <div className="chatBubble assistant"><Loader2 size={14}/> Lendo os sinais…</div>}
     </div>
     <form className="chatForm" onSubmit={submit}>
