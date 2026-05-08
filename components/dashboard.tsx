@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
-import { Check, Copy, ExternalLink, Heart, Loader2, RefreshCw, Send, ThumbsDown, XCircle } from 'lucide-react'
+import { Check, Copy, ExternalLink, Heart, LayoutGrid, List, Loader2, RefreshCw, Send, ThumbsDown, XCircle } from 'lucide-react'
 import { brl, dt } from '@/lib/utils'
 import { useDashboardStore } from '@/store/dashboard-store'
 import { Button } from './ui/button'
@@ -14,6 +14,7 @@ const statuses = [
 function statusKind(status:string){ if(['liked','won','proposal_sent'].includes(status)) return 'ok'; if(['lost','discarded','descartar'].includes(status)) return 'bad'; if(['review','prepare_proposal','preparar_proposta','caso_a_caso'].includes(status)) return 'warn'; return '' }
 export function Dashboard(){
   const [items,setItems]=useState<Opportunity[]>([]); const [status,setStatus]=useState<any>(null); const [loading,setLoading]=useState(true); const [busy,setBusy]=useState(''); const [toast,setToast]=useState('')
+  const [view,setView]=useState<'list'|'cards'>('list')
   const {query,minScore,statuses:activeStatuses,setQuery,setMinScore,toggleStatus,clearStatuses}=useDashboardStore()
   async function load(){setLoading(true); const [r,s]=await Promise.all([fetch('/api/opportunities',{cache:'no-store'}), fetch('/api/status',{cache:'no-store'})]); const data=await r.json(); setItems(data.items||[]); if(s.ok) setStatus(await s.json()); setLoading(false)}
   useEffect(()=>{load()},[])
@@ -23,11 +24,16 @@ export function Dashboard(){
   const metrics=useMemo(()=>({total:items.length, visible:filtered.length, proposals:items.filter(i=>i.decision_support?.proposal_draft).length, avg:Math.round(items.reduce((s,i)=>s+Number(i.analysis?.final_score||0),0)/Math.max(items.length,1))}),[items,filtered])
   const chatProjects = useMemo(() => items.map(i => ({ id: String(i.source_project_id), title: i.title })), [items])
   return <main className="container">
-    <section className="hero"><div><span className="kicker">🔮 Oracle · Softwarehouse</span><h1>99Dashboard</h1><p>Radar moderno de oportunidades 99Freelas com dark mode, persistência local de filtros, ações rápidas e integração automática com o pipeline atual.</p></div><div className="actions"><ThemeToggle/><Button variant="primary" onClick={runPipeline} disabled={!!busy}>{busy==='pipeline'?<Loader2 size={16}/>:<RefreshCw size={16}/>} Atualizar</Button></div></section>
+    <section className="topbar"><div><span className="kicker">Oracle · Softwarehouse</span><h1>99Dashboard</h1></div><div className="topActions"><ThemeToggle/><Button variant="primary" onClick={runPipeline} disabled={!!busy}>{busy==='pipeline'?<Loader2 size={16}/>:<RefreshCw size={16}/>} Atualizar</Button></div></section>
     <section className="metrics"><div className="metric glass"><span>Total</span><b>{metrics.total}</b></div><div className="metric glass"><span>Visíveis</span><b>{metrics.visible}</b></div><div className="metric glass"><span>Com proposta</span><b>{metrics.proposals}</b></div><div className="metric glass"><span>Score médio</span><b>{metrics.avg}</b></div></section>
     <StatusStrip status={status}/>
-    <section className="toolbar glass"><input className="input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar por título, descrição ou status…"/><select className="select" value={minScore} onChange={e=>setMinScore(Number(e.target.value))}><option value={0}>Qualquer score</option><option value={40}>Score ≥ 40</option><option value={60}>Score ≥ 60</option><option value={75}>Score ≥ 75</option></select><Button onClick={clearStatuses}>Limpar status</Button><div className="statusBar">{statuses.map(([s,l])=><label className="pill" key={s}><input type="checkbox" checked={activeStatuses.includes(s)} onChange={()=>toggleStatus(s)}/>{l}</label>)}</div></section>
-    {loading?<div className="empty glass"><Loader2/> Carregando…</div>:<section className="grid">{filtered.map(item=><Card key={item.source_project_id} item={item} busy={busy} onAction={action}/>)}</section>}
+    <section className="toolbar glass">
+      <input className="input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar por título, descrição ou status..."/>
+      <select className="select" value={minScore} onChange={e=>setMinScore(Number(e.target.value))}><option value={0}>Qualquer score</option><option value={40}>Score &gt;= 40</option><option value={60}>Score &gt;= 60</option><option value={75}>Score &gt;= 75</option></select>
+      <div className="viewToggle" aria-label="Visualização"><button className={view==='list'?'active':''} onClick={()=>setView('list')} title="Lista"><List size={16}/></button><button className={view==='cards'?'active':''} onClick={()=>setView('cards')} title="Cards"><LayoutGrid size={16}/></button></div>
+      <details className="filterDetails"><summary>Filtros de status {activeStatuses.length ? `(${activeStatuses.length})` : ''}</summary><div className="statusBar">{statuses.map(([s,l])=><label className="pill" key={s}><input type="checkbox" checked={activeStatuses.includes(s)} onChange={()=>toggleStatus(s)}/>{l}</label>)}<Button onClick={clearStatuses}>Limpar</Button></div></details>
+    </section>
+    {loading?<div className="empty glass"><Loader2/> Carregando...</div>:view==='list'?<OpportunityTable items={filtered} busy={busy} onAction={action}/>:<section className="grid">{filtered.map(item=><Card key={item.source_project_id} item={item} busy={busy} onAction={action}/>)}</section>}
     {!loading&&!filtered.length&&<div className="empty glass">Nenhuma oportunidade com esses filtros.</div>}
     <OracleChat projects={chatProjects}/>
     {toast&&<div className="toast" onAnimationEnd={()=>setToast('')}>{toast}</div>}
@@ -35,6 +41,22 @@ export function Dashboard(){
 }
 function fmtDate(value?: string){ if(!value) return 'Nunca'; const d=new Date(value); return Number.isNaN(d.getTime()) ? value : d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) }
 function StatusStrip({status}:{status:any}){ const s=status?.import_state||{}; return <section className="statusStrip glass"><span><b>Última busca Gmail</b>{fmtDate(s.last_import_at)} · {s.last_import_ok===false?'falhou':`${s.last_saved ?? 0} novos / ${s.last_found ?? 0} encontrados`}</span><span><b>Último pipeline</b>{fmtDate(s.last_pipeline_at)} · {s.last_pipeline_ok===false?'falhou':'ok'}</span>{s.last_query&&<span><b>Filtro</b>{s.last_query}</span>}</section> }
+function OpportunityTable({items,busy,onAction}:{items:Opportunity[];busy:string;onAction:(item:Opportunity,status:string,reason:string,outcome?:string)=>void}){
+  return <section className="listView glass"><div className="tableHead"><span>Score</span><span>Oportunidade</span><span>Status</span><span>Valor</span><span>Esforço</span><span>Concorrência</span><span>Ações</span></div>{items.map(item=><TableRow key={item.source_project_id} item={item} busy={busy} onAction={onAction}/>)}</section>
+}
+function TableRow({item,busy,onAction}:{item:Opportunity;busy:string;onAction:(item:Opportunity,status:string,reason:string,outcome?:string)=>void}){
+  const ds=item.decision_support||{}; const pd=item.page_details||{}; const status=item.effective_status||ds.status_manual||'review'; const price=ds.price_suggested_effective??ds.price_suggested
+  async function copyProposal(){await navigator.clipboard.writeText(ds.proposal_draft||'')}
+  return <article className="tableRow">
+    <div className="score compact">{item.analysis?.final_score||0}</div>
+    <div className="opportunityCell"><div className="eyebrow">#{item.source_project_id} · {pd.subcategory||item.category||'99Freelas'}</div><h2 className="rowTitle">{item.title}</h2><p>{(item.full_description||item.description_preview||'').slice(0,150)}{(item.full_description||'').length>150?'...':''}</p></div>
+    <div><span className={`chip ${statusKind(status)}`}>{item.effective_status_label||status}</span></div>
+    <div className="valueCell"><b>{brl(price)}</b><span>{brl(ds.pricing_calc?.net_target_suggested)} líquido</span></div>
+    <div className="mutedCell"><b>{ds.effort_estimate||'-'}</b><span>{ds.delivery_estimate||'-'}</span></div>
+    <div className="mutedCell"><b>{pd.proposals??'-'} propostas</b><span>{pd.interested??'-'} interessados</span></div>
+    <div className="rowActions"><Button variant="primary" disabled={busy.includes(item.source_project_id)} onClick={()=>onAction(item,'proposal_sent','Abel enviou proposta ao cliente')}><Send size={15}/> Enviada</Button><Button onClick={copyProposal} title="Copiar proposta"><Copy size={15}/></Button>{item.project_url&&<a className="btn secondary iconBtn" target="_blank" href={item.project_url} title="Abrir projeto"><ExternalLink size={15}/></a>}<details className="moreActions"><summary>Mais</summary><div><Button onClick={()=>onAction(item,'review','Abel enviou perguntas ao cliente; aguardando respostas')}><Check size={15}/> Perguntas</Button><Button onClick={()=>onAction(item,'liked','Abel gostou da oportunidade')}><Heart size={15}/> Gostei</Button><Button variant="danger" onClick={()=>onAction(item,'discarded','Abel descartou a oportunidade')}><ThumbsDown size={15}/> Descartar</Button><Button variant="danger" onClick={()=>onAction(item,'lost','Projeto perdido/cancelado','lost')}><XCircle size={15}/> Perdido</Button></div></details></div>
+  </article>
+}
 function Card({item,busy,onAction}:{item:Opportunity;busy:string;onAction:(item:Opportunity,status:string,reason:string,outcome?:string)=>void}){
   const ds=item.decision_support||{}; const pd=item.page_details||{}; const status=item.effective_status||ds.status_manual||'review'; const price=ds.price_suggested_effective??ds.price_suggested; const calc=ds.pricing_calc||{}
   async function copyProposal(){await navigator.clipboard.writeText(ds.proposal_draft||'');}
