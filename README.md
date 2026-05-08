@@ -63,6 +63,17 @@ A IA respeita as regras fixas:
 
 Se a IA falhar ou a chave não estiver configurada, o pipeline mantém a heurística como fallback.
 
+### Chat Oracle IA
+
+O dashboard inclui um chat para conversar com a Oracle sobre os projetos. Ele usa `OPENAI_API_KEY` e recebe como contexto os projetos atuais do dashboard.
+
+```env
+CHAT_AI_MODEL=gpt-4o-mini
+OPENAI_API_KEY=sk-...
+```
+
+Você pode conversar sobre preço, prazo, riscos, perguntas para o cliente, proposta e decisão comercial. O chat não envia propostas automaticamente.
+
 ### Pipeline self-contained
 
 `POST /api/pipeline` roda `./scripts/update_pipeline.sh` e atualiza `storage/out/opportunities.feedback.json`.

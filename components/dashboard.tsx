@@ -5,6 +5,7 @@ import { brl, dt } from '@/lib/utils'
 import { useDashboardStore } from '@/store/dashboard-store'
 import { Button } from './ui/button'
 import { ThemeToggle } from './theme-toggle'
+import { OracleChat } from './oracle-chat'
 
 type Opportunity = any
 const statuses = [
@@ -20,12 +21,14 @@ export function Dashboard(){
   async function action(item:Opportunity,status:string,reason:string,outcome?:string){setBusy(item.source_project_id+status); const r=await fetch('/api/feedback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({projectId:item.source_project_id,status,reason,outcome})}); setBusy(''); setToast(r.ok?'Status salvo e dashboard regenerado':'Erro ao salvar status'); await load()}
   const filtered=useMemo(()=>items.filter(i=>{const q=(query||'').toLowerCase(); const text=`${i.title} ${i.full_description||''} ${i.effective_status||''}`.toLowerCase(); const score=Number(i.analysis?.final_score||0); const st=i.effective_status||i.decision_support?.status_manual||'review'; return (!q||text.includes(q)) && score>=minScore && (!activeStatuses.length||activeStatuses.includes(st))}),[items,query,minScore,activeStatuses])
   const metrics=useMemo(()=>({total:items.length, visible:filtered.length, proposals:items.filter(i=>i.decision_support?.proposal_draft).length, avg:Math.round(items.reduce((s,i)=>s+Number(i.analysis?.final_score||0),0)/Math.max(items.length,1))}),[items,filtered])
+  const chatProjects = useMemo(() => items.map(i => ({ id: String(i.source_project_id), title: i.title })), [items])
   return <main className="container">
     <section className="hero"><div><span className="kicker">🔮 Oracle · Softwarehouse</span><h1>99Dashboard</h1><p>Radar moderno de oportunidades 99Freelas com dark mode, persistência local de filtros, ações rápidas e integração automática com o pipeline atual.</p></div><div className="actions"><ThemeToggle/><Button variant="primary" onClick={runPipeline} disabled={!!busy}>{busy==='pipeline'?<Loader2 size={16}/>:<RefreshCw size={16}/>} Atualizar</Button></div></section>
     <section className="metrics"><div className="metric glass"><span>Total</span><b>{metrics.total}</b></div><div className="metric glass"><span>Visíveis</span><b>{metrics.visible}</b></div><div className="metric glass"><span>Com proposta</span><b>{metrics.proposals}</b></div><div className="metric glass"><span>Score médio</span><b>{metrics.avg}</b></div></section>
     <section className="toolbar glass"><input className="input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Buscar por título, descrição ou status…"/><select className="select" value={minScore} onChange={e=>setMinScore(Number(e.target.value))}><option value={0}>Qualquer score</option><option value={40}>Score ≥ 40</option><option value={60}>Score ≥ 60</option><option value={75}>Score ≥ 75</option></select><Button onClick={clearStatuses}>Limpar status</Button><div className="statusBar">{statuses.map(([s,l])=><label className="pill" key={s}><input type="checkbox" checked={activeStatuses.includes(s)} onChange={()=>toggleStatus(s)}/>{l}</label>)}</div></section>
     {loading?<div className="empty glass"><Loader2/> Carregando…</div>:<section className="grid">{filtered.map(item=><Card key={item.source_project_id} item={item} busy={busy} onAction={action}/>)}</section>}
     {!loading&&!filtered.length&&<div className="empty glass">Nenhuma oportunidade com esses filtros.</div>}
+    <OracleChat projects={chatProjects}/>
     {toast&&<div className="toast" onAnimationEnd={()=>setToast('')}>{toast}</div>}
   </main>
 }
