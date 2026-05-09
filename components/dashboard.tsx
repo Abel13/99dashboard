@@ -1,17 +1,20 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Loader2 } from 'lucide-react'
+import { Bell, Loader2, X } from 'lucide-react'
 import { OracleChat } from './oracle-chat'
 import { useDashboardStore } from '@/store/dashboard-store'
 import { DashboardShell } from './dashboard/shell'
 import { Explorer } from './dashboard/explorer'
 import { MatchAnalytics } from './dashboard/match-analytics'
+import { NotificationsPage, type ImportNotification } from './dashboard/notifications'
 import { Overview } from './dashboard/overview'
 import { Profile } from './dashboard/profile'
 import { SettingsPage } from './dashboard/settings-page'
 import { scoreOf, workflowStatusOf } from './dashboard/helpers'
 import type { DashboardPage, Opportunity } from './dashboard/types'
+
+const NOTIFICATION_HISTORY_KEY = '99dashboard-import-notifications'
 
 export function Dashboard() {
   const [items, setItems] = useState<Opportunity[]>([])
@@ -23,6 +26,8 @@ export function Dashboard() {
   const [view, setView] = useState<'list' | 'cards'>('list')
   const [selectedId, setSelectedId] = useState('')
   const [importing, setImporting] = useState(false)
+  const [notifications, setNotifications] = useState<ImportNotification[]>([])
+  const [activeNotification, setActiveNotification] = useState<ImportNotification | null>(null)
   const {
     query,
     minScore,
@@ -52,6 +57,15 @@ export function Dashboard() {
   }, [])
 
   useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(NOTIFICATION_HISTORY_KEY)
+      if (stored) setNotifications(JSON.parse(stored).slice(0, 30))
+    } catch {
+      setNotifications([])
+    }
+  }, [])
+
+  useEffect(() => {
     if (!toast) return
     const timeout = window.setTimeout(() => setToast(''), 3200)
     return () => window.clearTimeout(timeout)
@@ -70,8 +84,36 @@ export function Dashboard() {
     const response = await fetch('/api/import/gmail', { method: 'POST' })
     const body = await response.json().catch(() => ({}))
     setImporting(false)
+    if (response.ok && Number(body.inserted || 0) > 0) pushImportNotification(body)
     setToast(response.ok ? `Gmail: ${body.saved ?? 0} salvos / ${body.found ?? 0} encontrados` : `Erro Gmail: ${body.error || response.status}`)
     await load()
+  }
+
+  function pushImportNotification(body: any) {
+    const notification: ImportNotification = {
+      id: `${body.trigger || 'manual'}-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      inserted: Number(body.inserted || 0),
+      updated: Number(body.updated || 0),
+      saved: Number(body.saved || 0),
+      found: Number(body.found || 0),
+      trigger: body.trigger,
+    }
+    setActiveNotification(notification)
+    setNotifications((current) => {
+      const next = [notification, ...current].slice(0, 30)
+      try {
+        window.localStorage.setItem(NOTIFICATION_HISTORY_KEY, JSON.stringify(next))
+      } catch {}
+      return next
+    })
+  }
+
+  function clearNotificationHistory() {
+    setNotifications([])
+    try {
+      window.localStorage.removeItem(NOTIFICATION_HISTORY_KEY)
+    } catch {}
   }
 
   async function updateOpportunity(item: Opportunity, status: string, reason: string, outcome?: string) {
@@ -136,7 +178,7 @@ export function Dashboard() {
   )
 
   return (
-    <DashboardShell page={page} setPage={setPage} busy={busy} onRefresh={runPipeline} status={status}>
+    <DashboardShell page={page} setPage={setPage} busy={busy} onRefresh={runPipeline} status={status} notificationCount={notifications.length}>
       {loading ? (
         <div className="empty glass">
           <Loader2 className="loadingIcon" /> Carregando...
@@ -187,10 +229,33 @@ export function Dashboard() {
             />
           )}
           {page === 'profile' && <Profile items={items} />}
+          {page === 'notifications' && (
+            <NotificationsPage
+              notifications={notifications}
+              onClear={clearNotificationHistory}
+              onOpenExplorer={() => setPage('explorer')}
+            />
+          )}
           {page === 'settings' && <SettingsPage status={status} onImportGmail={importGmail} importing={importing} />}
         </>
       )}
       {toast && <div className="toast">{toast}</div>}
+      {activeNotification && (
+        <div className="importPopup glass" role="status" aria-live="polite">
+          <button className="importPopupClose" onClick={() => setActiveNotification(null)} aria-label="Fechar notificação">
+            <X size={16} />
+          </button>
+          <span className="notificationIcon"><Bell size={18} /></span>
+          <div>
+            <b>{activeNotification.inserted} novas oportunidades importadas</b>
+            <p>{activeNotification.saved} salvas · {activeNotification.updated} atualizadas · {activeNotification.found} e-mails encontrados</p>
+            <div className="importPopupActions">
+              <button onClick={() => { setPage('explorer'); setActiveNotification(null) }}>Ver oportunidades</button>
+              <button onClick={() => { setPage('notifications'); setActiveNotification(null) }}>Histórico</button>
+            </div>
+          </div>
+        </div>
+      )}
       <OracleChat projects={chatProjects} />
     </DashboardShell>
   )

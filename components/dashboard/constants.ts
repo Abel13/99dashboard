@@ -1,4 +1,4 @@
-import { BarChart3, LayoutDashboard, Search, Settings, User } from 'lucide-react'
+import { BarChart3, Bell, LayoutDashboard, Search, Settings, User } from 'lucide-react'
 import type { DashboardPage, StatusOption } from './types'
 
 export const statuses: StatusOption[] = [
@@ -25,5 +25,6 @@ export const nav: [DashboardPage, any, string][] = [
   ['explorer', Search, 'Project Explorer'],
   ['analytics', BarChart3, 'Match Analytics'],
   ['profile', User, 'Profile'],
+  ['notifications', Bell, 'Notificações'],
   ['settings', Settings, 'Configurações'],
 ]

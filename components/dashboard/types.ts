@@ -1,5 +1,5 @@
 export type Opportunity = any
-export type DashboardPage = 'dashboard' | 'explorer' | 'analytics' | 'profile' | 'settings'
+export type DashboardPage = 'dashboard' | 'explorer' | 'analytics' | 'profile' | 'notifications' | 'settings'
 
 export type OpportunityAction = (
   item: Opportunity,

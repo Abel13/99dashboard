@@ -16,6 +16,7 @@ export function DashboardShell({
   onRefresh,
   children,
   status,
+  notificationCount = 0,
 }: {
   page: DashboardPage
   setPage: (page: DashboardPage) => void
@@ -23,6 +24,7 @@ export function DashboardShell({
   onRefresh: () => void
   children: ReactNode
   status: any
+  notificationCount?: number
 }) {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -56,6 +58,7 @@ export function DashboardShell({
             <button key={id} className={page === id ? 'active' : ''} onClick={() => navigate(id)} title={collapsed ? label : undefined} aria-label={label}>
               <Icon size={17} />
               <span>{label}</span>
+              {id === 'notifications' && notificationCount > 0 && <em className="navBadge">{notificationCount}</em>}
             </button>
           ))}
         </nav>
