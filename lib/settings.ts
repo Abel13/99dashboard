@@ -4,7 +4,6 @@ export type AppSettings = {
   profile_username: string
   hourly_rate: number
   platform_fee_pct: number
-  profile_efficiency_pct: number
   ai_pricing_enabled: boolean
   ai_pricing_model: string
   chat_ai_model: string
@@ -25,7 +24,6 @@ export const DEFAULT_SETTINGS: AppSettings = {
   profile_username: 'abeldutraui',
   hourly_rate: Number(process.env.PRICING_HOURLY_RATE || 130),
   platform_fee_pct: Number(process.env.PRICING_PLATFORM_FEE_PCT || 0.2),
-  profile_efficiency_pct: 72,
   ai_pricing_enabled: /^(1|true|yes|on)$/i.test(process.env.AI_PRICING_ENABLED || 'false'),
   ai_pricing_model: process.env.AI_PRICING_MODEL || 'gpt-4o-mini',
   chat_ai_model: process.env.CHAT_AI_MODEL || process.env.AI_PRICING_MODEL || 'gpt-4o-mini',
@@ -71,7 +69,6 @@ export async function getAppSettings(options?: { redact?: boolean }): Promise<Ap
   settings.dashboard_api_token_configured = Boolean(settings.dashboard_api_token)
   settings.hourly_rate = Number(settings.hourly_rate || 130)
   settings.platform_fee_pct = Number(settings.platform_fee_pct || 0.2)
-  settings.profile_efficiency_pct = Number(settings.profile_efficiency_pct || 0)
   settings.gmail_auto_import_enabled = Boolean(settings.gmail_auto_import_enabled)
   settings.gmail_auto_import_interval_minutes = Math.max(5, Number(settings.gmail_auto_import_interval_minutes || 15))
   return options?.redact ? redactSettings(settings) : settings

@@ -48,81 +48,82 @@ export function SettingsPage({
 
   return (
     <>
-      <section className="dashboardGrid">
-        <Panel title="Importação Gmail">
-          <div className="gmailImportHero">
-            <div>
-              <StatusLine label="Gmail OAuth" ok={!!gmail.configured} detail={gmail.configured ? 'Credenciais presentes no .env' : 'Configure GMAIL_CLIENT_ID, SECRET e REFRESH_TOKEN no .env'} />
-              <p><b>Query usada:</b> {gmail.query || settings.gmail_query}</p>
-              <p><b>Automático:</b> {gmail.auto_import_enabled ? `ligado · a cada ${gmail.auto_import_interval_minutes || settings.gmail_auto_import_interval_minutes || 15} min` : 'desligado'}{gmail.scheduler?.enabled ? ' · scheduler ativo' : ''}</p>
-              <p><b>Última importação:</b> {fmtDate(gmail.last_import_at)} · {gmail.last_trigger ? `${gmail.last_trigger} · ` : ''}{gmail.last_ok === false ? 'falhou' : 'ok/sem erro'}</p>
-              <p><b>Resultado:</b> {gmail.last_found ?? 0} encontrados · {gmail.last_parsed ?? 0} parseados · {gmail.last_unique_projects ?? '—'} projetos únicos</p>
-              <p><b>Banco:</b> {gmail.last_inserted ?? '—'} inseridos · {gmail.last_updated ?? '—'} atualizados · {gmail.last_duplicate_in_run ?? 0} duplicados no run</p>
-              {gmail.last_error && <p className="errorText"><b>Erro:</b> {gmail.last_error}</p>}
-              <p className="summary">A lista abaixo mostra exatamente quais e-mails o Gmail devolveu para essa query e por que cada um foi salvo ou ignorado.</p>
-            </div>
-            <Button variant="primary" onClick={onImportGmail} disabled={importing}>
-              {importing ? <Loader2 className="loadingIcon" size={15} /> : <RefreshCw size={15} />}
-              Importar Gmail agora
-            </Button>
+      <section className="settingsOverview glass">
+        <div>
+          <span className="kicker">Configuração rápida</span>
+          <h2>Preferências do dashboard</h2>
+        </div>
+        <div className="settingsQuickActions">
+          <Button variant="primary" onClick={onImportGmail} disabled={importing}>
+            {importing ? <Loader2 className="loadingIcon" size={15} /> : <RefreshCw size={15} />}
+            Importar Gmail
+          </Button>
+        </div>
+      </section>
+
+      <section className="settingsStatusGrid">
+        <StatusCard label="Gmail" ok={!!gmail.configured} detail={gmail.configured ? `Última: ${fmtDate(gmail.last_import_at)}` : 'Credenciais ausentes'} />
+        <StatusCard label="IA" ok={!!settings.openai_configured} detail={settings.openai_configured ? 'OpenAI configurada' : 'OPENAI_API_KEY ausente'} />
+        <StatusCard
+          label="Automação"
+          ok={!!settings.gmail_auto_import_enabled}
+          detail={settings.gmail_auto_import_enabled ? `A cada ${settings.gmail_auto_import_interval_minutes || 15} min` : 'Desligada'}
+        />
+      </section>
+
+      <section className="settingsGrid">
+        <Panel title="Gmail">
+          <label className="fieldLabel">Query de busca<input className="input" value={settings.gmail_query || ''} onChange={(event) => patch('gmail_query', event.target.value)} /></label>
+          <div className="settingsInline">
+            <label className="pill"><input type="checkbox" checked={!!settings.gmail_auto_import_enabled} onChange={(event) => patch('gmail_auto_import_enabled', event.target.checked)} /> Importar automaticamente</label>
+            <label className="fieldLabel compactField">Intervalo<input className="input" type="number" min="5" step="5" value={settings.gmail_auto_import_interval_minutes || 15} onChange={(event) => patch('gmail_auto_import_interval_minutes', Number(event.target.value))} /></label>
+          </div>
+          {gmail.last_error && <p className="errorText"><b>Erro Gmail:</b> {gmail.last_error}</p>}
+          {gmail.scheduler?.last_error && <p className="errorText"><b>Erro automação:</b> {gmail.scheduler.last_error}</p>}
+        </Panel>
+
+        <Panel title="Perfil e preço">
+          <div className="settingsTwoCols">
+            <label className="fieldLabel">Usuário 99Freelas<input className="input" value={settings.profile_username || ''} onChange={(event) => patch('profile_username', event.target.value)} placeholder="abeldutraui" /></label>
+            <label className="fieldLabel">Preço por hora<input className="input" type="number" value={settings.hourly_rate || 130} onChange={(event) => patch('hourly_rate', Number(event.target.value))} /></label>
+            <label className="fieldLabel">Taxa da plataforma<input className="input" type="number" step="0.01" value={settings.platform_fee_pct || 0.2} onChange={(event) => patch('platform_fee_pct', Number(event.target.value))} /></label>
+          </div>
+          <p className="summary">Líquido alvo dividido por {(1 - Number(settings.platform_fee_pct || 0.2)).toFixed(2)}.</p>
+        </Panel>
+
+        <Panel title="IA">
+          <StatusLine label="OpenAI" ok={!!settings.openai_configured} detail={settings.openai_configured ? 'Configurada no ambiente' : 'Configure OPENAI_API_KEY'} />
+          <label className="pill"><input type="checkbox" checked={!!settings.ai_pricing_enabled} onChange={(event) => patch('ai_pricing_enabled', event.target.checked)} /> Usar IA na precificação</label>
+          <div className="settingsTwoCols">
+            <label className="fieldLabel">Modelo chat<input className="input" value={settings.chat_ai_model || ''} onChange={(event) => patch('chat_ai_model', event.target.value)} /></label>
+            <label className="fieldLabel">Modelo pricing<input className="input" value={settings.ai_pricing_model || ''} onChange={(event) => patch('ai_pricing_model', event.target.value)} /></label>
           </div>
         </Panel>
 
-        <Panel title="Como a importação funciona">
-          <ol className="softList">
-            <li>Usa credenciais OAuth do Gmail que ficam somente no `.env`.</li>
-            <li>Busca mensagens pela query configurada.</li>
-            <li>Baixa cada mensagem em formato raw direto da Gmail API.</li>
-            <li>Parseia o MIME em memória, sem salvar `.eml`.</li>
-            <li>Extrai dados do projeto 99Freelas.</li>
-            <li>Enriquece com heurística/IA conforme configuração.</li>
-            <li>Faz upsert da oportunidade no Supabase.</li>
-          </ol>
-        </Panel>
-
-        <Panel title="Histórico recente de importações">
-          <RunList runs={runs} />
-        </Panel>
-
-        <Panel title="Últimos e-mails avaliados">
-          <MessageTrace messages={s.last_message_trace || []} />
-        </Panel>
-
-        <Panel title="Profile">
-          <label className="fieldLabel">Usuário 99Freelas<input className="input" value={settings.profile_username || ''} onChange={(event) => patch('profile_username', event.target.value)} placeholder="abeldutraui" /></label>
-          <label className="fieldLabel">Eficiência do perfil (%)<input className="input" type="number" value={settings.profile_efficiency_pct || 0} onChange={(event) => patch('profile_efficiency_pct', Number(event.target.value))} /></label>
-        </Panel>
-
-        <Panel title="OpenAI / IA">
-          <StatusLine label="OpenAI key" ok={!!settings.openai_configured} detail={settings.openai_configured ? 'Configurada no .env' : 'Configure OPENAI_API_KEY no .env'} />
-          <label className="pill"><input type="checkbox" checked={!!settings.ai_pricing_enabled} onChange={(event) => patch('ai_pricing_enabled', event.target.checked)} /> Usar IA na precificação</label>
-          <label className="fieldLabel">Modelo chat<input className="input" value={settings.chat_ai_model || ''} onChange={(event) => patch('chat_ai_model', event.target.value)} /></label>
-          <label className="fieldLabel">Modelo pricing<input className="input" value={settings.ai_pricing_model || ''} onChange={(event) => patch('ai_pricing_model', event.target.value)} /></label>
-        </Panel>
-
-        <Panel title="Precificação">
-          <label className="fieldLabel">Preço por hora<input className="input" type="number" value={settings.hourly_rate || 130} onChange={(event) => patch('hourly_rate', Number(event.target.value))} /></label>
-          <label className="fieldLabel">Taxa da plataforma<input className="input" type="number" step="0.01" value={settings.platform_fee_pct || 0.2} onChange={(event) => patch('platform_fee_pct', Number(event.target.value))} /></label>
-          <p className="summary">Regra atual: líquido alvo ÷ {(1 - Number(settings.platform_fee_pct || 0.2)).toFixed(2)}.</p>
-        </Panel>
-
-        <Panel title="Gmail query">
-          <label className="fieldLabel">Query/label<input className="input" value={settings.gmail_query || ''} onChange={(event) => patch('gmail_query', event.target.value)} /></label>
-          <p className="summary">A query fica no Supabase; as credenciais ficam no `.env`.</p>
-        </Panel>
-
-        <Panel title="Importação automática">
-          <label className="pill"><input type="checkbox" checked={!!settings.gmail_auto_import_enabled} onChange={(event) => patch('gmail_auto_import_enabled', event.target.checked)} /> Atualizar Gmail automaticamente</label>
-          <label className="fieldLabel">Intervalo em minutos<input className="input" type="number" min="5" step="5" value={settings.gmail_auto_import_interval_minutes || 15} onChange={(event) => patch('gmail_auto_import_interval_minutes', Number(event.target.value))} /></label>
-          <p className="summary">Quando ligado, o backend chama a mesma importação do botão no intervalo configurado. Mínimo: 5 minutos.</p>
-          {gmail.scheduler?.last_error && <p className="errorText"><b>Erro do scheduler:</b> {gmail.scheduler.last_error}</p>}
-        </Panel>
-
-        <Panel title="Segurança / automação">
-          <StatusLine label="Token API/cron" ok={!!settings.dashboard_api_token_configured} detail={settings.dashboard_api_token_configured ? 'Configurado no .env' : 'Configure DASHBOARD_API_TOKEN no .env'} />
-          <p className="summary">Esse token protege chamadas externas. A importação automática interna não precisa chamar endpoint externo.</p>
+        <Panel title="Segurança">
+          <StatusLine label="Token API" ok={!!settings.dashboard_api_token_configured} detail={settings.dashboard_api_token_configured ? 'Configurado no ambiente' : 'Configure DASHBOARD_API_TOKEN'} />
         </Panel>
       </section>
+
+      <details className="settingsDiagnostics glass">
+        <summary>Diagnóstico e histórico</summary>
+        <div className="diagnosticGrid">
+          <div>
+            <h3>Última importação</h3>
+            <p><b>Status:</b> {gmail.last_ok === false ? 'falhou' : 'ok/sem erro'}</p>
+            <p><b>Resultado:</b> {gmail.last_found ?? 0} encontrados · {gmail.last_parsed ?? 0} parseados · {gmail.last_unique_projects ?? '—'} projetos únicos</p>
+            <p><b>Banco:</b> {gmail.last_inserted ?? '—'} inseridos · {gmail.last_updated ?? '—'} atualizados</p>
+          </div>
+          <div>
+            <h3>Histórico recente</h3>
+            <RunList runs={runs} />
+          </div>
+          <div>
+            <h3>E-mails avaliados</h3>
+            <MessageTrace messages={s.last_message_trace || []} />
+          </div>
+        </div>
+      </details>
 
       <section className="saveBar glass">
         <Button variant="primary" onClick={save} disabled={saving}>
@@ -132,6 +133,18 @@ export function SettingsPage({
         {msg && <span>{msg}</span>}
       </section>
     </>
+  )
+}
+
+function StatusCard({ label, ok, detail }: { label: string; ok: boolean; detail: string }) {
+  return (
+    <div className="settingsStatusCard glass">
+      <span className={`dot ${ok ? 'ok' : 'bad'}`} />
+      <div>
+        <b>{label}</b>
+        <small>{detail}</small>
+      </div>
+    </div>
   )
 }
 
