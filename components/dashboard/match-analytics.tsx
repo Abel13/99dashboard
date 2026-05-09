@@ -34,17 +34,20 @@ export function MatchAnalytics({
   onOpen: OpenOpportunity
 }) {
   const [insight, setInsight] = useState<any>(null)
+  const [localSelected, setLocalSelected] = useState<Opportunity | null>(null)
   const [loading, setLoading] = useState(false)
+  const [enriching, setEnriching] = useState(false)
 
   if (!selected) return <div className="empty glass">Nenhum projeto selecionado.</div>
 
-  const ds = selected.decision_support || {}
+  const current: Opportunity = localSelected && String(localSelected.source_project_id) === String(selected.source_project_id) ? localSelected : selected
+  const ds = current.decision_support || {}
   const calc = ds.pricing_calc || {}
   const price = ds.price_suggested_effective ?? ds.price_suggested
   const risk = Math.round(Number(calc.risk_pct || 0) * 100)
   const hoursAvg = Math.round(Number(calc.hours_avg || 0))
   const complexity = insight?.complexity_score ?? Math.min(100, Number(calc.hours_avg || 50) / 2)
-  const score = scoreOf(selected)
+  const score = scoreOf(current)
   const [band, bandKind] = scoreBand(score)
   const aiEnabled = Boolean(insight || ds.ai_pricing?.used)
   const questions = (insight?.technical_requirements || ds.questions_to_client || []).slice(0, 5)
@@ -55,11 +58,23 @@ export function MatchAnalytics({
     const response = await fetch('/api/project-insight', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ projectId: selected.source_project_id }),
+      body: JSON.stringify({ projectId: current.source_project_id }),
     })
     const data = await response.json()
     setInsight(data.insight)
     setLoading(false)
+  }
+
+  async function enrichCurrentProject() {
+    setEnriching(true)
+    const response = await fetch('/api/enrich/project', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ projectId: current.source_project_id }),
+    })
+    const data = await response.json().catch(() => ({}))
+    if (data.item) setLocalSelected(data.item)
+    setEnriching(false)
   }
 
   async function copyProposal() {
@@ -75,6 +90,7 @@ export function MatchAnalytics({
           onChange={(event) => {
             setSelectedId(event.target.value)
             setInsight(null)
+            setLocalSelected(null)
           }}
         >
           {items.map((item) => (
@@ -83,6 +99,10 @@ export function MatchAnalytics({
             </option>
           ))}
         </select>
+        <Button onClick={enrichCurrentProject} disabled={enriching || !current.project_url}>
+          {enriching ? <Loader2 size={15} /> : <Database size={15} />}
+          {current.page_details?.enriched_at ? 'Atualizar dados 99Freelas' : 'Enriquecer dados 99Freelas'}
+        </Button>
         <Button variant="primary" onClick={generateInsight} disabled={loading}>
           {loading ? <Loader2 size={15} /> : <Sparkles size={15} />}
           Atualizar painel IA
@@ -92,7 +112,7 @@ export function MatchAnalytics({
       <section className="analysisHeader glass">
         <div>
           <span className={`signalBadge ${bandKind}`}>{band} match</span>
-          <h2>{selected.title}</h2>
+          <h2>{current.title}</h2>
           <div className="sourceBadges">
             <span><Database size={14} /> 99Freelas</span>
             <span><ClipboardList size={14} /> Análise da aplicação</span>
@@ -118,7 +138,7 @@ export function MatchAnalytics({
           <Signal label="Horas" value={hoursAvg || 0} suffix="h" kind={hoursAvg > 120 ? 'bad' : hoursAvg > 64 ? 'warn' : 'ok'} />
         </div>
         <div className="analyticsActions">
-          <OpportunityActions item={selected} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
+          <OpportunityActions item={current} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
         </div>
       </section>
 
@@ -126,17 +146,17 @@ export function MatchAnalytics({
         <Panel title="Dados do 99Freelas">
           <span className="sectionSource source99">Origem: projeto importado</span>
           <div className="factGrid">
-            <Fact label="Projeto" value={`#${selected.source_project_id}`} />
-            <Fact label="Categoria" value={selected.category || selected.page_details?.subcategory || '—'} />
+            <Fact label="Projeto" value={`#${current.source_project_id}`} />
+            <Fact label="Categoria" value={current.category || current.page_details?.subcategory || '—'} />
             <Fact label="Status atual" value={workflowStatusLabel(selected)} />
-            <Fact label="Orçamento" value={selected.page_details?.budget || selected.budget || '—'} />
-            <Fact label="Nível" value={selected.page_details?.level || selected.level || '—'} />
-            <Fact label="Propostas" value={selected.page_details?.proposals ?? '—'} />
-            <Fact label="Interessados" value={selected.page_details?.interested ?? '—'} />
-            <Fact label="Valor mínimo" value={selected.page_details?.minimum_value || '—'} />
-            <Fact label="Visibilidade" value={selected.page_details?.visibility || '—'} />
+            <Fact label="Orçamento" value={current.page_details?.budget || current.budget || '—'} />
+            <Fact label="Nível" value={current.page_details?.level || current.level || '—'} />
+            <Fact label="Propostas" value={current.page_details?.proposals ?? '—'} />
+            <Fact label="Interessados" value={current.page_details?.interested ?? '—'} />
+            <Fact label="Valor mínimo" value={current.page_details?.minimum_value || '—'} />
+            <Fact label="Visibilidade" value={current.page_details?.visibility || '—'} />
           </div>
-          <p className="summary sourceText">{(selected.full_description || selected.description_preview || 'Sem descrição importada.').slice(0, 520)}{(selected.full_description || '').length > 520 ? '…' : ''}</p>
+          <p className="summary sourceText">{(current.full_description || current.description_preview || 'Sem descrição importada.').slice(0, 520)}{(current.full_description || '').length > 520 ? '…' : ''}</p>
         </Panel>
 
         <Panel title="Análise da aplicação">
@@ -176,9 +196,9 @@ export function MatchAnalytics({
               </div>
               <div>
                 <h4>Cliente</h4>
-                <p className="summary shortText"><b>{selected.client_details?.name || 'Cliente não identificado'}</b>{selected.client_details?.url && <> · <a target="_blank" href={selected.client_details.url}>abrir perfil</a></>}</p>
-                <div className="chips"><span className="chip">Nota {selected.client_details?.rating ?? selected.client_details?.score ?? '—'}</span><span className="chip">{selected.client_details?.reviews ?? '—'} avaliações</span><span className="chip">{selected.client_details?.completed_projects ?? '—'} projetos</span></div>
-                <p className="summary shortText">{insight?.client_reputation || selected.client_details?.about_preview || 'Sem reputação suficiente. Validar histórico, briefing, concorrência e velocidade de resposta.'}</p>
+                <p className="summary shortText"><b>{current.client_details?.name || 'Cliente não identificado'}</b>{current.client_details?.url && <> · <a target="_blank" href={current.client_details.url}>abrir perfil</a></>}</p>
+                <div className="chips"><span className="chip">Nota {current.client_details?.rating ?? current.client_details?.score ?? '—'}</span><span className="chip">{current.client_details?.reviews ?? '—'} avaliações</span><span className="chip">{current.client_details?.completed_projects ?? '—'} projetos</span></div>
+                <p className="summary shortText">{insight?.client_reputation || current.client_details?.about_preview || 'Sem reputação suficiente. Validar histórico, briefing, concorrência e velocidade de resposta.'}</p>
               </div>
               <div>
                 <h4>Base de preço</h4>

@@ -33,6 +33,12 @@ export async function getOpportunities() {
   return { items: (data || []).map((r: any) => r.payload as Opportunity) }
 }
 
+export async function getOpportunityById(projectId: string) {
+  const { data, error } = await requireSupabase().from('opportunities').select('payload').eq('project_id', projectId).maybeSingle()
+  if (error) throw error
+  return (data as any)?.payload as Opportunity | null
+}
+
 export async function updateFeedback(projectId: string, patch: Feedback) {
   const sb = requireSupabase()
   const { data: currentRow } = await sb.from('feedback').select('payload').eq('project_id', projectId).maybeSingle()
