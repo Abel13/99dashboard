@@ -51,6 +51,12 @@ export function Dashboard() {
     load()
   }, [])
 
+  useEffect(() => {
+    if (!toast) return
+    const timeout = window.setTimeout(() => setToast(''), 3200)
+    return () => window.clearTimeout(timeout)
+  }, [toast])
+
   async function runPipeline() {
     setBusy('pipeline')
     const response = await fetch('/api/pipeline', { method: 'POST' })
