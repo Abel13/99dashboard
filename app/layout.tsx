@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
-import { ThemeProvider } from 'next-themes'
+import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 const montserrat = Montserrat({
@@ -11,5 +11,5 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = { title: '99Dashboard', description: 'Radar moderno de oportunidades 99Freelas' }
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="pt-BR" suppressHydrationWarning><body className={montserrat.variable}><ThemeProvider attribute="class" defaultTheme="light" enableSystem>{children}</ThemeProvider></body></html>
+  return <html lang="pt-BR" suppressHydrationWarning><body className={montserrat.variable}><ThemeProvider>{children}</ThemeProvider></body></html>
 }
