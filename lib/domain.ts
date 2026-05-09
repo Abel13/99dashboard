@@ -29,6 +29,8 @@ export type Opportunity = {
   page_details?: any
   client_details?: any
   decision_support?: any
+  match_insight?: any
+  match_insight_generated_at?: string
   effective_status?: string
   effective_status_label?: string
   abel_feedback?: Feedback

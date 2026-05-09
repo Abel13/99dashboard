@@ -14,9 +14,9 @@ export async function POST(req: NextRequest) {
 
     const pageEnriched = await enrichProjectAndClient(item)
     const enriched = await enrichOpportunity(pageEnriched)
-    await upsertOpportunity(enriched)
+    const saved = await upsertOpportunity(enriched)
 
-    return NextResponse.json({ ok: true, item: enriched })
+    return NextResponse.json({ ok: true, item: saved.payload || enriched })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err.message || String(err) }, { status: 500 })
   }

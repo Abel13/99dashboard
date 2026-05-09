@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
   if (!settings.openai_api_key) {
     const insight = fallback(item)
     const updated = { ...item, match_insight: insight, match_insight_generated_at: new Date().toISOString() }
-    await upsertOpportunity(updated)
-    return NextResponse.json({ insight, item: updated, fallback: true })
+    const saved = await upsertOpportunity(updated)
+    return NextResponse.json({ insight, item: saved.payload || updated, fallback: true })
   }
 
   const prompt = `Você é Oracle, consultora técnica/comercial do Softwarehouse. Gere um painel analítico para o projeto 99Freelas abaixo.
@@ -59,21 +59,21 @@ Projeto: ${JSON.stringify(item).slice(0, 12000)}`
   if (!res.ok) {
     const insight = fallback(item)
     const updated = { ...item, match_insight: insight, match_insight_generated_at: new Date().toISOString() }
-    await upsertOpportunity(updated)
-    return NextResponse.json({ insight, item: updated, fallback: true, error: await res.text() })
+    const saved = await upsertOpportunity(updated)
+    return NextResponse.json({ insight, item: saved.payload || updated, fallback: true, error: await res.text() })
   }
   const json = await res.json()
   try {
     const insight = JSON.parse(json.choices?.[0]?.message?.content || '{}')
     const decision_support = insight.proposal_draft ? { ...(item.decision_support || {}), proposal_draft: insight.proposal_draft, requirements_breakdown: insight.requirements_breakdown || item.decision_support?.requirements_breakdown } : item.decision_support
     const updated = { ...item, decision_support, match_insight: insight, match_insight_generated_at: new Date().toISOString() }
-    await upsertOpportunity(updated)
-    return NextResponse.json({ insight, item: updated })
+    const saved = await upsertOpportunity(updated)
+    return NextResponse.json({ insight, item: saved.payload || updated })
   }
   catch {
     const insight = fallback(item)
     const updated = { ...item, match_insight: insight, match_insight_generated_at: new Date().toISOString() }
-    await upsertOpportunity(updated)
-    return NextResponse.json({ insight, item: updated, fallback: true })
+    const saved = await upsertOpportunity(updated)
+    return NextResponse.json({ insight, item: saved.payload || updated, fallback: true })
   }
 }
