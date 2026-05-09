@@ -5,11 +5,4 @@ node_modules
 .env*.local
 .DS_Store
 npm-debug.log*
-
-# Runtime temporário local: não é fonte de dados
-.runtime/
-
-__pycache__/
-*.py[cod]
-
 supabase/.temp/

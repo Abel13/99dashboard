@@ -6,6 +6,6 @@ export async function GET() {
   return NextResponse.json({
     import_state: state,
     items_count: opportunities.items?.length || 0,
-    feedback_applied_at: opportunities.feedback_applied_at || null,
+    feedback_applied_at: null,
   })
 }
