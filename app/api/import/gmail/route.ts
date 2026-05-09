@@ -5,7 +5,8 @@ import { updateImportState, upsertOpportunity } from '@/lib/softwarehouse'
 import { getAppSettings } from '@/lib/settings'
 
 function authorized(req: NextRequest, secret?: string){
-  return !secret || secret === 'change-me' || req.headers.get('authorization') === `Bearer ${secret}` || req.nextUrl.searchParams.get('token') === secret
+  const localDev = ['localhost','127.0.0.1','::1'].includes(req.nextUrl.hostname)
+  return localDev || !secret || secret === 'change-me' || req.headers.get('authorization') === `Bearer ${secret}` || req.nextUrl.searchParams.get('token') === secret
 }
 async function accessToken(settings: any){
   const client_id = settings.gmail_client_id
