@@ -17,6 +17,13 @@ function titleFromSlug(url = '') {
   const slug = url.split('/project/')[1]?.split('?')[0]?.replace(/-\d+\/?$/, '') || ''
   return slug.split('-').filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
+function safePersonName(name = '', projectTitle = '') {
+  const value = clean(name.replace(/^#\s*/, ''))
+  if (!value || value.length > 70) return ''
+  if (projectTitle && value.toLowerCase() === clean(projectTitle).toLowerCase()) return ''
+  if (/freelancer|proposta|aprovad|desenvolvedor|projeto|contratad|publicado|cliente/i.test(value)) return ''
+  return value
+}
 function dateFromMillis(value?: string) { const n = Number(value || 0); return n ? new Date(n).toISOString() : null }
 function descriptionFromHtml(html: string) {
   const text = htmlToText(html, { wordwrap: false, selectors: [{ selector: 'a', options: { ignoreHref: true } }, { selector: 'script', format: 'skip' }, { selector: 'style', format: 'skip' }] })
@@ -61,8 +68,9 @@ async function enrichClient(clientUrl?: string, clientName?: string, score?: str
   try {
     const html = await fetchHtml(abs(clientUrl))
     const text = htmlToText(html, { wordwrap: false })
+    const profileName = safePersonName(first(/#\s*([^\n]+)/, text) || first(/<title[^>]*>([\s\S]*?)<\/title>/i, html).split('|')[0] || clientName || '')
     return {
-      name: first(/#\s*([^\n]+)/, text) || clientName || '',
+      name: profileName || safePersonName(clientName || ''),
       url: abs(clientUrl),
       score: score ? Number(score) : null,
       rating: Number(text.match(/\((\d+(?:[,.]\d+)?)\s*-\s*(\d+)\s*avalia/i)?.[1]?.replace(',', '.') || score || 0) || null,
@@ -91,7 +99,8 @@ export async function enrichProjectAndClient(item: Opportunity): Promise<Opportu
     const clientMatch = html.match(/<a\s+href="(\/user\/[^"]+)"[^>]*>[\s\S]{0,800}?<span class="name">([\s\S]*?)<\/span>/i) || html.match(/<a\s+href="(\/user\/[^"]+)"[^>]*title="([^"]+)"/i)
     const clientScore = html.match(/data-score="([0-9.]+)"/i)?.[1]
     const rawClientName = clean(htmlToText(clientMatch?.[2] || '', { wordwrap: false }))
-    const safeClientName = rawClientName && rawClientName !== title && rawClientName !== canonicalTitle && !/freelancer|proposta|aprovad|desenvolvedor/i.test(rawClientName) ? rawClientName : ''
+    const clientNameFromText = first(/(?:Publicado por|Cliente)\s*:?\s*([^\n]+)/i, htmlToText(html, { wordwrap: false }))
+    const safeClientName = safePersonName(rawClientName, canonicalTitle) || safePersonName(clientNameFromText, canonicalTitle)
     const client = await enrichClient(clientMatch?.[1], safeClientName, clientScore)
     const page_details = {
       ...(item.page_details || {}),

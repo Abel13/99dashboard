@@ -2,6 +2,30 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getOpportunities, upsertOpportunity } from '@/lib/softwarehouse'
 import { getAppSettings } from '@/lib/settings'
 
+function safeClientName(name = '') {
+  const clean = String(name || '').replace(/^#\s*/, '').trim()
+  if (!clean || clean.length > 60 || /freelancer|proposta|aprovad|desenvolvedor|projeto|cliente não identificado/i.test(clean)) return ''
+  return clean
+}
+
+function normalizeProposalDraft(value: any, item: any) {
+  if (typeof value !== 'string' || !value.trim()) return ''
+  let text = value.trim()
+  if ((text.match(/\s\/\s/g) || []).length >= 3) {
+    text = text.split(/\s\/\s/g).map(x => x.trim()).filter(Boolean).join('\n\n')
+  }
+  text = text
+    .replace(/Minha sugestão (?:é|seria):\s*/i, 'Minha sugestão para o projeto seria:\n')
+    .replace(/\s+-\s+/g, '\n- ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+  const clientName = safeClientName(item.client_details?.name)
+  if (clientName && /^Olá,?\s*tudo bem\?/i.test(text)) {
+    text = text.replace(/^Olá,?\s*tudo bem\?/i, `Olá, ${clientName}. Tudo bem?`)
+  }
+  return text
+}
+
 function fallback(item: any) {
   const ds = item.decision_support || {}
   const calc = ds.pricing_calc || {}
@@ -42,13 +66,13 @@ Responda SOMENTE JSON válido no formato:
   "duration_estimate":"estimativa de duração",
   "requirements_breakdown":[{"requirement":"requisito/entregável","hours_min":0,"hours_max":0,"net_value":0}],
   "proposal_angle":"como posicionar a proposta de forma vendível e específica ao pedido",
-  "proposal_draft":"proposta comercial pronta para copiar seguindo este padrão: Olá, [nome se houver]. Tudo bem? / Li a descrição do projeto e entendi que você precisa de... / Tenho experiência com... / Minha sugestão seria: - entrega 1 - entrega 2 - entrega 3 - diferencial / Também posso te manter atualizado... / Tenho experiência prática... / Fico à disposição... Obrigado.",
+  "proposal_draft":"proposta comercial pronta para copiar, com parágrafos separados por quebras de linha reais e lista usando '- '. Nunca use '/' como separador. Estrutura: saudação; entendimento do problema; experiência relacionada; sugestão com lista; acompanhamento/validação; experiência prática; fechamento; obrigado.",
   "client_reputation":"análise reputacional com os dados disponíveis e o que verificar",},{
   "risks":["..."]
 }
 Considere funcionalidades, tecnologia, integrações, segurança, deploy, testes, clareza, concorrência e risco comercial.
 Não invente nome do cliente: se o nome não estiver claro em client_details, diga que não foi identificado.
-A proposta deve falar do pedido específico do cliente, seguir o padrão definido acima e vender confiança/resultado; evite texto genérico como "vamos fazer um MVP" quando o cliente pediu outra coisa.
+A proposta deve falar do pedido específico do cliente, seguir o padrão definido acima, usar quebras de linha reais, nunca usar '/' como separador e vender confiança/resultado; evite texto genérico como "vamos fazer um MVP" quando o cliente pediu outra coisa.
 Projeto: ${JSON.stringify(item).slice(0, 12000)}`
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -65,7 +89,9 @@ Projeto: ${JSON.stringify(item).slice(0, 12000)}`
   const json = await res.json()
   try {
     const insight = JSON.parse(json.choices?.[0]?.message?.content || '{}')
-    const decision_support = insight.proposal_draft ? { ...(item.decision_support || {}), proposal_draft: insight.proposal_draft, requirements_breakdown: insight.requirements_breakdown || item.decision_support?.requirements_breakdown } : item.decision_support
+    const proposalDraft = normalizeProposalDraft(insight.proposal_draft, item)
+    if (proposalDraft) insight.proposal_draft = proposalDraft
+    const decision_support = proposalDraft ? { ...(item.decision_support || {}), proposal_draft: proposalDraft, requirements_breakdown: insight.requirements_breakdown || item.decision_support?.requirements_breakdown } : item.decision_support
     const updated = { ...item, decision_support, match_insight: insight, match_insight_generated_at: new Date().toISOString() }
     const saved = await upsertOpportunity(updated)
     return NextResponse.json({ insight, item: saved.payload || updated })

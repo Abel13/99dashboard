@@ -76,7 +76,7 @@ function pricing(item: Opportunity, est: any, settings: AppSettings) {
     pricing_calc: { source: est.source, model: est.model, hourly_rate: hourlyRate, platform_fee_pct: fee, ai_assisted: true, raw_hours_min: rawHoursMin, raw_hours_max: rawHoursMax, hours_min: hoursMin, hours_max: hoursMax, hours_avg: Math.round(avg*10)/10, requirements_hours_avg: Math.round(requirementsHours*10)/10, requirements_net_total: roundMoney(requirementsNet, 100), risk_pct: est.risk_pct, net_target_suggested: roundMoney(net), gross_target_suggested: price },
     requirements_breakdown: requirements,
     questions_to_client: est.questions_to_client || defaultQuestions(item),
-    proposal_draft: est.proposal_draft || proposal(item, price, est), ai_pricing: est.ai_pricing,
+    proposal_draft: normalizeProposalDraft(est.proposal_draft, item) || proposal(item, price, est), ai_pricing: est.ai_pricing,
   }
   const score = item.analysis?.final_score || scoreOpportunity(item)
   return { ...item, analysis: { ...(item.analysis||{}), final_score: score }, decision_support, effective_status: decision_support.status_manual, effective_status_label: label(decision_support.status_manual) }
@@ -96,9 +96,30 @@ function proposal(item: Opportunity, price: number, est: any){
 }
 function cleanForProposal(text = '') { return text.replace(/\s+/g, ' ').trim().slice(0, 260) }
 function safeClientName(name = '') {
-  const clean = name.trim()
-  if (!clean || clean.length > 60 || /freelancer|proposta|aprovad|desenvolvedor|projeto/i.test(clean)) return ''
+  const clean = name.replace(/^#\s*/, '').trim()
+  if (!clean || clean.length > 60 || /freelancer|proposta|aprovad|desenvolvedor|projeto|cliente não identificado/i.test(clean)) return ''
   return clean
+}
+function normalizeProposalDraft(value: any, item: Opportunity) {
+  if (typeof value !== 'string' || !value.trim()) return ''
+  let text = value.trim()
+  // The AI sometimes copied the prompt separators literally: "Olá... / Li... / Tenho...".
+  // Convert that shape back to a readable proposal instead of persisting a single-line draft.
+  if ((text.match(/\s\/\s/g) || []).length >= 3) {
+    text = text.split(/\s\/\s/g).map(x => x.trim()).filter(Boolean).join('\n\n')
+  }
+  text = text
+    .replace(/Minha sugestão (?:é|seria):\s*/i, 'Minha sugestão para o projeto seria:\n')
+    .replace(/\s+-\s+/g, '\n- ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+
+  const clientName = safeClientName(item.client_details?.name)
+  if (clientName && /^Olá,?\s*tudo bem\?/i.test(text)) {
+    text = text.replace(/^Olá,?\s*tudo bem\?/i, `Olá, ${clientName}. Tudo bem?`)
+  }
+  if (!/^Olá/i.test(text)) return ''
+  return text
 }
 function summarizeProblem(item: Opportunity, desc: string) {
   const text = `${item.title}. ${desc}`.toLowerCase()
@@ -147,7 +168,7 @@ async function aiEstimate(item: Opportunity, base: Opportunity, settings: AppSet
   if (!settings.ai_pricing_enabled || !settings.openai_api_key) return null
   const hourlyRate = Number(settings.hourly_rate || 130)
   const fee = Number(settings.platform_fee_pct || 0.2)
-  const prompt = `Você é consultor técnico/comercial do Abel. Estime horas e preço para este projeto 99Freelas.\nRegras: valor-hora R$ ${hourlyRate}; taxa plataforma ${Math.round(fee*100)}%; preço ao cliente = líquido / ${(1-fee).toFixed(2)}.\nNão copie a heurística; decomponha mentalmente riscos, funcionalidades, tecnologia, integrações, segurança, deploy, testes e comunicação.\nConsidere que Abel trabalha com auxílio de IA/coding assistants; estime horas produtivas realistas para esse contexto, não uma fábrica tradicional.\nResponda JSON: {"hours_min":number,"hours_max":number,"risk_pct":number,"effort_estimate":"string","delivery_estimate":"string","pricing_note":"string","proposal_angle":"string","proposal_draft":"string opcional seguindo exatamente este padrão: Olá, [nome se houver]. Tudo bem? / Li a descrição... / Tenho experiência... / Minha sugestão... / Também posso... / Tenho experiência prática... / Fico à disposição... / Obrigado.","requirements_breakdown":[{"requirement":"string","hours_min":number,"hours_max":number,"net_value":number}],"questions_to_client":["..."],"risks":["..."],"status_manual":"review|prepare_proposal|discarded"}.\nNão invente nome do cliente. Se não houver nome confiável, comece com "Olá, tudo bem?".\nHeurística de referência: ${JSON.stringify(base.decision_support?.pricing_calc)}\nProjeto: ${JSON.stringify({title:item.title,category:item.category,budget:item.budget,description:item.full_description})}`
+  const prompt = `Você é consultor técnico/comercial do Abel. Estime horas e preço para este projeto 99Freelas.\nRegras: valor-hora R$ ${hourlyRate}; taxa plataforma ${Math.round(fee*100)}%; preço ao cliente = líquido / ${(1-fee).toFixed(2)}.\nNão copie a heurística; decomponha mentalmente riscos, funcionalidades, tecnologia, integrações, segurança, deploy, testes e comunicação.\nConsidere que Abel trabalha com auxílio de IA/coding assistants; estime horas produtivas realistas para esse contexto, não uma fábrica tradicional.\nResponda JSON: {"hours_min":number,"hours_max":number,"risk_pct":number,"effort_estimate":"string","delivery_estimate":"string","pricing_note":"string","proposal_angle":"string","proposal_draft":"string opcional em parágrafos com quebras de linha reais, nunca usando barras '/', seguindo: saudação; entendimento do problema; experiência relacionada; sugestão com lista usando '- '; acompanhamento/validação; experiência prática; fechamento; obrigado.","requirements_breakdown":[{"requirement":"string","hours_min":number,"hours_max":number,"net_value":number}],"questions_to_client":["..."],"risks":["..."],"status_manual":"review|prepare_proposal|discarded"}.\nNão invente nome do cliente. Se não houver nome confiável, comece com "Olá, tudo bem?". Não use '/' como separador de parágrafos.\nHeurística de referência: ${JSON.stringify(base.decision_support?.pricing_calc)}\nProjeto: ${JSON.stringify({title:item.title,category:item.category,budget:item.budget,description:item.full_description})}`
   return openAIJson<any>(prompt, { model: settings.ai_pricing_model, apiKey: settings.openai_api_key })
 }
 
