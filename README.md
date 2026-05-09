@@ -51,18 +51,23 @@ Portas não-default:
 
 ## Configurações operacionais
 
-Depois de subir o app, use o menu **Configurações** para salvar no Supabase:
+Depois de subir o app, use o menu **Configurações** para salvar no Supabase apenas dados não secretos:
 
 - usuário do perfil 99Freelas;
 - preço por hora;
 - taxa da plataforma;
 - modelos de IA;
-- chave OpenAI;
-- credenciais OAuth do Gmail;
 - query/label do Gmail;
-- token de cron/API.
+- eficiência do perfil.
 
-O `.env` fica apenas como bootstrap mínimo para conectar no Supabase.
+Credenciais e chaves continuam somente no `.env`/runtime secrets:
+
+- `OPENAI_API_KEY`;
+- `GMAIL_CLIENT_ID`;
+- `GMAIL_CLIENT_SECRET`;
+- `GMAIL_REFRESH_TOKEN`;
+- `DASHBOARD_API_TOKEN`.
+
 
 Importar Gmail após configurar o token no painel:
 
