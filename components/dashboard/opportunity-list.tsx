@@ -11,8 +11,8 @@ import {
   riskTag,
   scoreOf,
   statusKind,
-  statusLabel,
-  statusOf,
+  workflowStatusLabel,
+  workflowStatusOf,
 } from './helpers'
 import { ScoreBar, SignalDot } from './ui'
 import type { OpenOpportunity, Opportunity, OpportunityAction } from './types'
@@ -49,7 +49,7 @@ export function OpportunityTable({
 
 function TableRow({ item, busy, onAction, onOpen }: { item: Opportunity; busy: string; onAction: OpportunityAction; onOpen: OpenOpportunity }) {
   const ds = item.decision_support || {}
-  const status = statusOf(item)
+  const status = workflowStatusOf(item)
   const price = priceOf(item)
   const score = scoreOf(item)
 
@@ -73,7 +73,7 @@ function TableRow({ item, busy, onAction, onOpen }: { item: Opportunity; busy: s
         <span className="nextAction">{nextActionFor(item)}</span>
       </div>
       <div data-label="Status">
-        <span className={`chip ${statusKind(status)}`}>{item.effective_status_label || statusLabel(status)}</span>
+        <span className={`chip ${statusKind(status)}`}>{workflowStatusLabel(item)}</span>
       </div>
       <div data-label="Esforço">
         <SignalDot
@@ -136,7 +136,7 @@ function RowActions({
       <details className="moreActions">
         <summary>Mais</summary>
         <div>
-          <Button onClick={() => onAction(item, 'review', 'Abel enviou perguntas ao cliente; aguardando respostas')}>
+          <Button onClick={() => onAction(item, 'questions_sent', 'Abel enviou perguntas ao cliente; aguardando respostas')}>
             <Check size={15} />
             Perguntas
           </Button>
@@ -161,7 +161,7 @@ function RowActions({
 export function OpportunityCard({ item, busy, onAction, onOpen }: { item: Opportunity; busy: string; onAction: OpportunityAction; onOpen: OpenOpportunity }) {
   const ds = item.decision_support || {}
   const pd = item.page_details || {}
-  const status = item.effective_status || ds.status_manual || 'review'
+  const status = workflowStatusOf(item)
   const price = ds.price_suggested_effective ?? ds.price_suggested
   const calc = ds.pricing_calc || {}
 
@@ -187,7 +187,7 @@ export function OpportunityCard({ item, busy, onAction, onOpen }: { item: Opport
         {(item.full_description || '').length > 240 ? '…' : ''}
       </p>
       <div className="chips">
-        <span className={`chip ${statusKind(status)}`}>{item.effective_status_label || status}</span>
+        <span className={`chip ${statusKind(status)}`}>{workflowStatusLabel(item)}</span>
         {ds.ai_pricing?.used && <span className="chip ok">Precificado por IA</span>}
         <span className="chip">{pd.proposals ?? '—'} propostas</span>
         <span className="chip">{pd.interested ?? '—'} interessados</span>

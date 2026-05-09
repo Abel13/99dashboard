@@ -10,7 +10,7 @@ import { MatchAnalytics } from './dashboard/match-analytics'
 import { Overview } from './dashboard/overview'
 import { Profile } from './dashboard/profile'
 import { SettingsPage } from './dashboard/settings-page'
-import { scoreOf, statusOf } from './dashboard/helpers'
+import { scoreOf, workflowStatusOf } from './dashboard/helpers'
 import type { DashboardPage, Opportunity } from './dashboard/types'
 
 export function Dashboard() {
@@ -85,7 +85,7 @@ export function Dashboard() {
       items.filter((item) => {
         const search = (query || '').toLowerCase()
         const text = `${item.title} ${item.full_description || ''} ${item.effective_status || ''}`.toLowerCase()
-        const status = statusOf(item)
+        const status = workflowStatusOf(item)
         return (
           (!search || text.includes(search)) &&
           scoreOf(item) >= minScore &&

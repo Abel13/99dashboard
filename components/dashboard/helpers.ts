@@ -32,7 +32,7 @@ export function topTerms(items: Opportunity[], limit = 8) {
 export function statusKind(status: string) {
   if (['liked', 'won', 'proposal_sent'].includes(status)) return 'ok'
   if (['lost', 'discarded', 'descartar'].includes(status)) return 'bad'
-  if (['review', 'prepare_proposal', 'preparar_proposta', 'caso_a_caso'].includes(status)) return 'warn'
+  if (['questions_sent', 'review', 'prepare_proposal', 'preparar_proposta', 'caso_a_caso'].includes(status)) return 'warn'
   return ''
 }
 
@@ -48,6 +48,17 @@ export function statusOf(item: Opportunity) {
   return item.effective_status || item.decision_support?.status_manual || 'review'
 }
 
+export function workflowStatusOf(item: Opportunity) {
+  const raw = statusOf(item)
+  const feedbackReason = String(item.abel_feedback?.reason || '').toLowerCase()
+
+  if (raw === 'review' && feedbackReason.includes('perguntas')) return 'questions_sent'
+  if (['review', 'caso_a_caso'].includes(raw)) return 'new'
+  if (raw === 'preparar_proposta') return 'prepare_proposal'
+  if (raw === 'descartar') return 'discarded'
+  return raw
+}
+
 export function scoreBand(score: number): [string, string] {
   if (score >= 75) return ['Forte', 'ok']
   if (score >= 60) return ['Bom', 'warn']
@@ -56,16 +67,21 @@ export function scoreBand(score: number): [string, string] {
 }
 
 export function nextActionFor(item: Opportunity) {
-  const status = statusOf(item)
-  if (['new', 'review', 'caso_a_caso'].includes(status)) return 'Validar escopo'
-  if (['prepare_proposal', 'preparar_proposta', 'liked'].includes(status)) return 'Preparar envio'
+  const status = workflowStatusOf(item)
+  if (status === 'new') return 'Revisar'
+  if (status === 'questions_sent') return 'Aguardar resposta'
+  if (['prepare_proposal', 'liked'].includes(status)) return 'Preparar envio'
   if (status === 'proposal_sent') return 'Acompanhar'
-  if (['discarded', 'descartar', 'lost'].includes(status)) return 'Arquivado'
+  if (['discarded', 'lost'].includes(status)) return 'Arquivado'
   return 'Revisar'
 }
 
 export function statusLabel(status: string) {
   return statuses.find(([id]) => id === status)?.[1] || status
+}
+
+export function workflowStatusLabel(item: Opportunity) {
+  return statusLabel(workflowStatusOf(item))
 }
 
 export function effortTag(decisionSupport: any) {

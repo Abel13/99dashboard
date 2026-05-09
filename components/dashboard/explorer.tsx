@@ -66,6 +66,12 @@ export function Explorer({
           </div>
         </details>
       </section>
+      <section className="workflowLegend glass">
+        <span><b>Não revisado</b> ainda não teve ação manual</span>
+        <span><b>Perguntas enviadas</b> aguardando resposta do cliente</span>
+        <span><b>Preparar proposta</b> pronto para montar/enviar</span>
+        <span><b>Proposta enviada</b> acompanhar retorno</span>
+      </section>
 
       {view === 'list' ? (
         <OpportunityTable items={filtered} busy={busy} onAction={onAction} onOpen={onOpen} />

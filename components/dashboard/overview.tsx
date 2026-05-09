@@ -9,15 +9,15 @@ import {
   scoreBand,
   scoreOf,
   statusKind,
-  statusOf,
   topTerms,
+  workflowStatusOf,
 } from './helpers'
 import { MiniStat, Panel, ScoreBar } from './ui'
 import type { Opportunity } from './types'
 
 export function Overview({ items, onOpen }: { items: Opportunity[]; onOpen: (id: string) => void }) {
   const total = items.length
-  const active = items.filter((item) => !['lost', 'discarded', 'descartar'].includes(statusOf(item)))
+  const active = items.filter((item) => !['lost', 'discarded'].includes(workflowStatusOf(item)))
   const potential = active.reduce((sum, item) => sum + priceOf(item), 0)
   const top = [...active].sort((a, b) => scoreOf(b) - scoreOf(a)).slice(0, 4)
   const champion = top[0]
@@ -25,13 +25,13 @@ export function Overview({ items, onOpen }: { items: Opportunity[]; onOpen: (id:
   const [championBand, championKind] = scoreBand(championScore)
   const avgScore = Math.round(items.reduce((sum, item) => sum + scoreOf(item), 0) / Math.max(total, 1))
   const strong = items.filter((item) => scoreOf(item) >= 75).length
-  const ready = items.filter((item) => ['prepare_proposal', 'preparar_proposta', 'liked'].includes(statusOf(item))).length
+  const ready = items.filter((item) => ['prepare_proposal', 'liked'].includes(workflowStatusOf(item))).length
   const statusFlow: [string, number][] = [
-    ['Triar', items.filter((item) => ['new', 'review', 'caso_a_caso'].includes(statusOf(item))).length],
+    ['Não revisado', items.filter((item) => workflowStatusOf(item) === 'new').length],
+    ['Perguntas', items.filter((item) => workflowStatusOf(item) === 'questions_sent').length],
     ['Preparar', ready],
-    ['Enviadas', items.filter((item) => statusOf(item) === 'proposal_sent').length],
-    ['Ganhas', items.filter((item) => statusOf(item) === 'won').length],
-    ['Fora', items.filter((item) => ['lost', 'discarded', 'descartar'].includes(statusOf(item))).length],
+    ['Enviadas', items.filter((item) => workflowStatusOf(item) === 'proposal_sent').length],
+    ['Fora', items.filter((item) => ['lost', 'discarded'].includes(workflowStatusOf(item))).length],
   ]
   const scoreBuckets: [string, string, number][] = [
     ['Fraco', '0-39', items.filter((item) => scoreOf(item) < 40).length],
@@ -106,7 +106,7 @@ export function Overview({ items, onOpen }: { items: Opportunity[]; onOpen: (id:
                 key={item.source_project_id}
                 title={`${item.title} · score ${scoreOf(item)} · ${moneyShort(priceOf(item))}`}
                 onClick={() => onOpen(String(item.source_project_id))}
-                className={statusKind(statusOf(item))}
+                className={statusKind(workflowStatusOf(item))}
                 style={{
                   left: `${Math.min(92, Math.max(6, scoreOf(item) + ((index % 5) - 2) * 1.8))}%`,
                   bottom: `${Math.min(88, Math.max(8, (priceOf(item) / maxPrice) * 82))}%`,
@@ -145,7 +145,7 @@ export function Overview({ items, onOpen }: { items: Opportunity[]; onOpen: (id:
 
         <Panel title="Próxima ação">
           <div className="actionTiles">
-            {['Validar escopo', 'Preparar envio', 'Acompanhar', 'Arquivado'].map((label) => (
+            {['Revisar', 'Aguardar resposta', 'Preparar envio', 'Acompanhar', 'Arquivado'].map((label) => (
               <div key={label}>
                 <b>{items.filter((item) => nextActionFor(item) === label).length}</b>
                 <span>{label}</span>

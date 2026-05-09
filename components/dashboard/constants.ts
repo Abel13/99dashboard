@@ -2,17 +2,14 @@ import { BarChart3, LayoutDashboard, Search, Settings, User } from 'lucide-react
 import type { DashboardPage, StatusOption } from './types'
 
 export const statuses: StatusOption[] = [
-  ['new', 'Novo'],
-  ['review', 'Revisar'],
-  ['liked', 'Gostei'],
-  ['discarded', 'Descartado'],
+  ['new', 'Não revisado'],
+  ['questions_sent', 'Perguntas enviadas'],
   ['prepare_proposal', 'Preparar proposta'],
   ['proposal_sent', 'Proposta enviada'],
-  ['won', 'Ganhou'],
+  ['won', 'Ganho'],
   ['lost', 'Perdeu'],
-  ['preparar_proposta', 'Preparar proposta (sug.)'],
-  ['caso_a_caso', 'Caso a caso'],
-  ['descartar', 'Descartar (sug.)'],
+  ['discarded', 'Descartado'],
+  ['liked', 'Gostei'],
 ]
 
 export const nav: [DashboardPage, any, string][] = [

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { runPipeline, updateFeedback } from '@/lib/softwarehouse'
-const valid = new Set(['new','review','liked','discarded','prepare_proposal','proposal_sent','won','lost'])
+const valid = new Set(['new','questions_sent','review','liked','discarded','prepare_proposal','proposal_sent','won','lost'])
 export async function POST(req: NextRequest){
   const body = await req.json()
   const projectId = String(body.projectId || '')
