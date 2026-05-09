@@ -139,7 +139,7 @@ export function Dashboard() {
     <DashboardShell page={page} setPage={setPage} busy={busy} onRefresh={runPipeline} status={status}>
       {loading ? (
         <div className="empty glass">
-          <Loader2 /> Carregando...
+          <Loader2 className="loadingIcon" /> Carregando...
         </div>
       ) : (
         <>

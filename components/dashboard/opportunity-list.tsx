@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertTriangle, BarChart3, Copy, DollarSign, ExternalLink, Heart, MessageCircleQuestion, Send, Star, ThumbsDown, Trophy, UserCheck, UserX, XCircle } from 'lucide-react'
+import { AlertTriangle, BarChart3, Copy, DollarSign, ExternalLink, Heart, Loader2, MessageCircleQuestion, Send, Star, ThumbsDown, Trophy, UserCheck, UserX, XCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { brl, dt } from '@/lib/utils'
 import {
@@ -119,6 +119,10 @@ export function OpportunityActions({
 }) {
   const activeReactions = reactionsOf(item)
   const isActive = (reaction: string) => activeReactions.includes(reaction)
+  const keyFor = (value: string) => item.source_project_id + value
+  const isBusy = (value: string) => busy === keyFor(value)
+  const remoteActions = ['proposal_sent', 'questions_sent', 'discarded', 'lost', 'won', 'liked', 'high_priority', 'attractive_price', 'unclear_scope', 'good_client', 'risky_client']
+  const projectBusy = remoteActions.some(isBusy)
 
   return (
     <div className="rowActions">
@@ -127,45 +131,45 @@ export function OpportunityActions({
         <Button
           className="iconAction"
           variant="primary"
-          disabled={busy.includes(item.source_project_id)}
+          disabled={projectBusy}
           onClick={() => onAction(item, 'proposal_sent', 'Abel enviou proposta ao cliente')}
           title="Marcar proposta enviada"
           aria-label="Marcar proposta enviada"
         >
-          <Send size={15} />
+          {isBusy('proposal_sent') ? <Loader2 className="loadingIcon" size={15} /> : <Send size={15} />}
         </Button>
-        <Button className="iconAction" onClick={() => onAction(item, 'questions_sent', 'Abel enviou perguntas ao cliente; aguardando respostas')} title="Marcar perguntas enviadas" aria-label="Marcar perguntas enviadas">
-          <MessageCircleQuestion size={15} />
+        <Button className="iconAction" disabled={projectBusy} onClick={() => onAction(item, 'questions_sent', 'Abel enviou perguntas ao cliente; aguardando respostas')} title="Marcar perguntas enviadas" aria-label="Marcar perguntas enviadas">
+          {isBusy('questions_sent') ? <Loader2 className="loadingIcon" size={15} /> : <MessageCircleQuestion size={15} />}
         </Button>
-        <Button className="iconAction" variant="danger" onClick={() => onAction(item, 'discarded', 'Abel descartou a oportunidade')} title="Descartar oportunidade" aria-label="Descartar oportunidade">
-          <ThumbsDown size={15} />
+        <Button className="iconAction" variant="danger" disabled={projectBusy} onClick={() => onAction(item, 'discarded', 'Abel descartou a oportunidade')} title="Descartar oportunidade" aria-label="Descartar oportunidade">
+          {isBusy('discarded') ? <Loader2 className="loadingIcon" size={15} /> : <ThumbsDown size={15} />}
         </Button>
-        <Button className="iconAction" variant="danger" onClick={() => onAction(item, 'lost', 'Projeto perdido/cancelado', 'lost')} title="Marcar como perdido" aria-label="Marcar como perdido">
-          <XCircle size={15} />
+        <Button className="iconAction" variant="danger" disabled={projectBusy} onClick={() => onAction(item, 'lost', 'Projeto perdido/cancelado', 'lost')} title="Marcar como perdido" aria-label="Marcar como perdido">
+          {isBusy('lost') ? <Loader2 className="loadingIcon" size={15} /> : <XCircle size={15} />}
         </Button>
-        <Button className="iconAction successAction" onClick={() => onAction(item, 'won', 'Projeto ganho', 'won')} title="Marcar como ganho" aria-label="Marcar como ganho">
-          <Trophy size={15} />
+        <Button className="iconAction successAction" disabled={projectBusy} onClick={() => onAction(item, 'won', 'Projeto ganho', 'won')} title="Marcar como ganho" aria-label="Marcar como ganho">
+          {isBusy('won') ? <Loader2 className="loadingIcon" size={15} /> : <Trophy size={15} />}
         </Button>
       </div>
       <div className="actionGroup reactionGroup" aria-label="Reação">
         <span>Reação</span>
-        <Button className={`iconAction ${isActive('liked') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'liked')} title="Gostei" aria-label="Gostei">
-          <Heart size={15} />
+        <Button className={`iconAction ${isActive('liked') ? 'activeReaction' : ''}`} disabled={projectBusy} onClick={() => onReact(item, 'liked')} title="Gostei" aria-label="Gostei">
+          {isBusy('liked') ? <Loader2 className="loadingIcon" size={15} /> : <Heart size={15} />}
         </Button>
-        <Button className={`iconAction ${isActive('high_priority') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'high_priority')} title="Alta prioridade" aria-label="Alta prioridade">
-          <Star size={15} />
+        <Button className={`iconAction ${isActive('high_priority') ? 'activeReaction' : ''}`} disabled={projectBusy} onClick={() => onReact(item, 'high_priority')} title="Alta prioridade" aria-label="Alta prioridade">
+          {isBusy('high_priority') ? <Loader2 className="loadingIcon" size={15} /> : <Star size={15} />}
         </Button>
-        <Button className={`iconAction ${isActive('attractive_price') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'attractive_price')} title="Preço atrativo" aria-label="Preço atrativo">
-          <DollarSign size={15} />
+        <Button className={`iconAction ${isActive('attractive_price') ? 'activeReaction' : ''}`} disabled={projectBusy} onClick={() => onReact(item, 'attractive_price')} title="Preço atrativo" aria-label="Preço atrativo">
+          {isBusy('attractive_price') ? <Loader2 className="loadingIcon" size={15} /> : <DollarSign size={15} />}
         </Button>
-        <Button className={`iconAction ${isActive('unclear_scope') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'unclear_scope')} title="Escopo confuso" aria-label="Escopo confuso">
-          <AlertTriangle size={15} />
+        <Button className={`iconAction ${isActive('unclear_scope') ? 'activeReaction' : ''}`} disabled={projectBusy} onClick={() => onReact(item, 'unclear_scope')} title="Escopo confuso" aria-label="Escopo confuso">
+          {isBusy('unclear_scope') ? <Loader2 className="loadingIcon" size={15} /> : <AlertTriangle size={15} />}
         </Button>
-        <Button className={`iconAction ${isActive('good_client') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'good_client')} title="Cliente bom" aria-label="Cliente bom">
-          <UserCheck size={15} />
+        <Button className={`iconAction ${isActive('good_client') ? 'activeReaction' : ''}`} disabled={projectBusy} onClick={() => onReact(item, 'good_client')} title="Cliente bom" aria-label="Cliente bom">
+          {isBusy('good_client') ? <Loader2 className="loadingIcon" size={15} /> : <UserCheck size={15} />}
         </Button>
-        <Button className={`iconAction ${isActive('risky_client') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'risky_client')} title="Cliente duvidoso" aria-label="Cliente duvidoso">
-          <UserX size={15} />
+        <Button className={`iconAction ${isActive('risky_client') ? 'activeReaction' : ''}`} disabled={projectBusy} onClick={() => onReact(item, 'risky_client')} title="Cliente duvidoso" aria-label="Cliente duvidoso">
+          {isBusy('risky_client') ? <Loader2 className="loadingIcon" size={15} /> : <UserX size={15} />}
         </Button>
       </div>
       <div className="actionGroup toolGroup" aria-label="Ferramentas">

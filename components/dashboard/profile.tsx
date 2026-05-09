@@ -55,7 +55,7 @@ export function Profile({ items }: { items: Opportunity[] }) {
         </label>
         <div className="actions">
           <Button onClick={() => loadProfile(true)} disabled={profileLoading}>
-            {profileLoading ? <Loader2 size={15} /> : <RefreshCw size={15} />}
+            {profileLoading ? <Loader2 className="loadingIcon" size={15} /> : <RefreshCw size={15} />}
             Importar perfil
           </Button>
           {profile?.url && (
@@ -113,7 +113,7 @@ export function Profile({ items }: { items: Opportunity[] }) {
         <div className="panelHeadInline">
           <p className="summary">Gerada pela IA interna a partir das oportunidades, perfil importado e padrões de demanda.</p>
           <Button onClick={loadSkills} disabled={loading}>
-            {loading ? <Loader2 size={15} /> : <Sparkles size={15} />}
+            {loading ? <Loader2 className="loadingIcon" size={15} /> : <Sparkles size={15} />}
             Atualizar
           </Button>
         </div>

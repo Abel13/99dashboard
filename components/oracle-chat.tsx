@@ -55,11 +55,13 @@ export function OracleChat({ projects }: { projects: ProjectOption[] }) {
     </select>
     <div className="chatMessages">
       {messages.map((m, i) => <div key={i} className={`chatBubble ${m.role}`}><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{m.content}</ReactMarkdown></div>)}
-      {loading && <div className="chatBubble assistant"><Loader2 size={14}/> Lendo os sinais…</div>}
+      {loading && <div className="chatBubble assistant"><Loader2 className="loadingIcon" size={14}/> Lendo os sinais…</div>}
     </div>
     <form className="chatForm" onSubmit={submit}>
       <input className="input" value={input} onChange={e => setInput(e.target.value)} placeholder="Pergunte sobre preço, risco, proposta…" />
-      <Button variant="primary" disabled={loading || !input.trim()}><Send size={15}/></Button>
+      <Button variant="primary" disabled={loading || !input.trim()}>
+        {loading ? <Loader2 className="loadingIcon" size={15}/> : <Send size={15}/>}
+      </Button>
     </form>
   </aside>
 }

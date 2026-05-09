@@ -1,6 +1,6 @@
 'use client'
 
-import { CheckCircle2, ClipboardList, Database, Loader2, Sparkles } from 'lucide-react'
+import { ClipboardList, Database, Loader2, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -110,11 +110,11 @@ export function MatchAnalytics({
           ))}
         </select>
         <Button onClick={enrichCurrentProject} disabled={enriching || !current.project_url}>
-          {enriching ? <Loader2 size={15} /> : <Database size={15} />}
+          {enriching ? <Loader2 className="loadingIcon" size={15} /> : <Database size={15} />}
           {current.page_details?.enriched_at ? 'Atualizar dados 99Freelas' : 'Enriquecer dados 99Freelas'}
         </Button>
         <Button variant="primary" onClick={generateInsight} disabled={loading}>
-          {loading ? <Loader2 size={15} /> : <Sparkles size={15} />}
+          {loading ? <Loader2 className="loadingIcon" size={15} /> : <Sparkles size={15} />}
           Atualizar painel IA
         </Button>
       </section>

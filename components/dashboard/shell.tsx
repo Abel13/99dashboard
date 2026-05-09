@@ -62,7 +62,7 @@ export function DashboardShell({
         <div className="sideFoot">
           <ThemeToggle />
           <Button variant="primary" onClick={onRefresh} disabled={!!busy}>
-            {busy === 'pipeline' ? <Loader2 size={16} /> : <RefreshCw size={16} />}
+            {busy === 'pipeline' ? <Loader2 className="loadingIcon" size={16} /> : <RefreshCw size={16} />}
             Atualizar
           </Button>
         </div>

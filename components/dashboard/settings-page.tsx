@@ -44,7 +44,7 @@ export function SettingsPage({
     setMsg(response.ok ? 'Configurações salvas no Supabase' : 'Erro ao salvar configurações')
   }
 
-  if (!settings) return <div className="empty glass"><Loader2 /> Carregando configurações...</div>
+  if (!settings) return <div className="empty glass"><Loader2 className="loadingIcon" /> Carregando configurações...</div>
 
   return (
     <>
@@ -61,7 +61,7 @@ export function SettingsPage({
               <p className="summary">A lista abaixo mostra exatamente quais e-mails o Gmail devolveu para essa query e por que cada um foi salvo ou ignorado.</p>
             </div>
             <Button variant="primary" onClick={onImportGmail} disabled={importing}>
-              {importing ? <Loader2 size={15} /> : <RefreshCw size={15} />}
+              {importing ? <Loader2 className="loadingIcon" size={15} /> : <RefreshCw size={15} />}
               Importar Gmail agora
             </Button>
           </div>
@@ -118,7 +118,7 @@ export function SettingsPage({
 
       <section className="saveBar glass">
         <Button variant="primary" onClick={save} disabled={saving}>
-          {saving ? <Loader2 size={15} /> : <SlidersHorizontal size={15} />}
+          {saving ? <Loader2 className="loadingIcon" size={15} /> : <SlidersHorizontal size={15} />}
           Salvar configurações
         </Button>
         {msg && <span>{msg}</span>}
