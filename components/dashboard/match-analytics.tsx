@@ -56,6 +56,7 @@ export function MatchAnalytics({
   const aiEnabled = Boolean(insight || ds.ai_pricing?.used)
   const questions = (insight?.technical_requirements || ds.questions_to_client || []).slice(0, 5)
   const risks = (insight?.risks || ds.ai_pricing?.risks || ['Escopo, integrações e acesso a ambientes precisam ser confirmados.']).slice(0, 5)
+  const projectDescription = current.full_description || current.description_preview || 'Sem descrição importada.'
 
   async function generateInsight() {
     setLoading(true)
@@ -165,7 +166,13 @@ export function MatchAnalytics({
             <Fact label="Valor mínimo" value={current.page_details?.minimum_value || '—'} />
             <Fact label="Visibilidade" value={current.page_details?.visibility || '—'} />
           </div>
-          <p className="summary sourceText">{(current.full_description || current.description_preview || 'Sem descrição importada.').slice(0, 520)}{(current.full_description || '').length > 520 ? '…' : ''}</p>
+          <div className="descriptionBox">
+            <div className="descriptionMeta">
+              <b>Descrição completa</b>
+              <span>{current.full_description ? `${projectDescription.length} caracteres importados` : 'prévia importada'}</span>
+            </div>
+            <p className="summary fullDescription">{projectDescription}</p>
+          </div>
         </Panel>
 
         <Panel title="Análise da aplicação">

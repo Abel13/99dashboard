@@ -217,6 +217,12 @@ export function OpportunityCard({ item, busy, onAction, onReact, onOpen }: { ite
         {(item.full_description || item.description_preview || '').slice(0, 240)}
         {(item.full_description || '').length > 240 ? '…' : ''}
       </p>
+      <details className="details descriptionDetails">
+        <summary>Descrição completa do projeto</summary>
+        <div className="descriptionBox">
+          <p className="summary fullDescription">{item.full_description || item.description_preview || 'Sem descrição importada.'}</p>
+        </div>
+      </details>
       <div className="chips">
         <span className={`chip ${statusKind(status)}`}>{workflowStatusLabel(item)}</span>
         <ReactionChips item={item} />
