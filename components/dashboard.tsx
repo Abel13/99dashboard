@@ -85,17 +85,6 @@ export function Dashboard() {
     ])
   }
 
-  const pipelineMutation = useMutation({
-    mutationFn: () => fetchJson('/api/pipeline', { method: 'POST' }),
-    onMutate: () => setBusy('pipeline'),
-    onSuccess: async () => {
-      setToast('Atualização solicitada')
-      await invalidateDashboard()
-    },
-    onError: (error: Error) => setToast(`Erro ao atualizar: ${error.message}`),
-    onSettled: () => setBusy(''),
-  })
-
   const gmailMutation = useMutation({
     mutationFn: () => fetchJson<any>('/api/import/gmail', { method: 'POST' }),
     onSuccess: async (body) => {
@@ -122,10 +111,6 @@ export function Dashboard() {
     onError: (error: Error) => setToast(`Erro ao salvar: ${error.message}`),
     onSettled: () => setBusy(''),
   })
-
-  async function runPipeline() {
-    pipelineMutation.mutate()
-  }
 
   async function importGmail() {
     gmailMutation.mutate()
@@ -205,7 +190,7 @@ export function Dashboard() {
   )
 
   return (
-    <DashboardShell page={page} setPage={setPage} busy={busy} onRefresh={runPipeline} status={status} notificationCount={notifications.length}>
+    <DashboardShell page={page} setPage={setPage} status={status} notificationCount={notifications.length}>
       {loading ? (
         <div className="empty glass">
           <Loader2 className="loadingIcon" /> Carregando...

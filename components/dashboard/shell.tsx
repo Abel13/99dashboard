@@ -1,9 +1,8 @@
 'use client'
 
-import { Loader2, Menu, PanelLeftClose, PanelLeftOpen, RefreshCw, X } from 'lucide-react'
+import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { fmtDate } from './helpers'
 import { nav } from './constants'
@@ -12,16 +11,12 @@ import type { DashboardPage } from './types'
 export function DashboardShell({
   page,
   setPage,
-  busy,
-  onRefresh,
   children,
   status,
   notificationCount = 0,
 }: {
   page: DashboardPage
   setPage: (page: DashboardPage) => void
-  busy: string
-  onRefresh: () => void
   children: ReactNode
   status: any
   notificationCount?: number
@@ -64,10 +59,6 @@ export function DashboardShell({
         </nav>
         <div className="sideFoot">
           <ThemeToggle />
-          <Button variant="primary" onClick={onRefresh} disabled={!!busy}>
-            {busy === 'pipeline' ? <Loader2 className="loadingIcon" size={16} /> : <RefreshCw size={16} />}
-            Atualizar
-          </Button>
         </div>
       </aside>
       <main className="container pageContent">
