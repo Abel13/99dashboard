@@ -1,7 +1,8 @@
 'use client'
 
-import { Loader2, RefreshCw } from 'lucide-react'
+import { Loader2, Menu, PanelLeftClose, PanelLeftOpen, RefreshCw, X } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { fmtDate } from './helpers'
@@ -23,18 +24,38 @@ export function DashboardShell({
   children: ReactNode
   status: any
 }) {
+  const [collapsed, setCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  function navigate(nextPage: DashboardPage) {
+    setPage(nextPage)
+    setMobileOpen(false)
+  }
+
   return (
-    <div className="appShell">
+    <div className={`appShell ${collapsed ? 'navCollapsed' : ''} ${mobileOpen ? 'navOpen' : ''}`}>
+      <button className="mobileMenuButton" onClick={() => setMobileOpen(true)} aria-label="Abrir menu">
+        <Menu size={18} />
+      </button>
+      {mobileOpen && <button className="navScrim" onClick={() => setMobileOpen(false)} aria-label="Fechar menu" />}
       <aside className="sidebar glass">
+        <div className="navControls">
+          <button className="navIconButton desktopCollapse" onClick={() => setCollapsed((value) => !value)} aria-label={collapsed ? 'Expandir menu' : 'Recolher menu'} title={collapsed ? 'Expandir menu' : 'Recolher menu'}>
+            {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
+          </button>
+          <button className="navIconButton mobileClose" onClick={() => setMobileOpen(false)} aria-label="Fechar menu" title="Fechar menu">
+            <X size={17} />
+          </button>
+        </div>
         <div className="brand">
           <span>Oracle</span>
           <b>99Dashboard</b>
         </div>
         <nav>
           {nav.map(([id, Icon, label]) => (
-            <button key={id} className={page === id ? 'active' : ''} onClick={() => setPage(id)}>
+            <button key={id} className={page === id ? 'active' : ''} onClick={() => navigate(id)} title={collapsed ? label : undefined} aria-label={label}>
               <Icon size={17} />
-              {label}
+              <span>{label}</span>
             </button>
           ))}
         </nav>
