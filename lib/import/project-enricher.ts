@@ -24,6 +24,32 @@ function safePersonName(name = '', projectTitle = '') {
   if (/freelancer|proposta|aprovad|desenvolvedor|projeto|contratad|publicado|cliente/i.test(value)) return ''
   return value
 }
+function userNameFromAnchor(raw = '', projectTitle = '') {
+  const title = raw.match(/title="([^"]+)"/i)?.[1] || ''
+  const spanName = raw.match(/<span[^>]*class="[^"]*name[^"]*"[^>]*>([\s\S]*?)<\/span>/i)?.[1] || ''
+  const text = clean(htmlToText(spanName || raw, { wordwrap: false }))
+  return safePersonName(title, projectTitle) || safePersonName(text, projectTitle)
+}
+function selectedFreelancerFromHtml(html: string, clientUrl?: string, projectTitle = '') {
+  const normalizedClientUrl = clientUrl ? abs(clientUrl) : ''
+  const keyword = /freelancer\s+(?:selecionad[oa]|contratad[oa]|aprovad[oa])|contratad[oa]|proposta\s+(?:aceita|aprovada|vencedora)|em andamento/i
+  const anchors = [...html.matchAll(/<a\s+href="(\/user\/[^"]+)"[^>]*>[\s\S]*?<\/a>/gi)]
+    .map((match) => ({
+      href: abs(match[1]),
+      raw: match[0],
+      index: match.index || 0,
+      name: userNameFromAnchor(match[0], projectTitle),
+    }))
+    .filter((item) => item.name && item.href !== normalizedClientUrl)
+
+  for (const anchor of anchors) {
+    const around = html.slice(Math.max(0, anchor.index - 1000), anchor.index + anchor.raw.length + 1000)
+    if (keyword.test(clean(htmlToText(around, { wordwrap: false })))) {
+      return { name: anchor.name, url: anchor.href, source: 'project_page' }
+    }
+  }
+  return null
+}
 function dateFromMillis(value?: string) { const n = Number(value || 0); return n ? new Date(n).toISOString() : null }
 function descriptionFromHtml(html: string) {
   const text = htmlToText(html, { wordwrap: false, selectors: [{ selector: 'a', options: { ignoreHref: true } }, { selector: 'script', format: 'skip' }, { selector: 'style', format: 'skip' }] })
@@ -102,6 +128,7 @@ export async function enrichProjectAndClient(item: Opportunity): Promise<Opportu
     const clientNameFromText = first(/(?:Publicado por|Cliente)\s*:?\s*([^\n]+)/i, htmlToText(html, { wordwrap: false }))
     const safeClientName = safePersonName(rawClientName, canonicalTitle) || safePersonName(clientNameFromText, canonicalTitle)
     const client = await enrichClient(clientMatch?.[1], safeClientName, clientScore)
+    const selectedFreelancer = selectedFreelancerFromHtml(html, clientMatch?.[1], canonicalTitle)
     const page_details = {
       ...(item.page_details || {}),
       enriched_at: new Date().toISOString(),
@@ -115,6 +142,7 @@ export async function enrichProjectAndClient(item: Opportunity): Promise<Opportu
       minimum_value: pickTable(html, 'Valor Mínimo'),
       remaining_until: dateFromMillis(html.match(/class="datetime-restante"\s+cp-datetime="(\d+)"/i)?.[1] || ''),
       project_status_99freelas: projectStatusFromHtml(html),
+      selected_freelancer: selectedFreelancer,
       source: 'project_page',
     }
     return {

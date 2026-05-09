@@ -1,6 +1,6 @@
 'use client'
 
-import { Banknote, CalendarCheck2, ChevronLeft, ChevronRight, ClipboardList, Database, Eye, Loader2, Sparkles, Tag, Users } from 'lucide-react'
+import { Banknote, CalendarCheck2, CheckCircle2, ChevronLeft, ChevronRight, ClipboardList, Database, Eye, FileText, Loader2, MessageCircleQuestion, SearchCheck, Send, Sparkles, Tag, Users } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -72,6 +72,12 @@ export function MatchAnalytics({
   const requirementsNet = requirements.reduce((sum: number, row: any) => sum + Number(row.net_value || 0), 0)
   const platformFee = Number(calc.platform_fee_pct || 0.2)
   const grossFromRequirements = platformFee < 1 ? requirementsNet / (1 - platformFee) : requirementsNet
+  const competition = competitionLevel(current.page_details?.proposals, current.page_details?.interested)
+  const projectStatus = statusSignal(current.page_details?.project_status_99freelas)
+  const selectedFreelancer = current.page_details?.selected_freelancer
+  const nextAction = nextActionFor(selected)
+  const workflowTimeline = actionTimeline(nextAction)
+  const workflowProgress = actionTimelineProgress(nextAction)
 
   useEffect(() => {
     setProposalDraft(current.decision_support?.proposal_draft || '')
@@ -186,8 +192,18 @@ export function MatchAnalytics({
       <section className="nextStepPanel glass">
         <div>
           <span className="sectionSource app">O que fazer agora</span>
-          <h3>{nextActionFor(selected)}</h3>
-          <p>{actionCopy(nextActionFor(selected))}</p>
+          <div className="actionTimeline" style={{ '--timeline-scale': workflowProgress } as React.CSSProperties} aria-label={`Próxima etapa: ${nextAction}`}>
+            {workflowTimeline.map((step) => {
+              const Icon = step.icon
+              return (
+                <div className={`actionTimelineStep ${step.state}`} key={step.label}>
+                  <span><Icon size={24} /></span>
+                  <b>{step.label}</b>
+                </div>
+              )
+            })}
+          </div>
+          <p className="timelineHint">{actionCopy(nextAction)}</p>
         </div>
         <div className="nextStepMetrics">
           <Signal label="Score" value={score} suffix="/100" kind={bandKind} />
@@ -203,6 +219,13 @@ export function MatchAnalytics({
         <Panel title="Dados do 99Freelas">
           <span className="sectionSource source99">Origem: projeto importado</span>
           <div className="freelasSnapshot">
+            <div className={`freelasMainMetric status ${projectStatus.kind}`}>
+              <Eye size={20} />
+              <span>Status 99Freelas</span>
+              <b>{current.page_details?.project_status_99freelas || '—'}</b>
+              <small>{projectStatus.detail} · Workflow: {workflowStatusLabel(selected)}</small>
+              {selectedFreelancer?.url && <a className="selectedFreelancerLink" target="_blank" href={selectedFreelancer.url}>Selecionado: {selectedFreelancer.name || 'freelancer'}</a>}
+            </div>
             <div className="freelasMainMetric budget">
               <Banknote size={20} />
               <span>Orçamento</span>
@@ -211,20 +234,20 @@ export function MatchAnalytics({
             </div>
             <div className="freelasMainMetric">
               <ClipboardList size={20} />
-              <span>Propostas</span>
-              <b>{current.page_details?.proposals ?? '—'}</b>
-              <small>{current.page_details?.visibility || 'visibilidade não informada'}</small>
+              <span>Concorrência</span>
+              <b>{competition.label}</b>
+              <small>{competition.detail}</small>
             </div>
             <div className="freelasMainMetric">
               <Users size={20} />
-              <span>Interessados</span>
-              <b>{current.page_details?.interested ?? '—'}</b>
-              <small>{current.page_details?.level || current.level || 'nível não informado'}</small>
+              <span>Disputa</span>
+              <b>{competition.pressure}</b>
+              <small>{current.page_details?.proposals ?? '—'} propostas · {current.page_details?.interested ?? '—'} interessados</small>
             </div>
           </div>
           <div className="freelasMetaGrid">
-            <VisualFact icon={<Tag size={16} />} label="Projeto" value={`#${current.source_project_id}`} detail={current.category || current.page_details?.subcategory || '99Freelas'} />
-            <VisualFact icon={<Eye size={16} />} label="Status" value={current.page_details?.project_status_99freelas || '—'} detail={`Workflow: ${workflowStatusLabel(selected)}`} />
+            <VisualFact icon={<Tag size={16} />} label="Categoria" value={current.category || '—'} detail={current.page_details?.subcategory || 'subcategoria não informada'} />
+            <VisualFact icon={<Eye size={16} />} label="Visibilidade" value={current.page_details?.visibility || '—'} detail={current.page_details?.level || current.level || 'nível não informado'} />
             <VisualFact icon={<CalendarCheck2 size={16} />} label="Dados" value={fmtMaybe(current.page_details?.enriched_at)} detail={`IA: ${fmtMaybe(current.match_insight_generated_at)}`} />
           </div>
           <div className="descriptionBox">
@@ -361,9 +384,50 @@ function actionCopy(action: string) {
   return 'O projeto está arquivado ou fora do fluxo ativo.'
 }
 
+function actionTimeline(action: string) {
+  const steps = [
+    { label: 'Revisar', action: 'Revisar', icon: SearchCheck },
+    { label: 'Perguntas', action: 'Aguardar resposta', icon: MessageCircleQuestion },
+    { label: 'Proposta', action: 'Preparar envio', icon: FileText },
+    { label: 'Acompanhar', action: 'Acompanhar', icon: Send },
+  ]
+  const currentIndex = steps.findIndex((step) => step.action === action)
+  if (currentIndex < 0) return steps.map((step) => ({ ...step, state: 'muted' }))
+  return steps.map((step, index) => ({
+    ...step,
+    state: index < currentIndex ? 'done' : index === currentIndex ? 'active' : 'pending',
+    icon: index < currentIndex ? CheckCircle2 : step.icon,
+  }))
+}
+
+function actionTimelineProgress(action: string) {
+  const order = ['Revisar', 'Aguardar resposta', 'Preparar envio', 'Acompanhar']
+  const currentIndex = order.indexOf(action)
+  if (currentIndex < 0) return 0
+  return currentIndex / (order.length - 1)
+}
+
 function compareProjectId(a: string | number, b: string | number) {
   const na = Number(a)
   const nb = Number(b)
   if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb
   return String(a).localeCompare(String(b), 'pt-BR', { numeric: true })
+}
+
+function competitionLevel(proposals: any, interested: any) {
+  const p = Number(proposals || 0)
+  const i = Number(interested || 0)
+  const score = p * 2 + i
+  if (!p && !i) return { label: 'Sem sinal', pressure: 'A confirmar', detail: 'sem propostas ou interessados informados' }
+  if (score >= 30) return { label: 'Alta', pressure: 'Disputa forte', detail: 'muitos freelancers já disputando' }
+  if (score >= 12) return { label: 'Média', pressure: 'Atenção', detail: 'há concorrência relevante' }
+  return { label: 'Baixa', pressure: 'Boa janela', detail: 'pouca tração visível no projeto' }
+}
+
+function statusSignal(status = '') {
+  const text = status.toLowerCase()
+  if (!text) return { kind: 'unknown', detail: 'status não informado' }
+  if (/(em andamento|andamento|encerr|fechad|cancel|finaliz|conclu|expir|não.*aceit|nao.*aceit|pausad|bloquead)/i.test(text)) return { kind: 'bad', detail: 'não aceita propostas' }
+  if (/(abert|receb|aceit|publicad|dispon|ativo)/i.test(text)) return { kind: 'ok', detail: 'aceitando propostas' }
+  return { kind: 'warn', detail: 'confirmar antes de agir' }
 }
