@@ -31,6 +31,7 @@ export type Opportunity = {
   decision_support?: any
   match_insight?: any
   match_insight_generated_at?: string
+  match_insight_source_warning?: string
   effective_status?: string
   effective_status_label?: string
   abel_feedback?: Feedback
