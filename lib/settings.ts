@@ -50,7 +50,7 @@ export async function getAppSettings(options?: { redact?: boolean }): Promise<Ap
   let settings = { ...DEFAULT_SETTINGS }
   if (SUPABASE_ENABLED) {
     try {
-      const { data } = await supabaseAdmin().from('app_settings').select('payload').eq('key', 'default').maybeSingle()
+      const { data } = await supabaseAdmin().from('import_state').select('payload').eq('key', 'app_settings').maybeSingle()
       settings = { ...settings, ...((data as any)?.payload || {}) }
     } catch {
       // Migration may not have been applied yet; keep env/default fallback.
@@ -85,7 +85,7 @@ export async function saveAppSettings(patch: Partial<AppSettings>) {
   delete (next as any).openai_configured
   delete (next as any).gmail_configured
   delete (next as any).dashboard_api_token_configured
-  const { error } = await supabaseAdmin().from('app_settings').upsert({ key: 'default', payload: next }, { onConflict: 'key' })
+  const { error } = await supabaseAdmin().from('import_state').upsert({ key: 'app_settings', payload: next }, { onConflict: 'key' })
   if (error) throw error
   return next as AppSettings
 }
