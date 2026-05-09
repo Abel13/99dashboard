@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart3, Gauge, Loader2, Sparkles } from 'lucide-react'
+import { CheckCircle2, ClipboardList, Database, Loader2, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,20 +10,28 @@ import {
   riskTag,
   scoreBand,
   scoreOf,
+  workflowStatusLabel,
 } from './helpers'
-import { Complexity, Metric, Panel, ScoreBar, Signal } from './ui'
-import type { Opportunity } from './types'
+import { Complexity, Panel, ScoreBar, Signal } from './ui'
+import { OpportunityActions } from './opportunity-list'
+import type { OpenOpportunity, Opportunity, OpportunityAction } from './types'
 
 export function MatchAnalytics({
   items,
   selected,
   selectedId,
   setSelectedId,
+  busy,
+  onAction,
+  onOpen,
 }: {
   items: Opportunity[]
   selected: Opportunity
   selectedId: string
   setSelectedId: (value: string) => void
+  busy: string
+  onAction: OpportunityAction
+  onOpen: OpenOpportunity
 }) {
   const [insight, setInsight] = useState<any>(null)
   const [loading, setLoading] = useState(false)
@@ -35,8 +43,12 @@ export function MatchAnalytics({
   const price = ds.price_suggested_effective ?? ds.price_suggested
   const risk = Math.round(Number(calc.risk_pct || 0) * 100)
   const hoursAvg = Math.round(Number(calc.hours_avg || 0))
+  const complexity = insight?.complexity_score ?? Math.min(100, Number(calc.hours_avg || 50) / 2)
   const score = scoreOf(selected)
   const [band, bandKind] = scoreBand(score)
+  const aiEnabled = Boolean(insight || ds.ai_pricing?.used)
+  const questions = (insight?.technical_requirements || ds.questions_to_client || []).slice(0, 5)
+  const risks = (insight?.risks || ds.ai_pricing?.risks || ['Escopo, integrações e acesso a ambientes precisam ser confirmados.']).slice(0, 5)
 
   async function generateInsight() {
     setLoading(true)
@@ -48,6 +60,10 @@ export function MatchAnalytics({
     const data = await response.json()
     setInsight(data.insight)
     setLoading(false)
+  }
+
+  async function copyProposal() {
+    await navigator.clipboard.writeText(ds.proposal_draft || '')
   }
 
   return (
@@ -73,14 +89,14 @@ export function MatchAnalytics({
         </Button>
       </section>
 
-      <section className="decisionHero glass">
+      <section className="analysisHeader glass">
         <div>
           <span className={`signalBadge ${bandKind}`}>{band} match</span>
           <h2>{selected.title}</h2>
-          <div className="visualSignals">
-            <Signal label="Score" value={score} suffix="/100" kind={bandKind} />
-            <Signal label="Risco" value={risk || 0} suffix="%" kind={risk > 38 ? 'bad' : risk > 24 ? 'warn' : 'ok'} />
-            <Signal label="Horas" value={hoursAvg || 0} suffix="h" kind={hoursAvg > 120 ? 'bad' : hoursAvg > 64 ? 'warn' : 'ok'} />
+          <div className="sourceBadges">
+            <span><Database size={14} /> 99Freelas</span>
+            <span><ClipboardList size={14} /> Análise da aplicação</span>
+            {aiEnabled && <span><Sparkles size={14} /> IA</span>}
           </div>
         </div>
         <div className="decisionPrice">
@@ -90,78 +106,100 @@ export function MatchAnalytics({
         </div>
       </section>
 
-      <section className="decisionBoard">
-        <div className="decisionCard glass">
-          <Gauge size={20} />
-          <span>Próxima ação</span>
-          <b>{nextActionFor(selected)}</b>
+      <section className="nextStepPanel glass">
+        <div>
+          <span className="sectionSource app">O que fazer agora</span>
+          <h3>{nextActionFor(selected)}</h3>
+          <p>{actionCopy(nextActionFor(selected))}</p>
         </div>
-        <div className="decisionCard glass">
-          <Sparkles size={20} />
-          <span>Base</span>
-          <b>{ds.ai_pricing?.used ? 'IA + heurística' : 'Heurística'}</b>
+        <div className="nextStepMetrics">
+          <Signal label="Score" value={score} suffix="/100" kind={bandKind} />
+          <Signal label="Risco" value={risk || 0} suffix="%" kind={risk > 38 ? 'bad' : risk > 24 ? 'warn' : 'ok'} />
+          <Signal label="Horas" value={hoursAvg || 0} suffix="h" kind={hoursAvg > 120 ? 'bad' : hoursAvg > 64 ? 'warn' : 'ok'} />
         </div>
-        <div className="decisionCard glass">
-          <BarChart3 size={20} />
-          <span>Prazo</span>
-          <b>{ds.delivery_estimate || insight?.duration_estimate || 'A confirmar'}</b>
+        <div className="analyticsActions">
+          <OpportunityActions item={selected} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
         </div>
       </section>
 
-      <section className="visualGrid analysisGrid">
-        <Panel title="Complexidade técnica">
-          <Complexity value={insight?.complexity_score ?? Math.min(100, Number(calc.hours_avg || 50) / 2)} label={insight?.complexity_label || effortTag(ds)} />
-          <div className="signalTiles">
+      <section className="analysisSections">
+        <Panel title="Dados do 99Freelas">
+          <span className="sectionSource source99">Origem: projeto importado</span>
+          <div className="factGrid">
+            <Fact label="Projeto" value={`#${selected.source_project_id}`} />
+            <Fact label="Categoria" value={selected.category || selected.page_details?.subcategory || '—'} />
+            <Fact label="Status atual" value={workflowStatusLabel(selected)} />
+            <Fact label="Propostas" value={selected.page_details?.proposals ?? '—'} />
+            <Fact label="Interessados" value={selected.page_details?.interested ?? '—'} />
+            <Fact label="Exclusivo" value={selected.page_details?.is_exclusive ? 'Sim' : 'Não'} />
+          </div>
+          <p className="summary sourceText">{(selected.full_description || selected.description_preview || 'Sem descrição importada.').slice(0, 520)}{(selected.full_description || '').length > 520 ? '…' : ''}</p>
+        </Panel>
+
+        <Panel title="Análise da aplicação">
+          <span className="sectionSource app">Origem: regras, score e precificação local</span>
+          <div className="analysisSplit">
             <div>
-              <b>{riskTag(ds)}</b>
-              <span>risco comercial/técnico</span>
+              <Complexity value={complexity} label={insight?.complexity_label || effortTag(ds)} />
+              <div className="signalTiles compact">
+                <div><b>{riskTag(ds)}</b><span>risco estimado</span></div>
+                <div><b>{hoursAvg || '—'}h</b><span>média estimada</span></div>
+              </div>
             </div>
             <div>
-              <b>{hoursAvg || '—'}h</b>
-              <span>média estimada</span>
+              <div className="priceBlock">
+                <b>{moneyShort(price)}</b>
+                <span>{`${calc.hours_min || '—'}-${calc.hours_max || '—'}h estimadas`}</span>
+              </div>
+              <ScoreBar value={Math.max(6, 100 - risk)} />
+              <p className="summary shortText">{ds.pricing_note || 'Sem nota de precificação local.'}</p>
+              <Button onClick={() => navigator.clipboard.writeText(ds.proposal_draft || '')}>Copiar proposta</Button>
             </div>
           </div>
         </Panel>
 
-        <Panel title="Preço x esforço">
-          <div className="priceBlock">
-            <b>{moneyShort(price)}</b>
-            <span>{`${calc.hours_min || '—'}-${calc.hours_max || '—'}h estimadas`}</span>
-          </div>
-          <ScoreBar value={Math.max(6, 100 - risk)} />
-          <p className="summary shortText">{insight?.pricing_basis || ds.pricing_note || 'Sem base registrada.'}</p>
-          <Button onClick={() => navigator.clipboard.writeText(ds.proposal_draft || '')}>Copiar proposta</Button>
-        </Panel>
-
-        <Panel title="Perguntas obrigatórias">
-          <ul className="softList compactList">
-            {(insight?.technical_requirements || ds.questions_to_client || []).slice(0, 5).map((item: string) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </Panel>
-
-        <Panel title="Riscos principais">
-          <ul className="softList compactList">
-            {(insight?.risks || ds.ai_pricing?.risks || ['Escopo, integrações e acesso a ambientes precisam ser confirmados.']).slice(0, 5).map((item: string) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </Panel>
-
-        <Panel title="Cliente">
-          <p className="summary shortText">
-            {insight?.client_reputation || 'Sem reputação suficiente. Validar histórico, briefing, concorrência e velocidade de resposta.'}
-          </p>
-        </Panel>
-
-        <Panel title="Resumo">
-          <p className="summary shortText">
-            {(selected.full_description || selected.description_preview || '').slice(0, 360)}
-            {(selected.full_description || '').length > 360 ? '…' : ''}
-          </p>
+        <Panel title="Análise da IA">
+          <span className="sectionSource ai">Origem: {aiEnabled ? 'modelo de IA / enriquecimento' : 'ainda não gerada para este projeto'}</span>
+          {!aiEnabled && <p className="summary">Clique em <b>Atualizar painel IA</b> para gerar uma leitura específica deste projeto.</p>}
+          {aiEnabled && (
+            <div className="aiGrid">
+              <div>
+                <h4>Perguntas obrigatórias</h4>
+                <ul className="softList compactList">{questions.map((item: string) => <li key={item}>{item}</li>)}</ul>
+              </div>
+              <div>
+                <h4>Riscos principais</h4>
+                <ul className="softList compactList">{risks.map((item: string) => <li key={item}>{item}</li>)}</ul>
+              </div>
+              <div>
+                <h4>Cliente</h4>
+                <p className="summary shortText">{insight?.client_reputation || 'Sem reputação suficiente. Validar histórico, briefing, concorrência e velocidade de resposta.'}</p>
+              </div>
+              <div>
+                <h4>Base de preço</h4>
+                <p className="summary shortText">{insight?.pricing_basis || ds.ai_pricing?.proposal_summary || 'Sem explicação adicional da IA.'}</p>
+              </div>
+            </div>
+          )}
         </Panel>
       </section>
     </>
   )
+}
+
+function Fact({ label, value }: { label: string; value: any }) {
+  return (
+    <div className="factItem">
+      <span>{label}</span>
+      <b>{value}</b>
+    </div>
+  )
+}
+
+function actionCopy(action: string) {
+  if (action === 'Revisar') return 'Leia o escopo importado, confira riscos e decida se precisa enviar perguntas ao cliente.'
+  if (action === 'Aguardar resposta') return 'Você já enviou perguntas. Aguarde retorno antes de fechar proposta ou preço.'
+  if (action === 'Preparar envio') return 'A oportunidade parece pronta para proposta. Revise preço, prazo e copie o rascunho.'
+  if (action === 'Acompanhar') return 'A proposta já foi enviada. Monitore retorno, negociação ou perda.'
+  return 'O projeto está arquivado ou fora do fluxo ativo.'
 }

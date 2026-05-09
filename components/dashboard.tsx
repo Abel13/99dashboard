@@ -141,7 +141,17 @@ export function Dashboard() {
               }}
             />
           )}
-          {page === 'analytics' && <MatchAnalytics items={items} selected={selected} selectedId={selectedId} setSelectedId={setSelectedId} />}
+          {page === 'analytics' && (
+            <MatchAnalytics
+              items={items}
+              selected={selected}
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}
+              busy={busy}
+              onAction={updateOpportunity}
+              onOpen={(id) => setSelectedId(id)}
+            />
+          )}
           {page === 'profile' && <Profile items={items} />}
           {page === 'settings' && <SettingsPage status={status} onImportGmail={importGmail} importing={importing} />}
         </>

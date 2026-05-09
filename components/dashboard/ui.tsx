@@ -73,13 +73,18 @@ export function Signal({ label, value, suffix, kind }: { label: string; value: n
 }
 
 export function Complexity({ value, label }: { value: number; label?: string }) {
+  const bounded = Math.min(100, Math.max(0, value))
+  const level = bounded >= 70 ? 'Alta' : bounded >= 40 ? 'Média' : 'Baixa'
   return (
     <div className="complexity">
-      <div>
-        <i style={{ width: `${Math.min(100, Math.max(0, value))}%` }} />
+      <div className="complexityScale">
+        <span>Baixa</span>
+        <span>Média</span>
+        <span>Alta</span>
+        <i style={{ left: `${bounded}%` }} />
       </div>
-      <span>{label || `${Math.round(value)} / 100`}</span>
-      <small>Correção simples → Complexidade empresarial</small>
+      <strong>{label || level}</strong>
+      <small>{Math.round(bounded)} / 100 · estimativa baseada em esforço, risco e escopo detectado</small>
     </div>
   )
 }

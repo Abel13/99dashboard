@@ -92,12 +92,12 @@ function TableRow({ item, busy, onAction, onOpen }: { item: Opportunity; busy: s
       <div className="valueCell single" data-label="Preço">
         <b>{moneyShort(price)}</b>
       </div>
-      <RowActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
+      <OpportunityActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
     </article>
   )
 }
 
-function RowActions({
+export function OpportunityActions({
   item,
   busy,
   copyProposal,
@@ -214,7 +214,7 @@ export function OpportunityCard({ item, busy, onAction, onOpen }: { item: Opport
         <pre className="proposal">{ds.proposal_draft}</pre>
       </details>
       <div className="actions">
-        <RowActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
+        <OpportunityActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
       </div>
     </article>
   )
