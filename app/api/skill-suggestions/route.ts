@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getOpportunities } from '@/lib/softwarehouse'
+import { getOpportunities, readImportState } from '@/lib/softwarehouse'
 import { getAppSettings } from '@/lib/settings'
 
 function terms(items: any[]) {
@@ -30,7 +30,8 @@ function fallback(items: any[]) {
 
 export async function GET() {
   const settings = await getAppSettings()
-  const { items } = await getOpportunities()
+  const [{ items }, state] = await Promise.all([getOpportunities(), readImportState()])
+  const profile = state.profile_data || null
   const compact = items.slice(0, 60).map((i: any) => ({
     id: i.source_project_id,
     title: i.title,
@@ -43,11 +44,11 @@ export async function GET() {
 
   if (!settings.openai_api_key) return NextResponse.json({ ok: true, ...fallback(items) })
 
-  const prompt = `Você é Oracle, IA interna do dashboard 99Freelas. Sugira novas habilidades para o perfil do Abel com base nas oportunidades reais, matches fortes, riscos e padrões de demanda.
-Não sugira habilidades genéricas demais. Priorize habilidades que aumentem conversão e preço/hora.
+  const prompt = `Você é Oracle, IA interna do dashboard 99Freelas. Sugira melhorias para o perfil público do Abel com base no perfil importado e nas oportunidades reais.
+Compare o que o perfil comunica com os termos, riscos e demandas dos melhores projetos. Não sugira habilidades genéricas demais. Priorize mudanças que aumentem conversão, ticket e confiança.
 Responda JSON válido:
 {"source":"ai","demand_terms":[{"skill":"...","demand":number}],"suggestions":[{"name":"...","priority":"alta|média|baixa","reason":"...","action":"como aprender/posicionar no perfil"}]}
-Contexto: ${JSON.stringify({ profile_username: settings.profile_username, hourly_rate: settings.hourly_rate, opportunities: compact }).slice(0, 14000)}`
+Contexto: ${JSON.stringify({ profile_username: settings.profile_username, hourly_rate: settings.hourly_rate, profile, opportunities: compact }).slice(0, 16000)}`
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
