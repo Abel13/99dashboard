@@ -1,10 +1,11 @@
 'use client'
 
 import { ClipboardList, Database, Loader2, Sparkles } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   effortTag,
+  fmtDate,
   moneyShort,
   nextActionFor,
   riskTag,
@@ -40,6 +41,8 @@ export function MatchAnalytics({
   const [localSelected, setLocalSelected] = useState<Opportunity | null>(null)
   const [loading, setLoading] = useState(false)
   const [enriching, setEnriching] = useState(false)
+  const [savingProposal, setSavingProposal] = useState(false)
+  const [proposalDraft, setProposalDraft] = useState('')
 
   if (!selected) return <div className="empty glass">Nenhum projeto selecionado.</div>
 
@@ -57,6 +60,15 @@ export function MatchAnalytics({
   const questions = (insight?.technical_requirements || ds.questions_to_client || []).slice(0, 5)
   const risks = (insight?.risks || ds.ai_pricing?.risks || ['Escopo, integrações e acesso a ambientes precisam ser confirmados.']).slice(0, 5)
   const projectDescription = current.full_description || current.description_preview || 'Sem descrição importada.'
+  const requirements = ds.requirements_breakdown || insight?.requirements_breakdown || []
+  const requirementsHours = requirements.reduce((sum: number, row: any) => sum + ((Number(row.hours_min || 0) + Number(row.hours_max || 0)) / 2), 0)
+  const requirementsNet = requirements.reduce((sum: number, row: any) => sum + Number(row.net_value || 0), 0)
+  const platformFee = Number(calc.platform_fee_pct || 0.2)
+  const grossFromRequirements = platformFee < 1 ? requirementsNet / (1 - platformFee) : requirementsNet
+
+  useEffect(() => {
+    setProposalDraft(current.decision_support?.proposal_draft || '')
+  }, [current.source_project_id, current.decision_support?.proposal_draft])
 
   async function generateInsight() {
     setLoading(true)
@@ -89,7 +101,22 @@ export function MatchAnalytics({
   }
 
   async function copyProposal() {
-    await navigator.clipboard.writeText(ds.proposal_draft || '')
+    await navigator.clipboard.writeText(proposalDraft || ds.proposal_draft || '')
+  }
+
+  async function saveProposal() {
+    setSavingProposal(true)
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ projectId: current.source_project_id, proposal_draft: proposalDraft, runPipeline: false }),
+    })
+    if (response.ok) {
+      const updated = { ...current, abel_feedback: { ...(current.abel_feedback || {}), proposal_draft: proposalDraft }, decision_support: { ...ds, proposal_draft: proposalDraft } }
+      setLocalSelected(updated)
+      onProjectUpdated?.(updated)
+    }
+    setSavingProposal(false)
   }
 
   return (
@@ -158,7 +185,10 @@ export function MatchAnalytics({
           <div className="factGrid">
             <Fact label="Projeto" value={`#${current.source_project_id}`} />
             <Fact label="Categoria" value={current.category || current.page_details?.subcategory || '—'} />
-            <Fact label="Status atual" value={workflowStatusLabel(selected)} />
+            <Fact label="Status workflow" value={workflowStatusLabel(selected)} />
+            <Fact label="Status 99Freelas" value={current.page_details?.project_status_99freelas || '—'} />
+            <Fact label="Dados baixados" value={fmtMaybe(current.page_details?.enriched_at)} />
+            <Fact label="IA analisou" value={fmtMaybe(current.match_insight_generated_at)} />
             <Fact label="Orçamento" value={current.page_details?.budget || current.budget || '—'} />
             <Fact label="Nível" value={current.page_details?.level || current.level || '—'} />
             <Fact label="Propostas" value={current.page_details?.proposals ?? '—'} />
@@ -171,7 +201,7 @@ export function MatchAnalytics({
               <b>Descrição completa</b>
               <span>{current.full_description ? `${projectDescription.length} caracteres importados` : 'prévia importada'}</span>
             </div>
-            <p className="summary fullDescription">{projectDescription}</p>
+            <div className="summary fullDescription">{formatDescriptionForView(projectDescription).map((block, index) => block.startsWith('•') ? <p key={index} className="descriptionBullet">{block}</p> : <p key={index}>{block}</p>)}</div>
           </div>
         </Panel>
 
@@ -192,9 +222,10 @@ export function MatchAnalytics({
               </div>
               <ScoreBar value={Math.max(6, 100 - risk)} />
               <p className="summary shortText">{ds.pricing_note || 'Sem nota de precificação local.'}</p>
-              <Button onClick={() => navigator.clipboard.writeText(ds.proposal_draft || '')}>Copiar proposta</Button>
+              <Button onClick={copyProposal}>Copiar proposta</Button>
             </div>
           </div>
+          <RequirementTable requirements={requirements} hours={requirementsHours} net={requirementsNet} gross={grossFromRequirements} fee={platformFee} />
         </Panel>
 
         <Panel title="Análise da IA">
@@ -223,8 +254,58 @@ export function MatchAnalytics({
             </div>
           )}
         </Panel>
+
+        <Panel title="Proposta editável">
+          <span className="sectionSource app">Origem: rascunho comercial revisável</span>
+          <textarea className="textarea proposalEditor" value={proposalDraft} onChange={(event) => setProposalDraft(event.target.value)} placeholder="Gere ou escreva uma proposta para copiar ao 99Freelas." />
+          <div className="proposalActions">
+            <Button onClick={saveProposal} disabled={savingProposal}>{savingProposal ? <Loader2 className="loadingIcon" size={15} /> : null}Salvar proposta</Button>
+            <Button variant="primary" onClick={copyProposal}>Copiar proposta</Button>
+          </div>
+        </Panel>
       </section>
     </>
+  )
+}
+
+function fmtMaybe(value?: string) {
+  return value ? fmtDate(value) : '—'
+}
+
+function formatDescriptionForView(text: string) {
+  return text
+    .replace(/\r/g, '')
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean)
+}
+
+function RequirementTable({ requirements, hours, net, gross, fee }: { requirements: any[]; hours: number; net: number; gross: number; fee: number }) {
+  if (!requirements.length) return <p className="summary">Sem tabela de requisitos ainda. Atualize a análise/enriquecimento para gerar a decomposição.</p>
+  return (
+    <div className="requirementTableWrap">
+      <h4>Análise de requisitos, tempo e valor</h4>
+      <div className="requirementTable">
+        <div className="requirementHead"><span>Requisito</span><span>Horas</span><span>Líquido</span></div>
+        {requirements.map((row: any, index: number) => (
+          <div className="requirementRow" key={`${row.requirement}-${index}`}>
+            <span>{row.requirement}</span>
+            <b>{row.hours_min ?? '—'}–{row.hours_max ?? '—'}h</b>
+            <b>{moneyShort(row.net_value || 0)}</b>
+          </div>
+        ))}
+        <div className="requirementTotal">
+          <span>Total médio</span>
+          <b>{Math.round(hours)}h</b>
+          <b>{moneyShort(net)}</b>
+        </div>
+        <div className="requirementTotal gross">
+          <span>Preço ao cliente com taxa ({Math.round(fee * 100)}%)</span>
+          <b>—</b>
+          <b>{moneyShort(gross)}</b>
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -7,6 +7,7 @@ export type Feedback = {
   price_override?: number
   proposal_sent_price?: number
   proposal_sent_at?: string
+  proposal_draft?: string
   updated_at?: string
 }
 

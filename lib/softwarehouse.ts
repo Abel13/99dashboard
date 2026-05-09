@@ -63,6 +63,9 @@ export async function updateFeedback(projectId: string, patch: Feedback) {
     item.abel_feedback = feedback
     item.effective_status = feedback.status || item.effective_status
     item.effective_status_label = feedback.status ? feedback.status.replaceAll('_',' ') : item.effective_status_label
+    if (feedback.proposal_draft) {
+      item.decision_support = { ...(item.decision_support || {}), proposal_draft: feedback.proposal_draft }
+    }
     await upsertOpportunity(item)
   }
   return feedback

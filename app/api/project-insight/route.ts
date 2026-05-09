@@ -9,9 +9,10 @@ function fallback(item: any) {
     technical_requirements: ds.questions_to_client || ['Validar escopo funcional', 'Confirmar integrações', 'Definir ambiente de deploy', 'Planejar testes e homologação'],
     complexity_label: 'Médio',
     complexity_score: Math.min(100, Math.max(15, Number(calc.hours_avg || 50) / 2)),
-    pricing_basis: ds.pricing_note || 'Estimativa baseada na régua atual de horas, risco e taxa da plataforma.',
+    pricing_basis: ds.pricing_note || 'Estimativa baseada na régua atual de horas, risco, auxílio de IA e taxa da plataforma.',
     duration_estimate: ds.delivery_estimate || 'A confirmar',
-    proposal_angle: 'Entrar com escopo fechado, separando MVP de evoluções futuras.',
+    requirements_breakdown: ds.requirements_breakdown || [],
+    proposal_angle: 'Entrar com escopo fechado e proposta conectada ao problema descrito pelo cliente.',
     client_reputation: 'Sem dados reputacionais suficientes no dashboard. Verificar perfil, histórico, avaliações, clareza do briefing e velocidade de resposta antes de enviar proposta.',
     risks: ds.ai_pricing?.risks || ['Escopo pode mudar após alinhamento', 'Integrações podem exigir credenciais/documentação', 'Prazo depende de respostas do cliente'],
   }
@@ -37,13 +38,17 @@ Responda SOMENTE JSON válido no formato:
   "technical_requirements":["..."],
   "complexity_label":"Correção simples|Pequeno|Médio|Alto|Complexidade empresarial",
   "complexity_score":0-100,
-  "pricing_basis":"base objetiva de preço",
+  "pricing_basis":"base objetiva de preço considerando auxílio de IA/coding assistant",
   "duration_estimate":"estimativa de duração",
-  "proposal_angle":"como posicionar a proposta",
-  "client_reputation":"análise reputacional com os dados disponíveis e o que verificar",
+  "requirements_breakdown":[{"requirement":"requisito/entregável","hours_min":0,"hours_max":0,"net_value":0}],
+  "proposal_angle":"como posicionar a proposta de forma vendível e específica ao pedido",
+  "proposal_draft":"proposta comercial pronta para copiar, específica para o projeto, sem parecer sugestão genérica de MVP",
+  "client_reputation":"análise reputacional com os dados disponíveis e o que verificar",},{
   "risks":["..."]
 }
 Considere funcionalidades, tecnologia, integrações, segurança, deploy, testes, clareza, concorrência e risco comercial.
+Não invente nome do cliente: se o nome não estiver claro em client_details, diga que não foi identificado.
+A proposta deve falar do pedido específico do cliente e vender confiança/resultado; evite texto genérico como "vamos fazer um MVP" quando o cliente pediu outra coisa.
 Projeto: ${JSON.stringify(item).slice(0, 12000)}`
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -60,7 +65,8 @@ Projeto: ${JSON.stringify(item).slice(0, 12000)}`
   const json = await res.json()
   try {
     const insight = JSON.parse(json.choices?.[0]?.message?.content || '{}')
-    const updated = { ...item, match_insight: insight, match_insight_generated_at: new Date().toISOString() }
+    const decision_support = insight.proposal_draft ? { ...(item.decision_support || {}), proposal_draft: insight.proposal_draft, requirements_breakdown: insight.requirements_breakdown || item.decision_support?.requirements_breakdown } : item.decision_support
+    const updated = { ...item, decision_support, match_insight: insight, match_insight_generated_at: new Date().toISOString() }
     await upsertOpportunity(updated)
     return NextResponse.json({ insight, item: updated })
   }

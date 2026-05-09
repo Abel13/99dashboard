@@ -15,6 +15,7 @@ export async function POST(req: NextRequest){
     price_override: body.price_override,
     proposal_sent_price: body.proposal_sent_price,
     proposal_sent_at: status === 'proposal_sent' ? new Date().toISOString() : body.proposal_sent_at,
+    proposal_draft: body.proposal_draft,
   }
   if (Array.isArray(body.reactions)) patch.reactions = body.reactions.map(String)
   const feedback = await updateFeedback(projectId, patch)
