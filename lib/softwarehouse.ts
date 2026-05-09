@@ -10,8 +10,11 @@ function requireSupabase() {
 
 export async function upsertOpportunity(item: Opportunity) {
   const sb = requireSupabase()
+  const projectId = String(item.source_project_id)
+  const { data: existing, error: lookupError } = await sb.from('opportunities').select('project_id').eq('project_id', projectId).maybeSingle()
+  if (lookupError) throw lookupError
   const row = {
-    project_id: String(item.source_project_id),
+    project_id: projectId,
     title: item.title,
     status: item.effective_status || item.decision_support?.status_manual || null,
     score: item.analysis?.final_score || null,
@@ -21,6 +24,7 @@ export async function upsertOpportunity(item: Opportunity) {
   }
   const { error } = await sb.from('opportunities').upsert(row, { onConflict: 'project_id' })
   if (error) throw error
+  return { inserted: !existing, updated: Boolean(existing), project_id: projectId }
 }
 
 export async function getOpportunities() {

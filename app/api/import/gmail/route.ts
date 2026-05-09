@@ -31,7 +31,8 @@ export async function POST(req: NextRequest){
     const token = await accessToken(settings)
     const list = await gmailFetch(token, `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(query)}&maxResults=25`)
     const messages = list.messages || []
-    let parsed = 0, saved = 0
+    let parsed = 0, saved = 0, inserted = 0, updated = 0, duplicateInRun = 0
+    const seenProjectIds = new Set<string>()
     const errors: any[] = []
     const trace: any[] = []
     for(const msg of messages){
@@ -44,13 +45,18 @@ export async function POST(req: NextRequest){
         const opportunity = parsedEmail.opportunity
         if (!opportunity) continue
         parsed++
+        const duplicate = seenProjectIds.has(String(opportunity.source_project_id))
+        seenProjectIds.add(String(opportunity.source_project_id))
         const enriched = await enrichOpportunity(opportunity)
-        await upsertOpportunity(enriched)
+        const result = await upsertOpportunity(enriched)
+        if (duplicate) duplicateInRun++
+        if (result.inserted) inserted++
+        if (result.updated) updated++
         saved++
       } catch (err:any) { errors.push({ id: msg.id, error: err.message || String(err) }); trace.push({ id: msg.id, error: err.message || String(err) }) }
     }
-    const state = await updateImportState({ last_import_at: new Date().toISOString(), last_query: query, last_found: messages.length, last_parsed: parsed, last_saved: saved, last_message_trace: trace.slice(0, 25), last_errors: errors, last_import_ok: errors.length === 0, last_import_error: errors[0]?.error || null })
-    return NextResponse.json({ ok:true, query, found:messages.length, parsed, saved, trace, errors, state })
+    const state = await updateImportState({ last_import_at: new Date().toISOString(), last_query: query, last_found: messages.length, last_parsed: parsed, last_saved: saved, last_inserted: inserted, last_updated: updated, last_duplicate_in_run: duplicateInRun, last_unique_projects: seenProjectIds.size, last_message_trace: trace.slice(0, 25), last_errors: errors, last_import_ok: errors.length === 0, last_import_error: errors[0]?.error || null })
+    return NextResponse.json({ ok:true, query, found:messages.length, parsed, saved, inserted, updated, duplicateInRun, uniqueProjects: seenProjectIds.size, trace, errors, state })
   }catch(err:any){
     await updateImportState({ last_import_at: new Date().toISOString(), last_query: query, last_import_ok: false, last_import_error: err.message || String(err) })
     return NextResponse.json({ ok:false, error:err.message || String(err) }, { status:500 })
