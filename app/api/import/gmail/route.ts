@@ -26,7 +26,7 @@ async function gmailFetch(token:string, url:string){
 export async function POST(req: NextRequest){
   const settings = await getAppSettings()
   if(!authorized(req, settings.dashboard_api_token)) return NextResponse.json({error:'unauthorized'},{status:401})
-  const query = settings.gmail_query || 'from:(99freelas.com.br) newer_than:7d'
+  const query = settings.gmail_query || '(from:99freelas.com.br OR from:abel.o.d@outlook.com) newer_than:7d (99freelas OR 99Freelas)'
   try{
     const token = await accessToken(settings)
     const list = await gmailFetch(token, `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(query)}&maxResults=25`)
@@ -38,6 +38,8 @@ export async function POST(req: NextRequest){
       try {
         const raw = await gmailFetch(token, `https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}?format=raw`)
         const parsedEmail = await parseGmailRawDebug(raw.raw)
+        const looksLike99Freelas = /99freelas/i.test(`${parsedEmail.meta.subject || ''} ${parsedEmail.meta.from || ''} ${parsedEmail.meta.to || ''}`) || Boolean(parsedEmail.meta.has_project_url)
+        if (!looksLike99Freelas) { trace.push({ id: msg.id, ...parsedEmail.meta, skipped_reason: 'Filtro interno: não parece e-mail/projeto 99Freelas' }); continue }
         trace.push({ id: msg.id, ...parsedEmail.meta })
         const opportunity = parsedEmail.opportunity
         if (!opportunity) continue

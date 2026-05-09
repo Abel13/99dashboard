@@ -33,7 +33,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   gmail_client_secret: process.env.GMAIL_CLIENT_SECRET || '',
   gmail_refresh_token: process.env.GMAIL_REFRESH_TOKEN || '',
   gmail_configured: Boolean(process.env.GMAIL_CLIENT_ID && process.env.GMAIL_CLIENT_SECRET && process.env.GMAIL_REFRESH_TOKEN),
-  gmail_query: process.env.GMAIL_LABEL_OR_QUERY || 'from:(99freelas.com.br) newer_than:7d',
+  gmail_query: process.env.GMAIL_LABEL_OR_QUERY || '(from:99freelas.com.br OR from:abel.o.d@outlook.com) newer_than:7d (99freelas OR 99Freelas)',
   dashboard_api_token: process.env.DASHBOARD_API_TOKEN || process.env.AUTO_IMPORT_CRON_SECRET || '',
   dashboard_api_token_configured: Boolean(process.env.DASHBOARD_API_TOKEN || process.env.AUTO_IMPORT_CRON_SECRET),
 }
