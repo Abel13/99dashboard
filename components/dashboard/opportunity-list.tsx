@@ -67,7 +67,9 @@ function TableRow({ item, busy, onAction, onOpen }: { item: Opportunity; busy: s
         <div className="eyebrow">
           #{item.source_project_id} · {item.category || '99Freelas'}
         </div>
-        <h2 className="rowTitle">{item.title}</h2>
+        <button className="titleLink rowTitle" onClick={() => onOpen(String(item.source_project_id))}>
+          {item.title}
+        </button>
         <span className="nextAction">{nextActionFor(item)}</span>
       </div>
       <div data-label="Status">
@@ -174,7 +176,9 @@ export function OpportunityCard({ item, busy, onAction, onOpen }: { item: Opport
           <div className="eyebrow">
             #{item.source_project_id} · {pd.subcategory || item.category || '99Freelas'}
           </div>
-          <h2 className="title">{item.title}</h2>
+          <button className="titleLink title" onClick={() => onOpen(String(item.source_project_id))}>
+            {item.title}
+          </button>
         </div>
         <div className="score">{item.analysis?.final_score || 0}</div>
       </div>
