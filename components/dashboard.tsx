@@ -86,6 +86,27 @@ export function Dashboard() {
     await load()
   }
 
+  async function updateReaction(item: Opportunity, reaction: string) {
+    const current = new Set<string>(item.abel_feedback?.reactions || [])
+    if (item.effective_status === 'liked') current.add('liked')
+    if (current.has(reaction)) current.delete(reaction)
+    else current.add(reaction)
+
+    setBusy(item.source_project_id + reaction)
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        projectId: item.source_project_id,
+        reactions: [...current],
+        reason: `Abel atualizou reações: ${[...current].join(', ') || 'nenhuma'}`,
+      }),
+    })
+    setBusy('')
+    setToast(response.ok ? 'Reação salva' : 'Erro ao salvar reação')
+    await load()
+  }
+
   const filtered = useMemo(
     () =>
       items.filter((item) => {
@@ -141,6 +162,7 @@ export function Dashboard() {
               clearStatuses={clearStatuses}
               busy={busy}
               onAction={updateOpportunity}
+              onReact={updateReaction}
               onOpen={(id) => {
                 setSelectedId(id)
                 setPage('analytics')
@@ -155,6 +177,7 @@ export function Dashboard() {
               setSelectedId={setSelectedId}
               busy={busy}
               onAction={updateOpportunity}
+              onReact={updateReaction}
               onOpen={(id) => setSelectedId(id)}
             />
           )}

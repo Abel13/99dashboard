@@ -1,5 +1,5 @@
 import { brl } from '@/lib/utils'
-import { statuses } from './constants'
+import { reactionLabels, statuses } from './constants'
 import type { Opportunity } from './types'
 
 export function fmtDate(value?: string) {
@@ -53,7 +53,7 @@ export function workflowStatusOf(item: Opportunity) {
   const feedbackReason = String(item.abel_feedback?.reason || '').toLowerCase()
 
   if (raw === 'review' && feedbackReason.includes('perguntas')) return 'questions_sent'
-  if (['review', 'caso_a_caso'].includes(raw)) return 'new'
+  if (['review', 'caso_a_caso', 'liked'].includes(raw)) return 'new'
   if (raw === 'preparar_proposta') return 'prepare_proposal'
   if (raw === 'descartar') return 'discarded'
   return raw
@@ -82,6 +82,16 @@ export function statusLabel(status: string) {
 
 export function workflowStatusLabel(item: Opportunity) {
   return statusLabel(workflowStatusOf(item))
+}
+
+export function reactionsOf(item: Opportunity) {
+  const reactions = new Set<string>(item.abel_feedback?.reactions || [])
+  if (statusOf(item) === 'liked') reactions.add('liked')
+  return [...reactions]
+}
+
+export function reactionLabel(reaction: string) {
+  return reactionLabels[reaction] || reaction
 }
 
 export function effortTag(decisionSupport: any) {

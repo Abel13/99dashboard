@@ -1,5 +1,6 @@
 export type Feedback = {
   status?: string
+  reactions?: string[]
   reason?: string
   notes?: string
   outcome?: string

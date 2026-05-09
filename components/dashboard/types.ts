@@ -8,6 +8,8 @@ export type OpportunityAction = (
   outcome?: string
 ) => void
 
+export type OpportunityReaction = (item: Opportunity, reaction: string) => void
+
 export type OpenOpportunity = (id: string) => void
 
 export type StatusOption = [string, string]

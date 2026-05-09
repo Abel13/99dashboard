@@ -14,7 +14,7 @@ import {
 } from './helpers'
 import { Complexity, Panel, ScoreBar, Signal } from './ui'
 import { OpportunityActions } from './opportunity-list'
-import type { OpenOpportunity, Opportunity, OpportunityAction } from './types'
+import type { OpenOpportunity, Opportunity, OpportunityAction, OpportunityReaction } from './types'
 
 export function MatchAnalytics({
   items,
@@ -23,6 +23,7 @@ export function MatchAnalytics({
   setSelectedId,
   busy,
   onAction,
+  onReact,
   onOpen,
 }: {
   items: Opportunity[]
@@ -31,6 +32,7 @@ export function MatchAnalytics({
   setSelectedId: (value: string) => void
   busy: string
   onAction: OpportunityAction
+  onReact: OpportunityReaction
   onOpen: OpenOpportunity
 }) {
   const [insight, setInsight] = useState<any>(null)
@@ -138,7 +140,7 @@ export function MatchAnalytics({
           <Signal label="Horas" value={hoursAvg || 0} suffix="h" kind={hoursAvg > 120 ? 'bad' : hoursAvg > 64 ? 'warn' : 'ok'} />
         </div>
         <div className="analyticsActions">
-          <OpportunityActions item={current} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
+          <OpportunityActions item={current} busy={busy} copyProposal={copyProposal} onAction={onAction} onReact={onReact} onOpen={onOpen} />
         </div>
       </section>
 

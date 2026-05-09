@@ -7,7 +7,7 @@ export async function POST(req: NextRequest){
   const status = body.status ? String(body.status) : undefined
   if(!projectId) return NextResponse.json({error:'projectId obrigatório'},{status:400})
   if(status && !valid.has(status)) return NextResponse.json({error:'status inválido'},{status:400})
-  const feedback = await updateFeedback(projectId, {
+  const patch: any = {
     status: status as any,
     reason: body.reason,
     notes: body.notes,
@@ -15,7 +15,9 @@ export async function POST(req: NextRequest){
     price_override: body.price_override,
     proposal_sent_price: body.proposal_sent_price,
     proposal_sent_at: status === 'proposal_sent' ? new Date().toISOString() : body.proposal_sent_at,
-  })
+  }
+  if (Array.isArray(body.reactions)) patch.reactions = body.reactions.map(String)
+  const feedback = await updateFeedback(projectId, patch)
   const pipeline = body.runPipeline === false ? undefined : await runPipeline()
   return NextResponse.json({ feedback, pipeline })
 }

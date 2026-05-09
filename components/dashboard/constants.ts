@@ -9,8 +9,16 @@ export const statuses: StatusOption[] = [
   ['won', 'Ganho'],
   ['lost', 'Perdeu'],
   ['discarded', 'Descartado'],
-  ['liked', 'Gostei'],
 ]
+
+export const reactionLabels: Record<string, string> = {
+  liked: 'Gostei',
+  high_priority: 'Alta prioridade',
+  attractive_price: 'Preço atrativo',
+  unclear_scope: 'Escopo confuso',
+  good_client: 'Cliente bom',
+  risky_client: 'Cliente duvidoso',
+}
 
 export const nav: [DashboardPage, any, string][] = [
   ['dashboard', LayoutDashboard, 'Dashboard'],

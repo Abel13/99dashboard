@@ -1,6 +1,6 @@
 'use client'
 
-import { BarChart3, Copy, ExternalLink, Heart, MessageCircleQuestion, Send, ThumbsDown, XCircle } from 'lucide-react'
+import { AlertTriangle, BarChart3, Copy, DollarSign, ExternalLink, Heart, MessageCircleQuestion, Send, Star, ThumbsDown, Trophy, UserCheck, UserX, XCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { brl, dt } from '@/lib/utils'
 import {
@@ -8,6 +8,8 @@ import {
   moneyShort,
   nextActionFor,
   priceOf,
+  reactionLabel,
+  reactionsOf,
   riskTag,
   scoreOf,
   statusKind,
@@ -15,17 +17,19 @@ import {
   workflowStatusOf,
 } from './helpers'
 import { ScoreBar, SignalDot } from './ui'
-import type { OpenOpportunity, Opportunity, OpportunityAction } from './types'
+import type { OpenOpportunity, Opportunity, OpportunityAction, OpportunityReaction } from './types'
 
 export function OpportunityTable({
   items,
   busy,
   onAction,
+  onReact,
   onOpen,
 }: {
   items: Opportunity[]
   busy: string
   onAction: OpportunityAction
+  onReact: OpportunityReaction
   onOpen: OpenOpportunity
 }) {
   return (
@@ -40,13 +44,13 @@ export function OpportunityTable({
         <span>Preço</span>
       </div>
       {items.map((item) => (
-        <TableRow key={item.source_project_id} item={item} busy={busy} onAction={onAction} onOpen={onOpen} />
+        <TableRow key={item.source_project_id} item={item} busy={busy} onAction={onAction} onReact={onReact} onOpen={onOpen} />
       ))}
     </section>
   )
 }
 
-function TableRow({ item, busy, onAction, onOpen }: { item: Opportunity; busy: string; onAction: OpportunityAction; onOpen: OpenOpportunity }) {
+function TableRow({ item, busy, onAction, onReact, onOpen }: { item: Opportunity; busy: string; onAction: OpportunityAction; onReact: OpportunityReaction; onOpen: OpenOpportunity }) {
   const ds = item.decision_support || {}
   const status = workflowStatusOf(item)
   const price = priceOf(item)
@@ -70,6 +74,7 @@ function TableRow({ item, busy, onAction, onOpen }: { item: Opportunity; busy: s
           {item.title}
         </button>
         <span className="nextAction">{nextActionFor(item)}</span>
+        <ReactionChips item={item} />
       </div>
       <div data-label="Status">
         <span className={`chip ${statusKind(status)}`}>{workflowStatusLabel(item)}</span>
@@ -92,7 +97,7 @@ function TableRow({ item, busy, onAction, onOpen }: { item: Opportunity; busy: s
       <div className="valueCell single" data-label="Preço">
         <b>{moneyShort(price)}</b>
       </div>
-      <OpportunityActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
+      <OpportunityActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onReact={onReact} onOpen={onOpen} />
     </article>
   )
 }
@@ -102,54 +107,89 @@ export function OpportunityActions({
   busy,
   copyProposal,
   onAction,
+  onReact,
   onOpen,
 }: {
   item: Opportunity
   busy: string
   copyProposal: () => void
   onAction: OpportunityAction
+  onReact: OpportunityReaction
   onOpen: OpenOpportunity
 }) {
+  const activeReactions = reactionsOf(item)
+  const isActive = (reaction: string) => activeReactions.includes(reaction)
+
   return (
     <div className="rowActions">
-      <Button
-        className="iconAction"
-        variant="primary"
-        disabled={busy.includes(item.source_project_id)}
-        onClick={() => onAction(item, 'proposal_sent', 'Abel enviou proposta ao cliente')}
-        title="Marcar proposta enviada"
-        aria-label="Marcar proposta enviada"
-      >
-        <Send size={15} />
-      </Button>
-      <Button className="iconAction" onClick={() => onAction(item, 'questions_sent', 'Abel enviou perguntas ao cliente; aguardando respostas')} title="Marcar perguntas enviadas" aria-label="Marcar perguntas enviadas">
-        <MessageCircleQuestion size={15} />
-      </Button>
-      <Button className="iconAction" onClick={copyProposal} title="Copiar proposta" aria-label="Copiar proposta">
-        <Copy size={15} />
-      </Button>
-      <Button className="iconAction" onClick={() => onOpen(String(item.source_project_id))} title="Analisar no Match Analytics" aria-label="Analisar no Match Analytics">
-        <BarChart3 size={15} />
-      </Button>
+      <div className="actionGroup statusGroup" aria-label="Mudar status">
+        <span>Status</span>
+        <Button
+          className="iconAction"
+          variant="primary"
+          disabled={busy.includes(item.source_project_id)}
+          onClick={() => onAction(item, 'proposal_sent', 'Abel enviou proposta ao cliente')}
+          title="Marcar proposta enviada"
+          aria-label="Marcar proposta enviada"
+        >
+          <Send size={15} />
+        </Button>
+        <Button className="iconAction" onClick={() => onAction(item, 'questions_sent', 'Abel enviou perguntas ao cliente; aguardando respostas')} title="Marcar perguntas enviadas" aria-label="Marcar perguntas enviadas">
+          <MessageCircleQuestion size={15} />
+        </Button>
+        <Button className="iconAction" variant="danger" onClick={() => onAction(item, 'discarded', 'Abel descartou a oportunidade')} title="Descartar oportunidade" aria-label="Descartar oportunidade">
+          <ThumbsDown size={15} />
+        </Button>
+        <Button className="iconAction" variant="danger" onClick={() => onAction(item, 'lost', 'Projeto perdido/cancelado', 'lost')} title="Marcar como perdido" aria-label="Marcar como perdido">
+          <XCircle size={15} />
+        </Button>
+        <Button className="iconAction successAction" onClick={() => onAction(item, 'won', 'Projeto ganho', 'won')} title="Marcar como ganho" aria-label="Marcar como ganho">
+          <Trophy size={15} />
+        </Button>
+      </div>
+      <div className="actionGroup reactionGroup" aria-label="Reação">
+        <span>Reação</span>
+        <Button className={`iconAction ${isActive('liked') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'liked')} title="Gostei" aria-label="Gostei">
+          <Heart size={15} />
+        </Button>
+        <Button className={`iconAction ${isActive('high_priority') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'high_priority')} title="Alta prioridade" aria-label="Alta prioridade">
+          <Star size={15} />
+        </Button>
+        <Button className={`iconAction ${isActive('attractive_price') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'attractive_price')} title="Preço atrativo" aria-label="Preço atrativo">
+          <DollarSign size={15} />
+        </Button>
+        <Button className={`iconAction ${isActive('unclear_scope') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'unclear_scope')} title="Escopo confuso" aria-label="Escopo confuso">
+          <AlertTriangle size={15} />
+        </Button>
+        <Button className={`iconAction ${isActive('good_client') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'good_client')} title="Cliente bom" aria-label="Cliente bom">
+          <UserCheck size={15} />
+        </Button>
+        <Button className={`iconAction ${isActive('risky_client') ? 'activeReaction' : ''}`} onClick={() => onReact(item, 'risky_client')} title="Cliente duvidoso" aria-label="Cliente duvidoso">
+          <UserX size={15} />
+        </Button>
+      </div>
+      <div className="actionGroup toolGroup" aria-label="Ferramentas">
+        <span>Ferramentas</span>
+        <Button className="iconAction" onClick={copyProposal} title="Copiar proposta" aria-label="Copiar proposta">
+          <Copy size={15} />
+        </Button>
+        <Button className="iconAction" onClick={() => onOpen(String(item.source_project_id))} title="Analisar no Match Analytics" aria-label="Analisar no Match Analytics">
+          <BarChart3 size={15} />
+        </Button>
+      </div>
       {item.project_url && (
-        <a className="btn secondary iconAction" target="_blank" href={item.project_url} title="Abrir projeto no 99Freelas" aria-label="Abrir projeto no 99Freelas">
-          <ExternalLink size={15} />
-        </a>
+        <div className="actionGroup linkGroup" aria-label="Links">
+          <span>Link</span>
+          <a className="btn secondary iconAction" target="_blank" href={item.project_url} title="Abrir projeto no 99Freelas" aria-label="Abrir projeto no 99Freelas">
+            <ExternalLink size={15} />
+          </a>
+        </div>
       )}
-      <Button className="iconAction" onClick={() => onAction(item, 'liked', 'Abel gostou da oportunidade')} title="Marcar como gostei" aria-label="Marcar como gostei">
-        <Heart size={15} />
-      </Button>
-      <Button className="iconAction" variant="danger" onClick={() => onAction(item, 'discarded', 'Abel descartou a oportunidade')} title="Descartar oportunidade" aria-label="Descartar oportunidade">
-        <ThumbsDown size={15} />
-      </Button>
-      <Button className="iconAction" variant="danger" onClick={() => onAction(item, 'lost', 'Projeto perdido/cancelado', 'lost')} title="Marcar como perdido" aria-label="Marcar como perdido">
-        <XCircle size={15} />
-      </Button>
     </div>
   )
 }
 
-export function OpportunityCard({ item, busy, onAction, onOpen }: { item: Opportunity; busy: string; onAction: OpportunityAction; onOpen: OpenOpportunity }) {
+export function OpportunityCard({ item, busy, onAction, onReact, onOpen }: { item: Opportunity; busy: string; onAction: OpportunityAction; onReact: OpportunityReaction; onOpen: OpenOpportunity }) {
   const ds = item.decision_support || {}
   const pd = item.page_details || {}
   const status = workflowStatusOf(item)
@@ -179,6 +219,7 @@ export function OpportunityCard({ item, busy, onAction, onOpen }: { item: Opport
       </p>
       <div className="chips">
         <span className={`chip ${statusKind(status)}`}>{workflowStatusLabel(item)}</span>
+        <ReactionChips item={item} />
         {ds.ai_pricing?.used && <span className="chip ok">Precificado por IA</span>}
         <span className="chip">{pd.proposals ?? '—'} propostas</span>
         <span className="chip">{pd.interested ?? '—'} interessados</span>
@@ -214,8 +255,20 @@ export function OpportunityCard({ item, busy, onAction, onOpen }: { item: Opport
         <pre className="proposal">{ds.proposal_draft}</pre>
       </details>
       <div className="actions">
-        <OpportunityActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onOpen={onOpen} />
+        <OpportunityActions item={item} busy={busy} copyProposal={copyProposal} onAction={onAction} onReact={onReact} onOpen={onOpen} />
       </div>
     </article>
+  )
+}
+
+function ReactionChips({ item }: { item: Opportunity }) {
+  const reactions = reactionsOf(item)
+  if (!reactions.length) return null
+  return (
+    <span className="reactionChips">
+      {reactions.map((reaction) => (
+        <span className="reactionChip" key={reaction}>{reactionLabel(reaction)}</span>
+      ))}
+    </span>
   )
 }

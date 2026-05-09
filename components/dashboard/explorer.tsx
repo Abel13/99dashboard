@@ -4,7 +4,7 @@ import { LayoutGrid, List } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { statuses } from './constants'
 import { OpportunityCard, OpportunityTable } from './opportunity-list'
-import type { OpenOpportunity, Opportunity, OpportunityAction } from './types'
+import type { OpenOpportunity, Opportunity, OpportunityAction, OpportunityReaction } from './types'
 
 export function Explorer({
   filtered,
@@ -19,6 +19,7 @@ export function Explorer({
   clearStatuses,
   busy,
   onAction,
+  onReact,
   onOpen,
 }: {
   filtered: Opportunity[]
@@ -33,6 +34,7 @@ export function Explorer({
   clearStatuses: () => void
   busy: string
   onAction: OpportunityAction
+  onReact: OpportunityReaction
   onOpen: OpenOpportunity
 }) {
   return (
@@ -74,11 +76,11 @@ export function Explorer({
       </section>
 
       {view === 'list' ? (
-        <OpportunityTable items={filtered} busy={busy} onAction={onAction} onOpen={onOpen} />
+        <OpportunityTable items={filtered} busy={busy} onAction={onAction} onReact={onReact} onOpen={onOpen} />
       ) : (
         <section className="grid">
           {filtered.map((item) => (
-            <OpportunityCard key={item.source_project_id} item={item} busy={busy} onAction={onAction} onOpen={onOpen} />
+            <OpportunityCard key={item.source_project_id} item={item} busy={busy} onAction={onAction} onReact={onReact} onOpen={onOpen} />
           ))}
         </section>
       )}
