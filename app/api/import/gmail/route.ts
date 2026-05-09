@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { parseGmailRaw } from '@/lib/import/gmail-parser'
+import { parseGmailRawDebug } from '@/lib/import/gmail-parser'
 import { enrichOpportunity } from '@/lib/pricing'
 import { updateImportState, upsertOpportunity } from '@/lib/softwarehouse'
 import { getAppSettings } from '@/lib/settings'
@@ -33,19 +33,22 @@ export async function POST(req: NextRequest){
     const messages = list.messages || []
     let parsed = 0, saved = 0
     const errors: any[] = []
+    const trace: any[] = []
     for(const msg of messages){
       try {
         const raw = await gmailFetch(token, `https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}?format=raw`)
-        const opportunity = await parseGmailRaw(raw.raw)
+        const parsedEmail = await parseGmailRawDebug(raw.raw)
+        trace.push({ id: msg.id, ...parsedEmail.meta })
+        const opportunity = parsedEmail.opportunity
         if (!opportunity) continue
         parsed++
         const enriched = await enrichOpportunity(opportunity)
         await upsertOpportunity(enriched)
         saved++
-      } catch (err:any) { errors.push({ id: msg.id, error: err.message || String(err) }) }
+      } catch (err:any) { errors.push({ id: msg.id, error: err.message || String(err) }); trace.push({ id: msg.id, error: err.message || String(err) }) }
     }
-    const state = await updateImportState({ last_import_at: new Date().toISOString(), last_query: query, last_found: messages.length, last_parsed: parsed, last_saved: saved, last_errors: errors, last_import_ok: errors.length === 0, last_import_error: errors[0]?.error || null })
-    return NextResponse.json({ ok:true, query, found:messages.length, parsed, saved, errors, state })
+    const state = await updateImportState({ last_import_at: new Date().toISOString(), last_query: query, last_found: messages.length, last_parsed: parsed, last_saved: saved, last_message_trace: trace.slice(0, 25), last_errors: errors, last_import_ok: errors.length === 0, last_import_error: errors[0]?.error || null })
+    return NextResponse.json({ ok:true, query, found:messages.length, parsed, saved, trace, errors, state })
   }catch(err:any){
     await updateImportState({ last_import_at: new Date().toISOString(), last_query: query, last_import_ok: false, last_import_error: err.message || String(err) })
     return NextResponse.json({ ok:false, error:err.message || String(err) }, { status:500 })
