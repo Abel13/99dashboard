@@ -23,8 +23,8 @@ function descriptionFromHtml(html: string) {
   const start = text.search(/Descrição do Projeto:?/i)
   if (start < 0) return ''
   let desc = text.slice(start).replace(/^\s*Descrição do Projeto:?\s*/i, '')
-  const stops = [/Informações Adicionais/i, /Habilidades desejadas/i, /Propostas\s*\(/i, /Propostas\s*$/i, /Cliente\s*$/i, /Gerenciamento do projeto/i, /Denunciar projeto/i, /Compartilhar projeto/i]
-  const indexes = stops.map(r => desc.search(r)).filter(i => i > 120)
+  const stops = [/ATIVIDADES DO CLIENTE NESSE PROJETO/i, /Última visualização:/i, /Tem dúvidas\?/i, /Faça uma pergunta/i, /Enviar proposta/i, /Informações Adicionais/i, /Habilidades desejadas/i, /Propostas\s*\(/i, /Propostas\s*$/i, /Cliente\s*$/i, /Gerenciamento do projeto/i, /Denunciar projeto/i, /Compartilhar projeto/i]
+  const indexes = stops.map(r => desc.search(r)).filter(i => i > 80)
   if (indexes.length) desc = desc.slice(0, Math.min(...indexes))
   return formatDescription(desc)
 }
