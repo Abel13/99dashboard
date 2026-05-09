@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { Bell, Loader2, X } from 'lucide-react'
-import { OracleChat } from './oracle-chat'
 import { useDashboardStore } from '@/store/dashboard-store'
 import { DashboardShell } from './dashboard/shell'
 import { Explorer } from './dashboard/explorer'
@@ -172,10 +171,6 @@ export function Dashboard() {
     () => items.find((item) => String(item.source_project_id) === selectedId) || items[0],
     [items, selectedId]
   )
-  const chatProjects = useMemo(
-    () => items.map((item) => ({ id: String(item.source_project_id), title: item.title })),
-    [items]
-  )
 
   return (
     <DashboardShell page={page} setPage={setPage} busy={busy} onRefresh={runPipeline} status={status} notificationCount={notifications.length}>
@@ -256,7 +251,6 @@ export function Dashboard() {
           </div>
         </div>
       )}
-      <OracleChat projects={chatProjects} />
     </DashboardShell>
   )
 }
