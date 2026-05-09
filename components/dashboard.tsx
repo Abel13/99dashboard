@@ -86,6 +86,10 @@ export function Dashboard() {
     await load()
   }
 
+  function updateLocalOpportunity(updated: Opportunity) {
+    setItems((current) => current.map((item) => String(item.source_project_id) === String(updated.source_project_id) ? updated : item))
+  }
+
   async function updateReaction(item: Opportunity, reaction: string) {
     const current = new Set<string>(item.abel_feedback?.reactions || [])
     if (item.effective_status === 'liked') current.add('liked')
@@ -179,6 +183,7 @@ export function Dashboard() {
               onAction={updateOpportunity}
               onReact={updateReaction}
               onOpen={(id) => setSelectedId(id)}
+              onProjectUpdated={updateLocalOpportunity}
             />
           )}
           {page === 'profile' && <Profile items={items} />}

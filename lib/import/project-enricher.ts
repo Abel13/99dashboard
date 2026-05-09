@@ -8,7 +8,15 @@ function pickTable(html: string, label: string) {
   const raw = html.match(re)?.[1] || ''
   return clean(htmlToText(raw, { wordwrap: false }))
 }
-function first(regex: RegExp, text: string) { return clean(text.match(regex)?.[1] || '') }
+function first(regex: RegExp, text: string) { return clean(htmlToText(text.match(regex)?.[1] || '', { wordwrap: false })) }
+function badTitle(title = '') {
+  const t = clean(title)
+  return !t || t.length > 180 || /Pesquisar|Freelancers|Projetos\s+Freelancers|Login|Cadastre-se|Descrição do Projeto/i.test(t)
+}
+function titleFromSlug(url = '') {
+  const slug = url.split('/project/')[1]?.split('?')[0]?.replace(/-\d+\/?$/, '') || ''
+  return slug.split('-').filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+}
 function dateFromMillis(value?: string) { const n = Number(value || 0); return n ? new Date(n).toISOString() : null }
 function descriptionFromHtml(html: string) {
   const text = htmlToText(html, { wordwrap: false, selectors: [{ selector: 'a', options: { ignoreHref: true } }] })
@@ -52,7 +60,10 @@ export async function enrichProjectAndClient(item: Opportunity): Promise<Opportu
   if (!item.project_url) return item
   try {
     const html = await fetchHtml(item.project_url)
-    const title = first(/<h1[^>]*>([\s\S]*?)<\/h1>/i, html) || item.title
+    const h1Title = first(/<h1[^>]*>([\s\S]*?)<\/h1>/i, html)
+    const metaTitle = first(/<title[^>]*>([\s\S]*?)<\/title>/i, html).split('|')[0]?.trim()
+    const title = !badTitle(h1Title) ? h1Title : (!badTitle(metaTitle) ? metaTitle : titleFromSlug(item.project_url))
+    const canonicalTitle = badTitle(item.title) ? (title || item.title) : item.title
     const description = descriptionFromHtml(html)
     const clientMatch = html.match(/<a\s+href="(\/user\/[^"]+)"[^>]*>\s*<span class="name">([\s\S]*?)<\/span>/i)
     const clientScore = html.match(/data-score="([0-9.]+)"/i)?.[1]
@@ -73,7 +84,8 @@ export async function enrichProjectAndClient(item: Opportunity): Promise<Opportu
     }
     return {
       ...item,
-      title: title || item.title,
+      // Preserve the canonical title imported from Gmail unless a previous enrichment polluted it.
+      title: canonicalTitle,
       category: page_details.category || item.category,
       level: page_details.level || item.level,
       budget: page_details.budget || item.budget,

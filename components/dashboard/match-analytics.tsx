@@ -25,6 +25,7 @@ export function MatchAnalytics({
   onAction,
   onReact,
   onOpen,
+  onProjectUpdated,
 }: {
   items: Opportunity[]
   selected: Opportunity
@@ -34,8 +35,8 @@ export function MatchAnalytics({
   onAction: OpportunityAction
   onReact: OpportunityReaction
   onOpen: OpenOpportunity
+  onProjectUpdated?: (item: Opportunity) => void
 }) {
-  const [insight, setInsight] = useState<any>(null)
   const [localSelected, setLocalSelected] = useState<Opportunity | null>(null)
   const [loading, setLoading] = useState(false)
   const [enriching, setEnriching] = useState(false)
@@ -43,6 +44,7 @@ export function MatchAnalytics({
   if (!selected) return <div className="empty glass">Nenhum projeto selecionado.</div>
 
   const current: Opportunity = localSelected && String(localSelected.source_project_id) === String(selected.source_project_id) ? localSelected : selected
+  const insight = current.match_insight || null
   const ds = current.decision_support || {}
   const calc = ds.pricing_calc || {}
   const price = ds.price_suggested_effective ?? ds.price_suggested
@@ -63,7 +65,10 @@ export function MatchAnalytics({
       body: JSON.stringify({ projectId: current.source_project_id }),
     })
     const data = await response.json()
-    setInsight(data.insight)
+    if (data.item) {
+      setLocalSelected(data.item)
+      onProjectUpdated?.(data.item)
+    }
     setLoading(false)
   }
 
@@ -75,7 +80,10 @@ export function MatchAnalytics({
       body: JSON.stringify({ projectId: current.source_project_id }),
     })
     const data = await response.json().catch(() => ({}))
-    if (data.item) setLocalSelected(data.item)
+    if (data.item) {
+      setLocalSelected(data.item)
+      onProjectUpdated?.(data.item)
+    }
     setEnriching(false)
   }
 
@@ -91,7 +99,6 @@ export function MatchAnalytics({
           value={selectedId}
           onChange={(event) => {
             setSelectedId(event.target.value)
-            setInsight(null)
             setLocalSelected(null)
           }}
         >
