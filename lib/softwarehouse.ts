@@ -63,6 +63,12 @@ export async function readImportState() {
   return data?.payload || {}
 }
 
+export async function readImportRuns(limit = 10) {
+  const { data, error } = await requireSupabase().from('import_runs').select('*').order('created_at', { ascending: false }).limit(limit)
+  if (error) throw error
+  return data || []
+}
+
 export async function updateImportState(patch: Record<string, any>) {
   const current = await readImportState()
   const next = { ...current, ...patch, updated_at: new Date().toISOString() }
