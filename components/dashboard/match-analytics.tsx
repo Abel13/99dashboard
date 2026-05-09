@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft, ChevronRight, ClipboardList, Database, Loader2, Sparkles } from 'lucide-react'
+import { Banknote, CalendarCheck2, ChevronLeft, ChevronRight, ClipboardList, Database, Eye, Loader2, Sparkles, Tag, Users } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -202,19 +202,30 @@ export function MatchAnalytics({
       <section className="analysisSections">
         <Panel title="Dados do 99Freelas">
           <span className="sectionSource source99">Origem: projeto importado</span>
-          <div className="factGrid">
-            <Fact label="Projeto" value={`#${current.source_project_id}`} />
-            <Fact label="Categoria" value={current.category || current.page_details?.subcategory || '—'} />
-            <Fact label="Status workflow" value={workflowStatusLabel(selected)} />
-            <Fact label="Status 99Freelas" value={current.page_details?.project_status_99freelas || '—'} />
-            <Fact label="Dados baixados" value={fmtMaybe(current.page_details?.enriched_at)} />
-            <Fact label="IA analisou" value={fmtMaybe(current.match_insight_generated_at)} />
-            <Fact label="Orçamento" value={current.page_details?.budget || current.budget || '—'} />
-            <Fact label="Nível" value={current.page_details?.level || current.level || '—'} />
-            <Fact label="Propostas" value={current.page_details?.proposals ?? '—'} />
-            <Fact label="Interessados" value={current.page_details?.interested ?? '—'} />
-            <Fact label="Valor mínimo" value={current.page_details?.minimum_value || '—'} />
-            <Fact label="Visibilidade" value={current.page_details?.visibility || '—'} />
+          <div className="freelasSnapshot">
+            <div className="freelasMainMetric budget">
+              <Banknote size={20} />
+              <span>Orçamento</span>
+              <b>{current.page_details?.budget || current.budget || '—'}</b>
+              <small>mínimo {current.page_details?.minimum_value || '—'}</small>
+            </div>
+            <div className="freelasMainMetric">
+              <ClipboardList size={20} />
+              <span>Propostas</span>
+              <b>{current.page_details?.proposals ?? '—'}</b>
+              <small>{current.page_details?.visibility || 'visibilidade não informada'}</small>
+            </div>
+            <div className="freelasMainMetric">
+              <Users size={20} />
+              <span>Interessados</span>
+              <b>{current.page_details?.interested ?? '—'}</b>
+              <small>{current.page_details?.level || current.level || 'nível não informado'}</small>
+            </div>
+          </div>
+          <div className="freelasMetaGrid">
+            <VisualFact icon={<Tag size={16} />} label="Projeto" value={`#${current.source_project_id}`} detail={current.category || current.page_details?.subcategory || '99Freelas'} />
+            <VisualFact icon={<Eye size={16} />} label="Status" value={current.page_details?.project_status_99freelas || '—'} detail={`Workflow: ${workflowStatusLabel(selected)}`} />
+            <VisualFact icon={<CalendarCheck2 size={16} />} label="Dados" value={fmtMaybe(current.page_details?.enriched_at)} detail={`IA: ${fmtMaybe(current.match_insight_generated_at)}`} />
           </div>
           <div className="descriptionBox">
             <div className="descriptionMeta">
@@ -329,11 +340,15 @@ function RequirementTable({ requirements, hours, net, gross, fee }: { requiremen
   )
 }
 
-function Fact({ label, value }: { label: string; value: any }) {
+function VisualFact({ icon, label, value, detail }: { icon: React.ReactNode; label: string; value: any; detail?: string }) {
   return (
-    <div className="factItem">
-      <span>{label}</span>
-      <b>{value}</b>
+    <div className="visualFact">
+      <span>{icon}</span>
+      <div>
+        <small>{label}</small>
+        <b>{value}</b>
+        {detail && <em>{detail}</em>}
+      </div>
     </div>
   )
 }
