@@ -115,9 +115,9 @@ export async function enrichProjectAndClient(item: Opportunity): Promise<Opportu
       category: page_details.category || item.category,
       level: page_details.level || item.level,
       budget: page_details.budget || item.budget,
-      full_description: description && description.length > (item.full_description || '').length ? description : item.full_description,
+      full_description: description || item.full_description,
       description_preview: (description || item.full_description || item.description_preview || '').slice(0, 260),
-      page_details,
+      page_details: { ...page_details, description_source: description ? 'project_page' : (item.full_description ? 'previous_import' : 'email_preview') },
       client_details: client,
     }
   } catch (err: any) {
