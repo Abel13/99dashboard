@@ -129,9 +129,12 @@ export function MatchAnalytics({
             <Fact label="Projeto" value={`#${selected.source_project_id}`} />
             <Fact label="Categoria" value={selected.category || selected.page_details?.subcategory || '—'} />
             <Fact label="Status atual" value={workflowStatusLabel(selected)} />
+            <Fact label="Orçamento" value={selected.page_details?.budget || selected.budget || '—'} />
+            <Fact label="Nível" value={selected.page_details?.level || selected.level || '—'} />
             <Fact label="Propostas" value={selected.page_details?.proposals ?? '—'} />
             <Fact label="Interessados" value={selected.page_details?.interested ?? '—'} />
-            <Fact label="Exclusivo" value={selected.page_details?.is_exclusive ? 'Sim' : 'Não'} />
+            <Fact label="Valor mínimo" value={selected.page_details?.minimum_value || '—'} />
+            <Fact label="Visibilidade" value={selected.page_details?.visibility || '—'} />
           </div>
           <p className="summary sourceText">{(selected.full_description || selected.description_preview || 'Sem descrição importada.').slice(0, 520)}{(selected.full_description || '').length > 520 ? '…' : ''}</p>
         </Panel>
@@ -173,7 +176,9 @@ export function MatchAnalytics({
               </div>
               <div>
                 <h4>Cliente</h4>
-                <p className="summary shortText">{insight?.client_reputation || 'Sem reputação suficiente. Validar histórico, briefing, concorrência e velocidade de resposta.'}</p>
+                <p className="summary shortText"><b>{selected.client_details?.name || 'Cliente não identificado'}</b>{selected.client_details?.url && <> · <a target="_blank" href={selected.client_details.url}>abrir perfil</a></>}</p>
+                <div className="chips"><span className="chip">Nota {selected.client_details?.rating ?? selected.client_details?.score ?? '—'}</span><span className="chip">{selected.client_details?.reviews ?? '—'} avaliações</span><span className="chip">{selected.client_details?.completed_projects ?? '—'} projetos</span></div>
+                <p className="summary shortText">{insight?.client_reputation || selected.client_details?.about_preview || 'Sem reputação suficiente. Validar histórico, briefing, concorrência e velocidade de resposta.'}</p>
               </div>
               <div>
                 <h4>Base de preço</h4>
