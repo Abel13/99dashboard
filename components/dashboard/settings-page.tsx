@@ -54,7 +54,8 @@ export function SettingsPage({
             <div>
               <StatusLine label="Gmail OAuth" ok={!!gmail.configured} detail={gmail.configured ? 'Credenciais presentes no .env' : 'Configure GMAIL_CLIENT_ID, SECRET e REFRESH_TOKEN no .env'} />
               <p><b>Query usada:</b> {gmail.query || settings.gmail_query}</p>
-              <p><b>Última importação:</b> {fmtDate(gmail.last_import_at)} · {gmail.last_ok === false ? 'falhou' : 'ok/sem erro'}</p>
+              <p><b>Automático:</b> {gmail.auto_import_enabled ? `ligado · a cada ${gmail.auto_import_interval_minutes || settings.gmail_auto_import_interval_minutes || 15} min` : 'desligado'}{gmail.scheduler?.enabled ? ' · scheduler ativo' : ''}</p>
+              <p><b>Última importação:</b> {fmtDate(gmail.last_import_at)} · {gmail.last_trigger ? `${gmail.last_trigger} · ` : ''}{gmail.last_ok === false ? 'falhou' : 'ok/sem erro'}</p>
               <p><b>Resultado:</b> {gmail.last_found ?? 0} encontrados · {gmail.last_parsed ?? 0} parseados · {gmail.last_unique_projects ?? '—'} projetos únicos</p>
               <p><b>Banco:</b> {gmail.last_inserted ?? '—'} inseridos · {gmail.last_updated ?? '—'} atualizados · {gmail.last_duplicate_in_run ?? 0} duplicados no run</p>
               {gmail.last_error && <p className="errorText"><b>Erro:</b> {gmail.last_error}</p>}
@@ -110,9 +111,16 @@ export function SettingsPage({
           <p className="summary">A query fica no Supabase; as credenciais ficam no `.env`.</p>
         </Panel>
 
+        <Panel title="Importação automática">
+          <label className="pill"><input type="checkbox" checked={!!settings.gmail_auto_import_enabled} onChange={(event) => patch('gmail_auto_import_enabled', event.target.checked)} /> Atualizar Gmail automaticamente</label>
+          <label className="fieldLabel">Intervalo em minutos<input className="input" type="number" min="5" step="5" value={settings.gmail_auto_import_interval_minutes || 15} onChange={(event) => patch('gmail_auto_import_interval_minutes', Number(event.target.value))} /></label>
+          <p className="summary">Quando ligado, o backend chama a mesma importação do botão no intervalo configurado. Mínimo: 5 minutos.</p>
+          {gmail.scheduler?.last_error && <p className="errorText"><b>Erro do scheduler:</b> {gmail.scheduler.last_error}</p>}
+        </Panel>
+
         <Panel title="Segurança / automação">
           <StatusLine label="Token API/cron" ok={!!settings.dashboard_api_token_configured} detail={settings.dashboard_api_token_configured ? 'Configurado no .env' : 'Configure DASHBOARD_API_TOKEN no .env'} />
-          <p className="summary">Esse token protege chamadas externas como importação Gmail.</p>
+          <p className="summary">Esse token protege chamadas externas. A importação automática interna não precisa chamar endpoint externo.</p>
         </Panel>
       </section>
 

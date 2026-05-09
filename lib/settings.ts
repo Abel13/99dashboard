@@ -15,6 +15,8 @@ export type AppSettings = {
   gmail_refresh_token: string
   gmail_configured: boolean
   gmail_query: string
+  gmail_auto_import_enabled: boolean
+  gmail_auto_import_interval_minutes: number
   dashboard_api_token: string
   dashboard_api_token_configured: boolean
 }
@@ -34,6 +36,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   gmail_refresh_token: process.env.GMAIL_REFRESH_TOKEN || '',
   gmail_configured: Boolean(process.env.GMAIL_CLIENT_ID && process.env.GMAIL_CLIENT_SECRET && process.env.GMAIL_REFRESH_TOKEN),
   gmail_query: process.env.GMAIL_LABEL_OR_QUERY || '(from:99freelas.com.br OR from:abel.o.d@outlook.com) newer_than:7d (99freelas OR 99Freelas)',
+  gmail_auto_import_enabled: /^(1|true|yes|on)$/i.test(process.env.GMAIL_AUTO_IMPORT_ENABLED || 'false'),
+  gmail_auto_import_interval_minutes: Number(process.env.GMAIL_AUTO_IMPORT_INTERVAL_MINUTES || 15),
   dashboard_api_token: process.env.DASHBOARD_API_TOKEN || process.env.AUTO_IMPORT_CRON_SECRET || '',
   dashboard_api_token_configured: Boolean(process.env.DASHBOARD_API_TOKEN || process.env.AUTO_IMPORT_CRON_SECRET),
 }
@@ -68,6 +72,8 @@ export async function getAppSettings(options?: { redact?: boolean }): Promise<Ap
   settings.hourly_rate = Number(settings.hourly_rate || 130)
   settings.platform_fee_pct = Number(settings.platform_fee_pct || 0.2)
   settings.profile_efficiency_pct = Number(settings.profile_efficiency_pct || 0)
+  settings.gmail_auto_import_enabled = Boolean(settings.gmail_auto_import_enabled)
+  settings.gmail_auto_import_interval_minutes = Math.max(5, Number(settings.gmail_auto_import_interval_minutes || 15))
   return options?.redact ? redactSettings(settings) : settings
 }
 

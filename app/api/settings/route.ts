@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { DEFAULT_SETTINGS, getAppSettings, redactSettings, saveAppSettings } from '@/lib/settings'
+import { ensureGmailImportScheduler } from '@/lib/import/gmail-scheduler'
 
 export async function GET() {
   try {
@@ -20,7 +21,8 @@ export async function POST(req: NextRequest) {
   try {
     const patch = await req.json()
     const settings = await saveAppSettings(patch)
-    return NextResponse.json({ ok: true, settings: redactSettings(settings) })
+    const scheduler = await ensureGmailImportScheduler()
+    return NextResponse.json({ ok: true, settings: redactSettings(settings), scheduler })
   } catch (err: any) {
     return NextResponse.json({ ok: false, error: err.message || String(err) }, { status: 500 })
   }
