@@ -2,15 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { parseGmailRaw } from '@/lib/import/gmail-parser'
 import { enrichOpportunity } from '@/lib/pricing'
 import { updateImportState, upsertOpportunity } from '@/lib/softwarehouse'
+import { getAppSettings } from '@/lib/settings'
 
-function authorized(req: NextRequest){
-  const secret = process.env.AUTO_IMPORT_CRON_SECRET || process.env.DASHBOARD_API_TOKEN
+function authorized(req: NextRequest, secret?: string){
   return !secret || secret === 'change-me' || req.headers.get('authorization') === `Bearer ${secret}` || req.nextUrl.searchParams.get('token') === secret
 }
-async function accessToken(){
-  const client_id = process.env.GMAIL_CLIENT_ID
-  const client_secret = process.env.GMAIL_CLIENT_SECRET
-  const refresh_token = process.env.GMAIL_REFRESH_TOKEN
+async function accessToken(settings: any){
+  const client_id = settings.gmail_client_id
+  const client_secret = settings.gmail_client_secret
+  const refresh_token = settings.gmail_refresh_token
   if(!client_id || !client_secret || !refresh_token) throw new Error('Gmail OAuth env ausente: GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET e GMAIL_REFRESH_TOKEN')
   const res = await fetch('https://oauth2.googleapis.com/token', { method:'POST', headers:{'content-type':'application/x-www-form-urlencoded'}, body:new URLSearchParams({ client_id, client_secret, refresh_token, grant_type:'refresh_token' }) })
   if(!res.ok) throw new Error(`Falha ao renovar token Gmail: ${res.status} ${await res.text()}`)
@@ -23,10 +23,11 @@ async function gmailFetch(token:string, url:string){
   return res.json()
 }
 export async function POST(req: NextRequest){
-  if(!authorized(req)) return NextResponse.json({error:'unauthorized'},{status:401})
-  const query = process.env.GMAIL_LABEL_OR_QUERY || 'from:(99freelas.com.br) newer_than:7d'
+  const settings = await getAppSettings()
+  if(!authorized(req, settings.dashboard_api_token)) return NextResponse.json({error:'unauthorized'},{status:401})
+  const query = settings.gmail_query || 'from:(99freelas.com.br) newer_than:7d'
   try{
-    const token = await accessToken()
+    const token = await accessToken(settings)
     const list = await gmailFetch(token, `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(query)}&maxResults=25`)
     const messages = list.messages || []
     let parsed = 0, saved = 0

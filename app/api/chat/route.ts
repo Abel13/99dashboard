@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getOpportunities } from '@/lib/softwarehouse'
-
-const MODEL = process.env.CHAT_AI_MODEL || process.env.AI_PRICING_MODEL || 'gpt-4o-mini'
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+import { getAppSettings } from '@/lib/settings'
 
 type ChatMessage = { role: 'user' | 'assistant' | 'system'; content: string }
 
@@ -32,7 +30,7 @@ function compactOpportunity(item: any, detailed = false) {
   }
 }
 
-function systemPrompt(projects: any[]) {
+function systemPrompt(projects: any[], settings: any) {
   return `Você é Oracle, agente do Softwarehouse de Abel.
 
 Tom e comportamento:
@@ -46,7 +44,7 @@ Tom e comportamento:
 - Prioridades de Abel: mobile multiplataforma, websites, software desktop.
 - Aceita se pagar bem: backend, dados, agentes de IA, WordPress/Elementor só como landing simples/editável e bem delimitada.
 - Tende a descartar: manutenção/migração/SEO técnico/plugin/erro crítico/WooCommerce/legado WordPress; apostas/cassino/automação de jogo salvo decisão explícita.
-- Valor-hora: R$ 130/h. Taxa plataforma: 20%. Preço ao cliente deve considerar gross-up: líquido ÷ 0,80.
+- Valor-hora: R$ ${settings.hourly_rate}/h. Taxa plataforma: ${Math.round(Number(settings.platform_fee_pct || 0.2)*100)}%. Preço ao cliente deve considerar gross-up: líquido ÷ ${(1-Number(settings.platform_fee_pct || 0.2)).toFixed(2)}.
 
 Regra crítica de raciocínio:
 - Os campos em "heuristic_reference_do_not_copy" são apenas uma referência do sistema antigo.
@@ -59,8 +57,8 @@ Quando Abel pedir horas/estimativa/preço, responda obrigatoriamente com:
 1. Leitura curta do escopo real.
 2. Quebra por blocos de trabalho em tabela Markdown: bloco, horas mín, horas máx, observação.
 3. Total de horas mín/máx e horas sugeridas.
-4. Cálculo líquido: horas sugeridas × R$ 130/h + margem de risco.
-5. Preço ao cliente com taxa: líquido ÷ 0,80.
+4. Cálculo líquido: horas sugeridas × R$ ${settings.hourly_rate}/h + margem de risco.
+5. Preço ao cliente com taxa: líquido ÷ ${(1-Number(settings.platform_fee_pct || 0.2)).toFixed(2)}.
 6. Principais riscos que podem aumentar horas.
 7. Perguntas que reduziriam incerteza.
 
@@ -76,7 +74,8 @@ function looksLikeEstimationRequest(messages: ChatMessage[]) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!OPENAI_API_KEY) return NextResponse.json({ error: 'OPENAI_API_KEY não configurada' }, { status: 500 })
+  const settings = await getAppSettings()
+  if (!settings.openai_api_key) return NextResponse.json({ error: 'OpenAI não configurada em Configurações' }, { status: 500 })
   const body = await req.json()
   const messages = (body.messages || []) as ChatMessage[]
   const selectedProjectId = body.projectId ? String(body.projectId) : ''
@@ -95,10 +94,10 @@ export async function POST(req: NextRequest) {
     : []
 
   const payload = {
-    model: MODEL,
+    model: settings.chat_ai_model || settings.ai_pricing_model || 'gpt-4o-mini',
     temperature: 0.45,
     messages: [
-      { role: 'system', content: systemPrompt(projects.map((p: any, idx: number) => compactOpportunity(p, idx === 0 && !!selectedProjectId))) },
+      { role: 'system', content: systemPrompt(projects.map((p: any, idx: number) => compactOpportunity(p, idx === 0 && !!selectedProjectId)), settings) },
       ...estimationNudge,
       ...messages.slice(-12).map(m => ({ role: m.role, content: m.content })),
     ],
@@ -106,7 +105,7 @@ export async function POST(req: NextRequest) {
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
-    headers: { authorization: `Bearer ${OPENAI_API_KEY}`, 'content-type': 'application/json' },
+    headers: { authorization: `Bearer ${settings.openai_api_key}`, 'content-type': 'application/json' },
     body: JSON.stringify(payload),
   })
   if (!res.ok) return NextResponse.json({ error: await res.text() }, { status: res.status })

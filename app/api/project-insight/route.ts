@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getOpportunities } from '@/lib/softwarehouse'
-
-const MODEL = process.env.CHAT_AI_MODEL || process.env.AI_PRICING_MODEL || 'gpt-4o-mini'
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+import { getAppSettings } from '@/lib/settings'
 
 function fallback(item: any) {
   const ds = item.decision_support || {}
@@ -25,7 +23,8 @@ export async function POST(req: NextRequest) {
   const data = await getOpportunities()
   const item = data.items.find((i: any) => String(i.source_project_id) === String(projectId))
   if (!item) return NextResponse.json({ error: 'Projeto não encontrado' }, { status: 404 })
-  if (!OPENAI_API_KEY) return NextResponse.json({ insight: fallback(item), fallback: true })
+  const settings = await getAppSettings()
+  if (!settings.openai_api_key) return NextResponse.json({ insight: fallback(item), fallback: true })
 
   const prompt = `Você é Oracle, consultora técnica/comercial do Softwarehouse. Gere um painel analítico para o projeto 99Freelas abaixo.
 Responda SOMENTE JSON válido no formato:
@@ -44,8 +43,8 @@ Projeto: ${JSON.stringify(item).slice(0, 12000)}`
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
-    headers: { authorization: `Bearer ${OPENAI_API_KEY}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ model: MODEL, temperature: 0.25, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] }),
+    headers: { authorization: `Bearer ${settings.openai_api_key}`, 'content-type': 'application/json' },
+    body: JSON.stringify({ model: settings.chat_ai_model || settings.ai_pricing_model || 'gpt-4o-mini', temperature: 0.25, response_format: { type: 'json_object' }, messages: [{ role: 'user', content: prompt }] }),
   })
   if (!res.ok) return NextResponse.json({ insight: fallback(item), fallback: true, error: await res.text() })
   const json = await res.json()

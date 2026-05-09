@@ -49,30 +49,25 @@ Portas não-default:
 - Inbucket: `55424`
 - Analytics: `55427`
 
-## Gmail
+## Configurações operacionais
 
-Configure:
+Depois de subir o app, use o menu **Configurações** para salvar no Supabase:
 
-```env
-GMAIL_CLIENT_ID=...
-GMAIL_CLIENT_SECRET=...
-GMAIL_REFRESH_TOKEN=...
-GMAIL_LABEL_OR_QUERY=from:(99freelas.com.br) newer_than:7d
-```
+- usuário do perfil 99Freelas;
+- preço por hora;
+- taxa da plataforma;
+- modelos de IA;
+- chave OpenAI;
+- credenciais OAuth do Gmail;
+- query/label do Gmail;
+- token de cron/API.
 
-Importar:
+O `.env` fica apenas como bootstrap mínimo para conectar no Supabase.
+
+Importar Gmail após configurar o token no painel:
 
 ```bash
-curl -X POST "http://localhost:3000/api/import/gmail?token=$AUTO_IMPORT_CRON_SECRET"
-```
-
-## IA
-
-```env
-AI_PRICING_ENABLED=true
-AI_PRICING_MODEL=gpt-4o-mini
-CHAT_AI_MODEL=gpt-4o-mini
-OPENAI_API_KEY=sk-...
+curl -X POST "http://localhost:3000/api/import/gmail?token=SEU_TOKEN_CONFIGURADO"
 ```
 
 A precificação considera valor-hora, taxa da plataforma, risco, complexidade, tecnologia, funcionalidades, integrações, segurança, deploy e testes.
