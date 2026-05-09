@@ -1,51 +1,153 @@
 'use client'
+
 import { useEffect, useMemo, useState } from 'react'
-import { BarChart3, Check, Copy, ExternalLink, Gauge, Heart, LayoutDashboard, LayoutGrid, List, Loader2, RefreshCw, Search, Send, Settings, SlidersHorizontal, Sparkles, ThumbsDown, User, XCircle } from 'lucide-react'
-import { brl, dt } from '@/lib/utils'
-import { useDashboardStore } from '@/store/dashboard-store'
-import { Button } from './ui/button'
-import { ThemeToggle } from './theme-toggle'
+import { Loader2 } from 'lucide-react'
 import { OracleChat } from './oracle-chat'
+import { useDashboardStore } from '@/store/dashboard-store'
+import { DashboardShell } from './dashboard/shell'
+import { Explorer } from './dashboard/explorer'
+import { MatchAnalytics } from './dashboard/match-analytics'
+import { Overview } from './dashboard/overview'
+import { Profile } from './dashboard/profile'
+import { SettingsPage } from './dashboard/settings-page'
+import { scoreOf, statusOf } from './dashboard/helpers'
+import type { DashboardPage, Opportunity } from './dashboard/types'
 
-type Opportunity = any
-type Page = 'dashboard'|'explorer'|'analytics'|'profile'|'settings'
-const statuses = [['new','Novo'],['review','Revisar'],['liked','Gostei'],['discarded','Descartado'],['prepare_proposal','Preparar proposta'],['proposal_sent','Proposta enviada'],['won','Ganhou'],['lost','Perdeu'],['preparar_proposta','Preparar proposta (sug.)'],['caso_a_caso','Caso a caso'],['descartar','Descartar (sug.)']]
-const nav: [Page, any, string][] = [['dashboard',LayoutDashboard,'Dashboard'],['explorer',Search,'Project Explorer'],['analytics',BarChart3,'Match Analytics'],['profile',User,'Profile'],['settings',Settings,'Configurações']]
-function statusKind(status:string){ if(['liked','won','proposal_sent'].includes(status)) return 'ok'; if(['lost','discarded','descartar'].includes(status)) return 'bad'; if(['review','prepare_proposal','preparar_proposta','caso_a_caso'].includes(status)) return 'warn'; return '' }
-function fmtDate(value?: string){ if(!value) return 'Nunca'; const d=new Date(value); return Number.isNaN(d.getTime()) ? value : d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) }
-function words(text=''){return (text.toLowerCase().match(/[a-záàâãéêíóôõúç0-9+#.]{3,}/g)||[])}
-function topTerms(items:Opportunity[], limit=8){const stop=new Set('para com uma que por como dos das mais projeto sistema cliente precisa será criar desenvolvimento aplicação aplicativo site web mobile integração dados fazer esta este voce você pelo pela dentro sobre todos onde qual quais'.split(' ')); const map=new Map<string,number>(); items.forEach(i=>words(`${i.title} ${i.full_description||''}`).forEach(w=>{if(!stop.has(w)) map.set(w,(map.get(w)||0)+1)})); return [...map.entries()].sort((a,b)=>b[1]-a[1]).slice(0,limit)}
+export function Dashboard() {
+  const [items, setItems] = useState<Opportunity[]>([])
+  const [status, setStatus] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [busy, setBusy] = useState('')
+  const [toast, setToast] = useState('')
+  const [page, setPage] = useState<DashboardPage>('dashboard')
+  const [view, setView] = useState<'list' | 'cards'>('list')
+  const [selectedId, setSelectedId] = useState('')
+  const [importing, setImporting] = useState(false)
+  const {
+    query,
+    minScore,
+    statuses: activeStatuses,
+    setQuery,
+    setMinScore,
+    toggleStatus,
+    clearStatuses,
+  } = useDashboardStore()
 
-export function Dashboard(){
-  const [items,setItems]=useState<Opportunity[]>([]); const [status,setStatus]=useState<any>(null); const [loading,setLoading]=useState(true); const [busy,setBusy]=useState(''); const [toast,setToast]=useState('')
-  const [page,setPage]=useState<Page>('dashboard'); const [view,setView]=useState<'list'|'cards'>('list'); const [selectedId,setSelectedId]=useState(''); const [importing,setImporting]=useState(false)
-  const {query,minScore,statuses:activeStatuses,setQuery,setMinScore,toggleStatus,clearStatuses}=useDashboardStore()
-  async function load(){setLoading(true); const [r,s]=await Promise.all([fetch('/api/opportunities',{cache:'no-store'}), fetch('/api/status',{cache:'no-store'})]); const data=await r.json(); const next=data.items||[]; setItems(next); if(!selectedId&&next[0]) setSelectedId(String(next[0].source_project_id)); if(s.ok) setStatus(await s.json()); setLoading(false)}
-  useEffect(()=>{load()},[])
-  async function runPipeline(){setBusy('pipeline'); const r=await fetch('/api/pipeline',{method:'POST'}); setBusy(''); setToast(r.ok?'Atualização solicitada':'Erro ao atualizar'); await load()}
-  async function importGmail(){setImporting(true); const r=await fetch('/api/import/gmail',{method:'POST'}); const j=await r.json().catch(()=>({})); setImporting(false); setToast(r.ok?`Gmail: ${j.saved ?? 0} salvos / ${j.found ?? 0} encontrados`:`Erro Gmail: ${j.error || r.status}`); await load()}
-  async function action(item:Opportunity,status:string,reason:string,outcome?:string){setBusy(item.source_project_id+status); const r=await fetch('/api/feedback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({projectId:item.source_project_id,status,reason,outcome})}); setBusy(''); setToast(r.ok?'Status salvo':'Erro ao salvar status'); await load()}
-  const filtered=useMemo(()=>items.filter(i=>{const q=(query||'').toLowerCase(); const text=`${i.title} ${i.full_description||''} ${i.effective_status||''}`.toLowerCase(); const score=Number(i.analysis?.final_score||0); const st=i.effective_status||i.decision_support?.status_manual||'review'; return (!q||text.includes(q)) && score>=minScore && (!activeStatuses.length||activeStatuses.includes(st))}),[items,query,minScore,activeStatuses])
-  const selected=useMemo(()=>items.find(i=>String(i.source_project_id)===selectedId)||items[0], [items,selectedId])
-  const chatProjects = useMemo(() => items.map(i => ({ id: String(i.source_project_id), title: i.title })), [items])
-  return <div className="appShell"><aside className="sidebar glass"><div className="brand"><span>Oracle</span><b>99Dashboard</b></div><nav>{nav.map(([id,Icon,label])=><button key={id} className={page===id?'active':''} onClick={()=>setPage(id)}><Icon size={17}/>{label}</button>)}</nav><div className="sideFoot"><ThemeToggle/><Button variant="primary" onClick={runPipeline} disabled={!!busy}>{busy==='pipeline'?<Loader2 size={16}/>:<RefreshCw size={16}/>} Atualizar</Button></div></aside><main className="container pageContent"><Header page={page}/><StatusStrip status={status}/>{loading?<div className="empty glass"><Loader2/> Carregando...</div>:<>{page==='dashboard'&&<Overview items={items} onOpen={(id)=>{setSelectedId(id);setPage('analytics')}}/>}{page==='explorer'&&<Explorer filtered={filtered} view={view} setView={setView} query={query} setQuery={setQuery} minScore={minScore} setMinScore={setMinScore} activeStatuses={activeStatuses} toggleStatus={toggleStatus} clearStatuses={clearStatuses} busy={busy} onAction={action}/>} {page==='analytics'&&<MatchAnalytics items={items} selected={selected} selectedId={selectedId} setSelectedId={setSelectedId}/>} {page==='profile'&&<Profile items={items}/>} {page==='settings'&&<SettingsPage status={status} onImportGmail={importGmail} importing={importing}/>}</>}{toast&&<div className="toast">{toast}</div>}<OracleChat projects={chatProjects}/></main></div>
+  async function load() {
+    setLoading(true)
+    const [opportunitiesResponse, statusResponse] = await Promise.all([
+      fetch('/api/opportunities', { cache: 'no-store' }),
+      fetch('/api/status', { cache: 'no-store' }),
+    ])
+    const data = await opportunitiesResponse.json()
+    const nextItems = data.items || []
+    setItems(nextItems)
+    setSelectedId((current) => current || (nextItems[0] ? String(nextItems[0].source_project_id) : ''))
+    if (statusResponse.ok) setStatus(await statusResponse.json())
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
+  async function runPipeline() {
+    setBusy('pipeline')
+    const response = await fetch('/api/pipeline', { method: 'POST' })
+    setBusy('')
+    setToast(response.ok ? 'Atualização solicitada' : 'Erro ao atualizar')
+    await load()
+  }
+
+  async function importGmail() {
+    setImporting(true)
+    const response = await fetch('/api/import/gmail', { method: 'POST' })
+    const body = await response.json().catch(() => ({}))
+    setImporting(false)
+    setToast(response.ok ? `Gmail: ${body.saved ?? 0} salvos / ${body.found ?? 0} encontrados` : `Erro Gmail: ${body.error || response.status}`)
+    await load()
+  }
+
+  async function updateOpportunity(item: Opportunity, status: string, reason: string, outcome?: string) {
+    setBusy(item.source_project_id + status)
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ projectId: item.source_project_id, status, reason, outcome }),
+    })
+    setBusy('')
+    setToast(response.ok ? 'Status salvo' : 'Erro ao salvar status')
+    await load()
+  }
+
+  const filtered = useMemo(
+    () =>
+      items.filter((item) => {
+        const search = (query || '').toLowerCase()
+        const text = `${item.title} ${item.full_description || ''} ${item.effective_status || ''}`.toLowerCase()
+        const status = statusOf(item)
+        return (
+          (!search || text.includes(search)) &&
+          scoreOf(item) >= minScore &&
+          (!activeStatuses.length || activeStatuses.includes(status))
+        )
+      }),
+    [items, query, minScore, activeStatuses]
+  )
+
+  const selected = useMemo(
+    () => items.find((item) => String(item.source_project_id) === selectedId) || items[0],
+    [items, selectedId]
+  )
+  const chatProjects = useMemo(
+    () => items.map((item) => ({ id: String(item.source_project_id), title: item.title })),
+    [items]
+  )
+
+  return (
+    <DashboardShell page={page} setPage={setPage} busy={busy} onRefresh={runPipeline} status={status}>
+      {loading ? (
+        <div className="empty glass">
+          <Loader2 /> Carregando...
+        </div>
+      ) : (
+        <>
+          {page === 'dashboard' && (
+            <Overview
+              items={items}
+              onOpen={(id) => {
+                setSelectedId(id)
+                setPage('analytics')
+              }}
+            />
+          )}
+          {page === 'explorer' && (
+            <Explorer
+              filtered={filtered}
+              view={view}
+              setView={setView}
+              query={query}
+              setQuery={setQuery}
+              minScore={minScore}
+              setMinScore={setMinScore}
+              activeStatuses={activeStatuses}
+              toggleStatus={toggleStatus}
+              clearStatuses={clearStatuses}
+              busy={busy}
+              onAction={updateOpportunity}
+              onOpen={(id) => {
+                setSelectedId(id)
+                setPage('analytics')
+              }}
+            />
+          )}
+          {page === 'analytics' && <MatchAnalytics items={items} selected={selected} selectedId={selectedId} setSelectedId={setSelectedId} />}
+          {page === 'profile' && <Profile items={items} />}
+          {page === 'settings' && <SettingsPage status={status} onImportGmail={importGmail} importing={importing} />}
+        </>
+      )}
+      {toast && <div className="toast">{toast}</div>}
+      <OracleChat projects={chatProjects} />
+    </DashboardShell>
+  )
 }
-function Header({page}:{page:Page}){const title=nav.find(n=>n[0]===page)?.[2]; return <section className="topbar"><div><span className="kicker">Oracle · Softwarehouse</span><h1>{title}</h1></div></section>}
-function StatusStrip({status}:{status:any}){ const s=status?.import_state||{}; return <section className="statusStrip glass"><span><b>Última busca Gmail</b>{fmtDate(s.last_import_at)} · {s.last_import_ok===false?'falhou':`${s.last_saved ?? 0} salvos / ${s.last_found ?? 0} encontrados`}</span><span><b>Atualização</b>{fmtDate(s.updated_at)}</span>{s.last_query&&<span><b>Filtro</b>{s.last_query}</span>}</section> }
-function Overview({items,onOpen}:{items:Opportunity[];onOpen:(id:string)=>void}){const total=items.length; const potential=items.filter(i=>!['lost','discarded','descartar'].includes(i.effective_status||'')).reduce((s,i)=>s+Number(i.decision_support?.price_suggested_effective??i.decision_support?.price_suggested??0),0); const cats=[...items.reduce((m,i)=>m.set(i.category||'Sem categoria',(m.get(i.category||'Sem categoria')||0)+1),new Map<string,number>()).entries()].sort((a,b)=>b[1]-a[1]).slice(0,6); const top=[...items].sort((a,b)=>Number(b.analysis?.final_score||0)-Number(a.analysis?.final_score||0)).slice(0,5); const terms=topTerms(items,10); return <><section className="metrics"><Metric label="Potencial de ganho" value={brl(potential)}/><Metric label="Projetos" value={total}/><Metric label="Ticket médio" value={brl(total?potential/total:0)}/><Metric label="Matches fortes" value={items.filter(i=>Number(i.analysis?.final_score||0)>=75).length}/></section><section className="dashboardGrid"><Panel title="Quantidade por categoria">{cats.map(([c,n])=><Bar key={c} label={c} value={n} max={Math.max(...cats.map(x=>x[1]))}/>)}</Panel><Panel title="Principais matches">{top.map(i=><button className="matchRow" key={i.source_project_id} onClick={()=>onOpen(String(i.source_project_id))}><span>#{i.source_project_id} · {i.title}</span><b>{i.analysis?.final_score||0}</b></button>)}</Panel><Panel title="Top skills demand"> <div className="chips">{terms.map(([t,n])=><span className="chip" key={t}>{t} · {n}</span>)}</div></Panel><Panel title="Insights"><ul className="softList"><li>Priorize projetos com score alto, escopo claro e baixa concorrência.</li><li>Projetos em review precisam de resposta do cliente antes de preço fechado.</li><li>Use Match Analytics para revisar risco e proposta antes de enviar.</li></ul></Panel></section></>}
-function Explorer(props:any){return <><section className="toolbar glass"><input className="input" value={props.query} onChange={(e:any)=>props.setQuery(e.target.value)} placeholder="Buscar por título, descrição ou status..."/><select className="select" value={props.minScore} onChange={(e:any)=>props.setMinScore(Number(e.target.value))}><option value={0}>Qualquer score</option><option value={40}>Score &gt;= 40</option><option value={60}>Score &gt;= 60</option><option value={75}>Score &gt;= 75</option></select><div className="viewToggle"><button className={props.view==='list'?'active':''} onClick={()=>props.setView('list')}><List size={16}/></button><button className={props.view==='cards'?'active':''} onClick={()=>props.setView('cards')}><LayoutGrid size={16}/></button></div><details className="filterDetails"><summary>Filtros de status {props.activeStatuses.length?`(${props.activeStatuses.length})`:''}</summary><div className="statusBar">{statuses.map(([s,l])=><label className="pill" key={s}><input type="checkbox" checked={props.activeStatuses.includes(s)} onChange={()=>props.toggleStatus(s)}/>{l}</label>)}<Button onClick={props.clearStatuses}>Limpar</Button></div></details></section>{props.view==='list'?<OpportunityTable items={props.filtered} busy={props.busy} onAction={props.onAction}/>:<section className="grid">{props.filtered.map((item:Opportunity)=><Card key={item.source_project_id} item={item} busy={props.busy} onAction={props.onAction}/>)}</section>}</>}
-function MatchAnalytics({items,selected,selectedId,setSelectedId}:{items:Opportunity[];selected:Opportunity;selectedId:string;setSelectedId:(v:string)=>void}){const [insight,setInsight]=useState<any>(null); const [loading,setLoading]=useState(false); if(!selected) return <div className="empty glass">Nenhum projeto selecionado.</div>; const ds=selected.decision_support||{}; const calc=ds.pricing_calc||{}; const price=ds.price_suggested_effective??ds.price_suggested; const risk=Math.round(Number(calc.risk_pct||0)*100); const hoursAvg=Math.round(Number(calc.hours_avg||0)); async function gen(){setLoading(true); const r=await fetch('/api/project-insight',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({projectId:selected.source_project_id})}); const j=await r.json(); setInsight(j.insight); setLoading(false)} return <><section className="toolbar glass"><select className="select" value={selectedId} onChange={e=>{setSelectedId(e.target.value);setInsight(null)}}>{items.map(i=><option key={i.source_project_id} value={i.source_project_id}>#{i.source_project_id} · {i.title}</option>)}</select><Button variant="primary" onClick={gen} disabled={loading}>{loading?<Loader2 size={15}/>:<Sparkles size={15}/>} Atualizar painel IA</Button></section><section className="matchHero glass"><div><span className="eyebrow">#{selected.source_project_id} · {selected.category||'99Freelas'}</span><h2>{selected.title}</h2><div className="chips"><span className={`chip ${statusKind(selected.effective_status||ds.status_manual||'review')}`}>{selected.effective_status_label||selected.effective_status||ds.status_manual||'review'}</span><span className="chip">{effortTag(ds)}</span><span className="chip warn">{hoursAvg||'—'}h média</span><span className="chip">{ds.delivery_estimate||'prazo ?'}</span></div></div><div className="score big">{selected.analysis?.final_score||0}</div></section><section className="analyticsKpis"><Metric label="Preço sugerido" value={moneyShort(price)}/><Metric label="Líquido alvo" value={moneyShort(calc.net_target_suggested)}/><Metric label="Horas estimadas" value={`${calc.hours_min||'—'}–${calc.hours_max||'—'}h`}/><Metric label="Risco" value={`${risk||'—'}%`}/></section><section className="dashboardGrid"><Panel title="Complexidade técnica"><Complexity value={insight?.complexity_score ?? Math.min(100,Number(calc.hours_avg||50)/2)} label={insight?.complexity_label||effortTag(ds)}/><div className="signalTiles"><div><b>{riskTag(ds)}</b><span>risco comercial/técnico</span></div><div><b>{ds.ai_pricing?.used?'IA usada':'Heurística'}</b><span>base da análise</span></div></div></Panel><Panel title="Requisitos técnicos"><ul className="softList compactList">{(insight?.technical_requirements||ds.questions_to_client||[]).slice(0,7).map((r:string)=><li key={r}>{r}</li>)}</ul></Panel><Panel title="Preço, prazo e base"><div className="priceBlock"><b>{moneyShort(price)}</b><span>{ds.delivery_estimate||insight?.duration_estimate||'Prazo a confirmar'}</span></div><p className="summary">{insight?.pricing_basis||ds.pricing_note||'Sem base registrada.'}</p><Button onClick={()=>navigator.clipboard.writeText(ds.proposal_draft||'')}>Copiar rascunho de proposta</Button></Panel><Panel title="Riscos que merecem pergunta"><ul className="softList compactList">{(insight?.risks||ds.ai_pricing?.risks||['Escopo, integrações e acesso a ambientes precisam ser confirmados.']).slice(0,6).map((r:string)=><li key={r}>{r}</li>)}</ul></Panel><Panel title="Análise do cliente"><p className="summary">{insight?.client_reputation||'Sem dados reputacionais suficientes. Verifique histórico, avaliações, clareza do briefing, concorrência e velocidade de resposta antes de enviar proposta.'}</p></Panel><Panel title="Resumo objetivo"><p className="summary">{(selected.full_description||selected.description_preview||'').slice(0,520)}{(selected.full_description||'').length>520?'…':''}</p></Panel></section></>}
-function Profile({items}:{items:Opportunity[]}){const terms=topTerms(items,18); const [skills,setSkills]=useState<any>(null); const [profile,setProfile]=useState<any>(null); const [username,setUsername]=useState('abeldutraui'); const [loading,setLoading]=useState(false); const [profileLoading,setProfileLoading]=useState(false); async function loadSkills(){setLoading(true); const r=await fetch('/api/skill-suggestions',{cache:'no-store'}); const j=await r.json(); setSkills(j); setLoading(false)} async function loadProfile(refresh=false){setProfileLoading(true); const r=await fetch(`/api/profile?username=${encodeURIComponent(username)}${refresh?'&refresh=1':''}`,{cache:'no-store'}); const j=await r.json(); if(j.profile){setProfile(j.profile); setUsername(j.profile.username)} setProfileLoading(false)} useEffect(()=>{fetch('/api/settings',{cache:'no-store'}).then(r=>r.json()).then(j=>{if(j.settings?.profile_username) setUsername(j.settings.profile_username)}).finally(()=>setTimeout(()=>loadProfile(false),0)); loadSkills()},[]); const inventory=(profile?.skills?.length?profile.skills:terms.map(([t])=>t)); return <section className="dashboardGrid"><Panel title="Perfil 99Freelas"><label className="fieldLabel">Usuário 99Freelas<input className="input" value={username} onChange={e=>setUsername(e.target.value)} placeholder="abeldutraui"/></label><div className="actions"><Button onClick={()=>loadProfile(true)} disabled={profileLoading}>{profileLoading?<Loader2 size={15}/>:<RefreshCw size={15}/>} Importar perfil</Button>{profile?.url&&<a className="btn secondary" target="_blank" href={profile.url}><ExternalLink size={15}/> Abrir perfil</a>}</div>{profile&&<div className="profileBox"><h3>{profile.name}</h3><p>{profile.headline}</p><div className="chips"><span className="chip">Nota {profile.rating ?? '—'}</span><span className="chip">{profile.reviews ?? 0} avaliações</span><span className="chip">Ranking {profile.ranking ?? '—'}</span><span className="chip">{profile.completed_projects ?? 0} projetos concluídos</span><span className="chip">Desde {profile.registered_since ?? '—'}</span></div></div>}</Panel><Panel title="Resumo importado"><p className="summary">{profile?.about || 'Clique em Importar perfil para buscar os dados públicos do 99Freelas.'}</p>{profile?.experience&&<details className="details"><summary>Experiência profissional</summary><p className="summary">{profile.experience}</p></details>}</Panel><Panel title="Precificação"><Metric label="Preço por hora" value="R$ 130/h"/><Metric label="Taxa da plataforma" value="20%"/><Metric label="Gross-up" value="÷ 0,80"/></Panel><Panel title="Eficiência do perfil"><Complexity value={Math.min(100, 45 + (profile?.skills?.length||0)*4 + (profile?.completed_projects||0)*5)} label="Calculada com perfil + matches"/><p className="summary">Considera inventário importado, aderência às demandas e sinais públicos do perfil.</p></Panel><Panel title="Inventário de habilidades importado"><div className="chips">{inventory.map((t:string)=><span className="chip" key={t}>{t}</span>)}</div></Panel><Panel title="Áreas de interesse"><div className="chips">{(profile?.interests||[]).map((t:string)=><span className="chip" key={t}>{t}</span>)}</div></Panel><Panel title="Sugestão dinâmica de novas habilidades"><div className="panelHeadInline"><p className="summary">Gerada pela IA interna a partir das oportunidades, perfil importado e padrões de demanda.</p><Button onClick={loadSkills} disabled={loading}>{loading?<Loader2 size={15}/>:<Sparkles size={15}/>} Atualizar</Button></div>{skills?.source&&<span className={`chip ${skills.source==='ai'?'ok':'warn'}`}>{skills.source==='ai'?'IA interna':'fallback local'}</span>}<ul className="skillSuggestList">{(skills?.suggestions||[]).map((x:any)=><li key={x.name}><div><b>{x.name}</b><span className={`chip ${x.priority==='alta'?'ok':x.priority==='baixa'?'':'warn'}`}>{x.priority}</span></div><p>{x.reason}</p><small>{x.action}</small></li>)}</ul></Panel><Panel title="Sinais de demanda aprendidos"><div className="chips">{(skills?.demand_terms||terms.map(([skill,demand])=>({skill,demand}))).slice(0,18).map((x:any)=><span className="chip" key={x.skill}>{x.skill} · {x.demand}</span>)}</div></Panel></section>}
-function SettingsPage({status,onImportGmail,importing}:{status:any;onImportGmail:()=>void;importing:boolean}){const s=status?.import_state||{}; const gmail=status?.gmail||{}; const runs=status?.import_runs||[]; const [settings,setSettings]=useState<any>(null); const [saving,setSaving]=useState(false); const [msg,setMsg]=useState(''); useEffect(()=>{fetch('/api/settings',{cache:'no-store'}).then(r=>r.json()).then(j=>setSettings(j.settings||{}))},[]); function patch(k:string,v:any){setSettings((x:any)=>({...x,[k]:v}))} async function save(){setSaving(true); setMsg(''); const r=await fetch('/api/settings',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(settings)}); setSaving(false); setMsg(r.ok?'Configurações salvas no Supabase':'Erro ao salvar configurações')} if(!settings) return <div className="empty glass"><Loader2/> Carregando configurações...</div>; return <><section className="dashboardGrid"><Panel title="Importação Gmail"><div className="gmailImportHero"><div><StatusLine label="Gmail OAuth" ok={!!gmail.configured} detail={gmail.configured?'Credenciais presentes no .env':'Configure GMAIL_CLIENT_ID, SECRET e REFRESH_TOKEN no .env'}/><p><b>Query usada:</b> {gmail.query || settings.gmail_query}</p><p><b>Última importação:</b> {fmtDate(gmail.last_import_at)} · {gmail.last_ok===false?'falhou':'ok/sem erro'}</p><p><b>Resultado:</b> {gmail.last_found ?? 0} encontrados · {gmail.last_parsed ?? 0} parseados · {gmail.last_unique_projects ?? '—'} projetos únicos</p><p><b>Banco:</b> {gmail.last_inserted ?? '—'} inseridos · {gmail.last_updated ?? '—'} atualizados · {gmail.last_duplicate_in_run ?? 0} duplicados no run</p>{gmail.last_error&&<p className="errorText"><b>Erro:</b> {gmail.last_error}</p>}<p className="summary">A lista abaixo mostra exatamente quais e-mails o Gmail devolveu para essa query e por que cada um foi salvo ou ignorado.</p></div><Button variant="primary" onClick={onImportGmail} disabled={importing}>{importing?<Loader2 size={15}/>:<RefreshCw size={15}/>} Importar Gmail agora</Button></div></Panel><Panel title="Como a importação funciona"><ol className="softList"><li>Usa credenciais OAuth do Gmail que ficam somente no `.env`.</li><li>Busca mensagens pela query configurada.</li><li>Baixa cada mensagem em formato raw direto da Gmail API.</li><li>Parseia o MIME em memória, sem salvar `.eml`.</li><li>Extrai dados do projeto 99Freelas.</li><li>Enriquece com heurística/IA conforme configuração.</li><li>Faz upsert da oportunidade no Supabase.</li></ol></Panel><Panel title="Histórico recente de importações"><div className="runList">{runs.length?runs.map((r:any)=><div className="runItem" key={r.id}><span className={`dot ${r.ok?'ok':'bad'}`}/><div><b>{fmtDate(r.created_at)} · {r.kind}</b><small>{r.saved ?? 0} upserts / {r.found ?? 0} encontrados · {r.query}</small>{r.error&&<small className="errorText">{r.error}</small>}</div></div>):<p className="summary">Nenhum run registrado ainda.</p>}</div></Panel><Panel title="Últimos e-mails avaliados"><div className="runList">{(s.last_message_trace||[]).length?(s.last_message_trace||[]).map((m:any)=><div className="runItem" key={m.id}><span className={`dot ${m.project_id?'ok':m.error?'bad':''}`}/><div><b>{m.project_id?`#${m.project_id} · ${m.title}`:(m.subject||m.id)}</b><small>{m.date?fmtDate(m.date):''} · {m.from}</small><small>{m.project_id?'Salvo/atualizado no Supabase':(m.skipped_reason||m.error||'Ignorado')}</small></div></div>):<p className="summary">Nenhum detalhe de e-mail registrado ainda. Rode uma importação para preencher.</p>}</div></Panel><Panel title="Profile"><label className="fieldLabel">Usuário 99Freelas<input className="input" value={settings.profile_username||''} onChange={e=>patch('profile_username',e.target.value)} placeholder="abeldutraui"/></label><label className="fieldLabel">Eficiência do perfil (%)<input className="input" type="number" value={settings.profile_efficiency_pct||0} onChange={e=>patch('profile_efficiency_pct',Number(e.target.value))}/></label></Panel><Panel title="OpenAI / IA"><StatusLine label="OpenAI key" ok={!!settings.openai_configured} detail={settings.openai_configured?'Configurada no .env':'Configure OPENAI_API_KEY no .env'}/><label className="pill"><input type="checkbox" checked={!!settings.ai_pricing_enabled} onChange={e=>patch('ai_pricing_enabled',e.target.checked)}/> Usar IA na precificação</label><label className="fieldLabel">Modelo chat<input className="input" value={settings.chat_ai_model||''} onChange={e=>patch('chat_ai_model',e.target.value)} /></label><label className="fieldLabel">Modelo pricing<input className="input" value={settings.ai_pricing_model||''} onChange={e=>patch('ai_pricing_model',e.target.value)} /></label></Panel><Panel title="Precificação"><label className="fieldLabel">Preço por hora<input className="input" type="number" value={settings.hourly_rate||130} onChange={e=>patch('hourly_rate',Number(e.target.value))}/></label><label className="fieldLabel">Taxa da plataforma<input className="input" type="number" step="0.01" value={settings.platform_fee_pct||0.2} onChange={e=>patch('platform_fee_pct',Number(e.target.value))}/></label><p className="summary">Regra atual: líquido alvo ÷ {(1-Number(settings.platform_fee_pct||0.2)).toFixed(2)}.</p></Panel><Panel title="Gmail query"><label className="fieldLabel">Query/label<input className="input" value={settings.gmail_query||''} onChange={e=>patch('gmail_query',e.target.value)}/></label><p className="summary">A query fica no Supabase; as credenciais ficam no `.env`.</p></Panel><Panel title="Segurança / automação"><StatusLine label="Token API/cron" ok={!!settings.dashboard_api_token_configured} detail={settings.dashboard_api_token_configured?'Configurado no .env':'Configure DASHBOARD_API_TOKEN no .env'}/><p className="summary">Esse token protege chamadas externas como importação Gmail.</p></Panel></section><section className="saveBar glass"><Button variant="primary" onClick={save} disabled={saving}>{saving?<Loader2 size={15}/>:<SlidersHorizontal size={15}/>} Salvar configurações</Button>{msg&&<span>{msg}</span>}</section></>}
-function OpportunityTable({items,busy,onAction}:{items:Opportunity[];busy:string;onAction:(item:Opportunity,status:string,reason:string,outcome?:string)=>void}){return <section className="listView glass"><div className="tableHead explorerHead"><span>Score</span><span>Projeto</span><span>Status</span><span>Esforço</span><span>Risco</span><span>IA</span><span>Preço</span><span>Ações</span></div>{items.map(item=><TableRow key={item.source_project_id} item={item} busy={busy} onAction={onAction}/>)}</section>}
-function effortTag(ds:any){const h=Number(ds.pricing_calc?.hours_avg||0); if(!h) return 'Esforço ?'; if(h<32) return 'Baixo'; if(h<80) return 'Médio'; if(h<160) return 'Alto'; return 'Enterprise'}
-function riskTag(ds:any){const r=Number(ds.pricing_calc?.risk_pct||0); if(!r) return 'Risco ?'; if(r<.25) return 'Risco baixo'; if(r<.38) return 'Risco médio'; return 'Risco alto'}
-function moneyShort(v:any){const n=Number(v||0); if(!n) return '—'; if(n>=1000) return `R$ ${(n/1000).toFixed(n>=10000?0:1)}k`.replace('.',','); return brl(n)}
-function TableRow({item,busy,onAction}:{item:Opportunity;busy:string;onAction:(item:Opportunity,status:string,reason:string,outcome?:string)=>void}){const ds=item.decision_support||{}; const status=item.effective_status||ds.status_manual||'review'; const price=ds.price_suggested_effective??ds.price_suggested; async function copyProposal(){await navigator.clipboard.writeText(ds.proposal_draft||'')} return <article className="tableRow explorerRow"><div className="score compact">{item.analysis?.final_score||0}</div><div className="opportunityCell"><div className="eyebrow">#{item.source_project_id} · {item.category||'99Freelas'}</div><h2 className="rowTitle">{item.title}</h2></div><div><span className={`chip ${statusKind(status)}`}>{item.effective_status_label||status}</span></div><div><span className="chip">{effortTag(ds)}</span></div><div><span className={`chip ${riskTag(ds).includes('alto')?'bad':riskTag(ds).includes('médio')?'warn':'ok'}`}>{riskTag(ds).replace('Risco ','')}</span></div><div><span className={`chip ${ds.ai_pricing?.used?'ok':''}`}>{ds.ai_pricing?.used?'Sim':'Não'}</span></div><div className="valueCell single"><b>{moneyShort(price)}</b></div><div className="rowActions"><Button variant="primary" disabled={busy.includes(item.source_project_id)} onClick={()=>onAction(item,'proposal_sent','Abel enviou proposta ao cliente')}><Send size={15}/> Enviada</Button><Button onClick={copyProposal} title="Copiar proposta"><Copy size={15}/></Button>{item.project_url&&<a className="btn secondary iconBtn" target="_blank" href={item.project_url}><ExternalLink size={15}/></a>}<details className="moreActions"><summary>Mais</summary><div><Button onClick={()=>onAction(item,'review','Abel enviou perguntas ao cliente; aguardando respostas')}><Check size={15}/> Perguntas</Button><Button onClick={()=>onAction(item,'liked','Abel gostou da oportunidade')}><Heart size={15}/> Gostei</Button><Button variant="danger" onClick={()=>onAction(item,'discarded','Abel descartou a oportunidade')}><ThumbsDown size={15}/> Descartar</Button><Button variant="danger" onClick={()=>onAction(item,'lost','Projeto perdido/cancelado','lost')}><XCircle size={15}/> Perdido</Button></div></details></div></article>}
-function Card({item,busy,onAction}:{item:Opportunity;busy:string;onAction:(item:Opportunity,status:string,reason:string,outcome?:string)=>void}){const ds=item.decision_support||{}; const pd=item.page_details||{}; const status=item.effective_status||ds.status_manual||'review'; const price=ds.price_suggested_effective??ds.price_suggested; const calc=ds.pricing_calc||{}; async function copyProposal(){await navigator.clipboard.writeText(ds.proposal_draft||'')} return <article className="card glass"><div className="cardHeader"><div><div className="eyebrow">#{item.source_project_id} · {pd.subcategory||item.category||'99Freelas'}</div><h2 className="title">{item.title}</h2></div><div className="score">{item.analysis?.final_score||0}</div></div><p className="summary">{(item.full_description||item.description_preview||'').slice(0,240)}{(item.full_description||'').length>240?'…':''}</p><div className="chips"><span className={`chip ${statusKind(status)}`}>{item.effective_status_label||status}</span>{ds.ai_pricing?.used&&<span className="chip ok">Precificado por IA</span>}<span className="chip">{pd.proposals??'—'} propostas</span><span className="chip">{pd.interested??'—'} interessados</span>{pd.is_exclusive&&<span className="chip warn">Exclusivo até {dt(pd.exclusive_until_estimated)}</span>}</div><div className="decision"><div className="box"><span>Preço sugerido</span><b>{brl(price)}</b></div><div className="box"><span>Líquido alvo</span><b>{brl(calc.net_target_suggested)}</b></div><div className="box"><span>Esforço</span><b>{ds.effort_estimate||'—'}</b></div><div className="box"><span>Prazo</span><b>{ds.delivery_estimate||'—'}</b></div></div><details className="details"><summary>Análise, perguntas e proposta</summary><p className="summary"><b>Precificação:</b> {ds.pricing_note}</p><div className="box"><span>Perguntas ao cliente</span><ol>{(ds.questions_to_client||[]).map((q:string)=><li key={q}>{q}</li>)}</ol></div><pre className="proposal">{ds.proposal_draft}</pre></details><div className="actions"><Button variant="primary" disabled={busy.includes(item.source_project_id)} onClick={()=>onAction(item,'proposal_sent','Abel enviou proposta ao cliente')}><Send size={15}/> Proposta enviada</Button><Button onClick={()=>onAction(item,'review','Abel enviou perguntas ao cliente; aguardando respostas')}><Check size={15}/> Perguntas enviadas</Button><Button onClick={()=>onAction(item,'liked','Abel gostou da oportunidade')}><Heart size={15}/> Gostei</Button><Button variant="danger" onClick={()=>onAction(item,'discarded','Abel descartou a oportunidade')}><ThumbsDown size={15}/> Descartar</Button><Button variant="danger" onClick={()=>onAction(item,'lost','Projeto perdido/cancelado','lost')}><XCircle size={15}/> Perdido</Button><Button onClick={copyProposal}><Copy size={15}/> Copiar</Button>{item.project_url&&<a className="btn secondary" target="_blank" href={item.project_url}><ExternalLink size={15}/> Abrir</a>}</div></article>}
-function Metric({label,value}:{label:string;value:any}){return <div className="metric glass mini"><span>{label}</span><b>{value}</b></div>}
-function Panel({title,children}:{title:string;children:any}){return <section className="panel glass"><h3>{title}</h3>{children}</section>}
-function Bar({label,value,max}:{label:string;value:number;max:number}){return <div className="barLine"><span>{label}</span><div><i style={{width:`${Math.max(8,value/max*100)}%`}}/></div><b>{value}</b></div>}
-function Complexity({value,label}:{value:number;label?:string}){return <div className="complexity"><div><i style={{width:`${Math.min(100,Math.max(0,value))}%`}}/></div><span>{label||`${Math.round(value)} / 100`}</span><small>Correção simples → Complexidade empresarial</small></div>}
-function StatusLine({label,ok,detail}:{label:string;ok:boolean;detail:string}){return <div className="statusLine"><span className={`dot ${ok?'ok':'bad'}`}/><b>{label}</b><small>{detail}</small></div>}
-function Field({label,value}:{label:string;value:string}){return <label className="fieldLabel">{label}<input className="input" defaultValue={value}/></label>}
