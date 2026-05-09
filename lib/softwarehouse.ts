@@ -43,7 +43,8 @@ export async function updateFeedback(projectId: string, patch: Feedback) {
   const sb = requireSupabase()
   const { data: currentRow } = await sb.from('feedback').select('payload').eq('project_id', projectId).maybeSingle()
   const now = new Date().toISOString()
-  const feedback = { ...((currentRow as any)?.payload || {}), ...patch, updated_at: now }
+  const cleanPatch = Object.fromEntries(Object.entries(patch).filter(([, value]) => value !== undefined)) as Feedback
+  const feedback = { ...((currentRow as any)?.payload || {}), ...cleanPatch, updated_at: now }
   const { error } = await sb.from('feedback').upsert({
     project_id: projectId,
     status: feedback.status || null,
