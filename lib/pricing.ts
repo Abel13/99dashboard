@@ -85,17 +85,69 @@ function label(s:string){return ({review:'Revisar',prepare_proposal:'Preparar pr
 function scoreOpportunity(item: Opportunity){ const t=`${item.title} ${item.full_description||''}`.toLowerCase(); let s=50; if(has(t,['app','mobile','site','web','node','react'])) s+=15; if(has(t,['wordpress','cassino','aposta'])) s-=20; if((item.full_description||'').length>600) s+=10; return Math.max(0,Math.min(100,s)) }
 function proposal(item: Opportunity, price: number, est: any){
   const desc = cleanForProposal(item.full_description || item.description_preview || '')
-  const pain = desc.split(/[.!?\n]/).map(x => x.trim()).filter(Boolean)[0] || 'a necessidade descrita no projeto'
-  const focus = est.proposal_angle || est.pricing_note || 'organizar o escopo, desenvolver a solução e entregar com teste e acompanhamento inicial'
-  return `Olá! Vi seu projeto "${item.title}" e entendi que você precisa resolver: ${pain}.\n\nPosso te ajudar com uma entrega objetiva, cuidando de ${focus}. Em vez de uma proposta genérica, minha ideia é já entrar com escopo claro, validar os pontos críticos no início e entregar uma versão funcional, testada e pronta para uso.\n\nO que eu incluiria nesta primeira entrega:\n• alinhamento rápido dos requisitos e prioridades;\n• desenvolvimento da solução principal;\n• integrações/regras de negócio necessárias;\n• testes, ajustes finais e orientação de uso/deploy.\n\nPrazo estimado: ${est.delivery_estimate || delivery(est.hours_min, est.hours_max)}.\nInvestimento de referência: a partir de ${brl(price)}, podendo ajustar após confirmar detalhes do escopo.\n\nPara te passar um valor fechado com segurança, preciso confirmar alguns pontos sobre funcionalidades obrigatórias, integrações e prazo esperado.`
+  const problem = summarizeProblem(item, desc)
+  const tech = relatedExperience(item)
+  const solutionStyle = solutionAdjectives(item)
+  const benefit = mainBenefit(item)
+  const deliveries = proposalDeliveries(item).slice(0, 4)
+  const clientName = safeClientName(item.client_details?.name)
+  const greeting = clientName ? `Olá, ${clientName}. Tudo bem?` : 'Olá, tudo bem?'
+  return `${greeting}\n\nLi a descrição do projeto e entendi que você precisa de ${problem}.\n\nTenho experiência com ${tech} e posso te ajudar criando uma solução ${solutionStyle}, com foco em ${benefit}.\n\nMinha sugestão para o projeto seria:\n${deliveries.map(x => `- ${x}`).join('\n')}\n\nTambém posso te manter atualizado durante o desenvolvimento e entregar uma versão para validação antes da entrega final.\n\nTenho experiência prática com desenvolvimento de aplicações ${tech} e posso te mostrar exemplos do meu trabalho, se desejar.\n\nFico à disposição para conversar melhor sobre os detalhes.\nObrigado.`
 }
 function cleanForProposal(text = '') { return text.replace(/\s+/g, ' ').trim().slice(0, 260) }
+function safeClientName(name = '') {
+  const clean = name.trim()
+  if (!clean || clean.length > 60 || /freelancer|proposta|aprovad|desenvolvedor|projeto/i.test(clean)) return ''
+  return clean
+}
+function summarizeProblem(item: Opportunity, desc: string) {
+  const text = `${item.title}. ${desc}`.toLowerCase()
+  if (has(text, ['contabilidade digital'])) return 'uma plataforma web para organizar e digitalizar processos contábeis'
+  if (has(text, ['landing page'])) return 'uma landing page clara, responsiva e preparada para conversão'
+  if (has(text, ['site', 'website', 'institucional'])) return 'um site profissional para apresentar sua empresa e captar contatos'
+  if (has(text, ['app', 'mobile', 'android', 'ios'])) return 'um aplicativo bem estruturado para atender seus usuários no celular'
+  if (has(text, ['api', 'webhook', 'integração', 'asaas', 'pix'])) return 'uma integração confiável entre sistemas, com automações e tratamento de erros'
+  if (has(text, ['desktop', 'sistema'])) return 'um sistema funcional e bem organizado para apoiar sua operação'
+  return desc ? desc.charAt(0).toLowerCase() + desc.slice(1).replace(/[.?!]$/, '') : 'uma solução bem definida para o escopo descrito'
+}
+function relatedExperience(item: Opportunity) {
+  const text = `${item.title} ${item.full_description || ''} ${item.category || ''}`.toLowerCase()
+  if (has(text, ['mobile', 'app', 'android', 'ios'])) return 'aplicações mobile e integrações com backend'
+  if (has(text, ['landing page', 'site', 'website', 'institucional'])) return 'desenvolvimento web, interfaces responsivas e páginas de conversão'
+  if (has(text, ['api', 'webhook', 'asaas', 'pix', 'integração'])) return 'backend, APIs, webhooks e automações'
+  if (has(text, ['desktop', 'genexus', 'sql'])) return 'sistemas desktop, banco de dados e configuração de ambientes'
+  if (has(text, ['dados', 'dashboard', 'relatório', 'sql'])) return 'sistemas web, dados, dashboards e automações'
+  return 'desenvolvimento de aplicações web e sistemas sob medida'
+}
+function solutionAdjectives(item: Opportunity) {
+  const text = `${item.title} ${item.full_description || ''}`.toLowerCase()
+  if (has(text, ['login', 'portal', 'cliente', 'documento'])) return 'segura, bem estruturada e fácil de evoluir'
+  if (has(text, ['landing page', 'site'])) return 'moderna, responsiva e orientada à conversão'
+  if (has(text, ['api', 'webhook', 'integração'])) return 'robusta, rastreável e preparada para falhas'
+  return 'moderna, organizada e alinhada ao seu objetivo'
+}
+function mainBenefit(item: Opportunity) {
+  const text = `${item.title} ${item.full_description || ''}`.toLowerCase()
+  if (has(text, ['contabilidade', 'processo', 'portal'])) return 'reduzir trabalho manual e melhorar a experiência dos clientes'
+  if (has(text, ['landing page', 'site'])) return 'passar credibilidade e gerar mais contatos'
+  if (has(text, ['api', 'webhook', 'automação'])) return 'automatizar o fluxo e evitar retrabalho operacional'
+  if (has(text, ['dashboard', 'relatório'])) return 'dar clareza aos dados e facilitar decisões'
+  return 'entregar valor rápido com uma base técnica confiável'
+}
+function proposalDeliveries(item: Opportunity) {
+  const text = `${item.title} ${item.full_description || ''}`.toLowerCase()
+  if (has(text, ['landing page'])) return ['estruturação da página com seções claras e persuasivas', 'layout responsivo para desktop e celular', 'formulário/CTA e ajustes finais de publicação', 'orientação para futuras alterações de conteúdo']
+  if (has(text, ['api', 'webhook', 'asaas', 'pix', 'integração'])) return ['mapeamento dos fluxos e regras da integração', 'implementação dos endpoints/webhooks necessários', 'tratamento de erros, logs e testes de homologação', 'documentação simples para operação e manutenção']
+  if (has(text, ['mobile', 'app', 'android', 'ios'])) return ['definição dos fluxos principais do aplicativo', 'desenvolvimento das telas e navegação', 'integração com backend/APIs necessárias', 'versão para validação com testes básicos']
+  if (has(text, ['contabilidade digital', 'portal'])) return ['estrutura do portal com perfis de acesso', 'fluxos principais para clientes e área administrativa', 'organização de documentos/dados conforme o escopo', 'validação guiada antes da entrega final']
+  return ['alinhamento dos requisitos e escopo fechado', 'desenvolvimento da funcionalidade principal', 'testes e ajustes com base na validação', 'entrega organizada com orientação de uso']
+}
 
 async function aiEstimate(item: Opportunity, base: Opportunity, settings: AppSettings) {
   if (!settings.ai_pricing_enabled || !settings.openai_api_key) return null
   const hourlyRate = Number(settings.hourly_rate || 130)
   const fee = Number(settings.platform_fee_pct || 0.2)
-  const prompt = `Você é consultor técnico/comercial do Abel. Estime horas e preço para este projeto 99Freelas.\nRegras: valor-hora R$ ${hourlyRate}; taxa plataforma ${Math.round(fee*100)}%; preço ao cliente = líquido / ${(1-fee).toFixed(2)}.\nNão copie a heurística; decomponha mentalmente riscos, funcionalidades, tecnologia, integrações, segurança, deploy, testes e comunicação.\nConsidere que Abel trabalha com auxílio de IA/coding assistants; estime horas produtivas realistas para esse contexto, não uma fábrica tradicional.\nResponda JSON: {"hours_min":number,"hours_max":number,"risk_pct":number,"effort_estimate":"string","delivery_estimate":"string","pricing_note":"string","proposal_angle":"string","proposal_draft":"string opcional, pitch comercial específico para o pedido do cliente","requirements_breakdown":[{"requirement":"string","hours_min":number,"hours_max":number,"net_value":number}],"questions_to_client":["..."],"risks":["..."],"status_manual":"review|prepare_proposal|discarded"}.\nHeurística de referência: ${JSON.stringify(base.decision_support?.pricing_calc)}\nProjeto: ${JSON.stringify({title:item.title,category:item.category,budget:item.budget,description:item.full_description})}`
+  const prompt = `Você é consultor técnico/comercial do Abel. Estime horas e preço para este projeto 99Freelas.\nRegras: valor-hora R$ ${hourlyRate}; taxa plataforma ${Math.round(fee*100)}%; preço ao cliente = líquido / ${(1-fee).toFixed(2)}.\nNão copie a heurística; decomponha mentalmente riscos, funcionalidades, tecnologia, integrações, segurança, deploy, testes e comunicação.\nConsidere que Abel trabalha com auxílio de IA/coding assistants; estime horas produtivas realistas para esse contexto, não uma fábrica tradicional.\nResponda JSON: {"hours_min":number,"hours_max":number,"risk_pct":number,"effort_estimate":"string","delivery_estimate":"string","pricing_note":"string","proposal_angle":"string","proposal_draft":"string opcional seguindo exatamente este padrão: Olá, [nome se houver]. Tudo bem? / Li a descrição... / Tenho experiência... / Minha sugestão... / Também posso... / Tenho experiência prática... / Fico à disposição... / Obrigado.","requirements_breakdown":[{"requirement":"string","hours_min":number,"hours_max":number,"net_value":number}],"questions_to_client":["..."],"risks":["..."],"status_manual":"review|prepare_proposal|discarded"}.\nNão invente nome do cliente. Se não houver nome confiável, comece com "Olá, tudo bem?".\nHeurística de referência: ${JSON.stringify(base.decision_support?.pricing_calc)}\nProjeto: ${JSON.stringify({title:item.title,category:item.category,budget:item.budget,description:item.full_description})}`
   return openAIJson<any>(prompt, { model: settings.ai_pricing_model, apiKey: settings.openai_api_key })
 }
 

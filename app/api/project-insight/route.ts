@@ -42,13 +42,13 @@ Responda SOMENTE JSON válido no formato:
   "duration_estimate":"estimativa de duração",
   "requirements_breakdown":[{"requirement":"requisito/entregável","hours_min":0,"hours_max":0,"net_value":0}],
   "proposal_angle":"como posicionar a proposta de forma vendível e específica ao pedido",
-  "proposal_draft":"proposta comercial pronta para copiar, específica para o projeto, sem parecer sugestão genérica de MVP",
+  "proposal_draft":"proposta comercial pronta para copiar seguindo este padrão: Olá, [nome se houver]. Tudo bem? / Li a descrição do projeto e entendi que você precisa de... / Tenho experiência com... / Minha sugestão seria: - entrega 1 - entrega 2 - entrega 3 - diferencial / Também posso te manter atualizado... / Tenho experiência prática... / Fico à disposição... Obrigado.",
   "client_reputation":"análise reputacional com os dados disponíveis e o que verificar",},{
   "risks":["..."]
 }
 Considere funcionalidades, tecnologia, integrações, segurança, deploy, testes, clareza, concorrência e risco comercial.
 Não invente nome do cliente: se o nome não estiver claro em client_details, diga que não foi identificado.
-A proposta deve falar do pedido específico do cliente e vender confiança/resultado; evite texto genérico como "vamos fazer um MVP" quando o cliente pediu outra coisa.
+A proposta deve falar do pedido específico do cliente, seguir o padrão definido acima e vender confiança/resultado; evite texto genérico como "vamos fazer um MVP" quando o cliente pediu outra coisa.
 Projeto: ${JSON.stringify(item).slice(0, 12000)}`
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
