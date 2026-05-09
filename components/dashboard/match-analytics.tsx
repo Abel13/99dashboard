@@ -1,7 +1,7 @@
 'use client'
 
-import { ClipboardList, Database, Loader2, Sparkles } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { ChevronLeft, ChevronRight, ClipboardList, Database, Loader2, Sparkles } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   effortTag,
@@ -43,10 +43,17 @@ export function MatchAnalytics({
   const [enriching, setEnriching] = useState(false)
   const [savingProposal, setSavingProposal] = useState(false)
   const [proposalDraft, setProposalDraft] = useState('')
+  const orderedItems = useMemo(
+    () => [...items].sort((a, b) => compareProjectId(a.source_project_id, b.source_project_id)),
+    [items]
+  )
 
   if (!selected) return <div className="empty glass">Nenhum projeto selecionado.</div>
 
   const current: Opportunity = localSelected && String(localSelected.source_project_id) === String(selected.source_project_id) ? localSelected : selected
+  const currentIndex = Math.max(0, orderedItems.findIndex((item) => String(item.source_project_id) === String(current.source_project_id)))
+  const previous = orderedItems[currentIndex - 1]
+  const next = orderedItems[currentIndex + 1]
   const insight = current.match_insight || null
   const ds = current.decision_support || {}
   const calc = ds.pricing_calc || {}
@@ -119,31 +126,44 @@ export function MatchAnalytics({
     setSavingProposal(false)
   }
 
+  function navigateTo(projectId?: string | number) {
+    if (!projectId) return
+    setSelectedId(String(projectId))
+    setLocalSelected(null)
+  }
+
   return (
     <>
-      <section className="toolbar glass">
-        <select
-          className="select"
-          value={selectedId}
-          onChange={(event) => {
-            setSelectedId(event.target.value)
-            setLocalSelected(null)
-          }}
-        >
-          {items.map((item) => (
+      <section className="matchNav glass">
+        <div className="projectStepper" aria-label="Navegação por projetos">
+          <Button className="iconAction" onClick={() => navigateTo(previous?.source_project_id)} disabled={!previous} title="Projeto anterior" aria-label="Projeto anterior">
+            <ChevronLeft size={16} />
+          </Button>
+          <div className="projectPosition">
+            <b>#{current.source_project_id}</b>
+            <span>{orderedItems.length ? `${currentIndex + 1} de ${orderedItems.length}` : '0 de 0'} · ordem por ID</span>
+          </div>
+          <Button className="iconAction" onClick={() => navigateTo(next?.source_project_id)} disabled={!next} title="Próximo projeto" aria-label="Próximo projeto">
+            <ChevronRight size={16} />
+          </Button>
+        </div>
+        <select className="select projectSelect" value={String(current.source_project_id)} onChange={(event) => navigateTo(event.target.value)} aria-label="Selecionar projeto">
+          {orderedItems.map((item) => (
             <option key={item.source_project_id} value={item.source_project_id}>
               #{item.source_project_id} · {item.title}
             </option>
           ))}
         </select>
-        <Button onClick={enrichCurrentProject} disabled={enriching || !current.project_url}>
-          {enriching ? <Loader2 className="loadingIcon" size={15} /> : <Database size={15} />}
-          {current.page_details?.enriched_at ? 'Atualizar dados 99Freelas' : 'Enriquecer dados 99Freelas'}
-        </Button>
-        <Button variant="primary" onClick={generateInsight} disabled={loading}>
-          {loading ? <Loader2 className="loadingIcon" size={15} /> : <Sparkles size={15} />}
-          Atualizar painel IA
-        </Button>
+        <div className="matchNavActions">
+          <Button onClick={enrichCurrentProject} disabled={enriching || !current.project_url}>
+            {enriching ? <Loader2 className="loadingIcon" size={15} /> : <Database size={15} />}
+            {current.page_details?.enriched_at ? 'Atualizar 99Freelas' : 'Enriquecer 99Freelas'}
+          </Button>
+          <Button variant="primary" onClick={generateInsight} disabled={loading}>
+            {loading ? <Loader2 className="loadingIcon" size={15} /> : <Sparkles size={15} />}
+            Atualizar IA
+          </Button>
+        </div>
       </section>
 
       <section className="analysisHeader glass">
@@ -324,4 +344,11 @@ function actionCopy(action: string) {
   if (action === 'Preparar envio') return 'A oportunidade parece pronta para proposta. Revise preço, prazo e copie o rascunho.'
   if (action === 'Acompanhar') return 'A proposta já foi enviada. Monitore retorno, negociação ou perda.'
   return 'O projeto está arquivado ou fora do fluxo ativo.'
+}
+
+function compareProjectId(a: string | number, b: string | number) {
+  const na = Number(a)
+  const nb = Number(b)
+  if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb
+  return String(a).localeCompare(String(b), 'pt-BR', { numeric: true })
 }
