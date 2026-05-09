@@ -25,6 +25,7 @@ export type Opportunity = {
   email_to?: string
   analysis?: any
   page_details?: any
+  client_details?: any
   decision_support?: any
   effective_status?: string
   effective_status_label?: string

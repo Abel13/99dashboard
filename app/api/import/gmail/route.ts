@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseGmailRawDebug } from '@/lib/import/gmail-parser'
 import { enrichOpportunity } from '@/lib/pricing'
+import { enrichProjectAndClient } from '@/lib/import/project-enricher'
 import { updateImportState, upsertOpportunity } from '@/lib/softwarehouse'
 import { getAppSettings } from '@/lib/settings'
 
@@ -47,7 +48,8 @@ export async function POST(req: NextRequest){
         parsed++
         const duplicate = seenProjectIds.has(String(opportunity.source_project_id))
         seenProjectIds.add(String(opportunity.source_project_id))
-        const enriched = await enrichOpportunity(opportunity)
+        const pageEnriched = await enrichProjectAndClient(opportunity)
+        const enriched = await enrichOpportunity(pageEnriched)
         const result = await upsertOpportunity(enriched)
         if (duplicate) duplicateInRun++
         if (result.inserted) inserted++
