@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Bell, Loader2, X } from 'lucide-react'
 import { useDashboardStore } from '@/store/dashboard-store'
 import { DashboardShell } from './dashboard/shell'
@@ -14,17 +15,25 @@ import { scoreOf, workflowStatusOf } from './dashboard/helpers'
 import type { DashboardPage, Opportunity } from './dashboard/types'
 
 const NOTIFICATION_HISTORY_KEY = '99dashboard-import-notifications'
+const queryKeys = {
+  opportunities: ['opportunities'] as const,
+  status: ['status'] as const,
+}
+
+async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(url, { cache: 'no-store', ...init })
+  const body = await response.json().catch(() => ({}))
+  if (!response.ok) throw new Error(body.error || `${response.status} ${response.statusText}`)
+  return body as T
+}
 
 export function Dashboard() {
-  const [items, setItems] = useState<Opportunity[]>([])
-  const [status, setStatus] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const queryClient = useQueryClient()
   const [busy, setBusy] = useState('')
   const [toast, setToast] = useState('')
   const [page, setPage] = useState<DashboardPage>('dashboard')
   const [view, setView] = useState<'list' | 'cards'>('list')
   const [selectedId, setSelectedId] = useState('')
-  const [importing, setImporting] = useState(false)
   const [notifications, setNotifications] = useState<ImportNotification[]>([])
   const [activeNotification, setActiveNotification] = useState<ImportNotification | null>(null)
   const {
@@ -37,23 +46,22 @@ export function Dashboard() {
     clearStatuses,
   } = useDashboardStore()
 
-  async function load() {
-    setLoading(true)
-    const [opportunitiesResponse, statusResponse] = await Promise.all([
-      fetch('/api/opportunities', { cache: 'no-store' }),
-      fetch('/api/status', { cache: 'no-store' }),
-    ])
-    const data = await opportunitiesResponse.json()
-    const nextItems = data.items || []
-    setItems(nextItems)
-    setSelectedId((current) => current || (nextItems[0] ? String(nextItems[0].source_project_id) : ''))
-    if (statusResponse.ok) setStatus(await statusResponse.json())
-    setLoading(false)
-  }
+  const opportunitiesQuery = useQuery({
+    queryKey: queryKeys.opportunities,
+    queryFn: () => fetchJson<{ items: Opportunity[] }>('/api/opportunities'),
+  })
+  const statusQuery = useQuery({
+    queryKey: queryKeys.status,
+    queryFn: () => fetchJson<any>('/api/status'),
+  })
+
+  const items = opportunitiesQuery.data?.items || []
+  const status = statusQuery.data || null
+  const loading = opportunitiesQuery.isLoading || statusQuery.isLoading
 
   useEffect(() => {
-    load()
-  }, [])
+    if (!selectedId && items[0]) setSelectedId(String(items[0].source_project_id))
+  }, [items, selectedId])
 
   useEffect(() => {
     try {
@@ -70,22 +78,57 @@ export function Dashboard() {
     return () => window.clearTimeout(timeout)
   }, [toast])
 
+  function invalidateDashboard() {
+    return Promise.all([
+      queryClient.invalidateQueries({ queryKey: queryKeys.opportunities }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.status }),
+    ])
+  }
+
+  const pipelineMutation = useMutation({
+    mutationFn: () => fetchJson('/api/pipeline', { method: 'POST' }),
+    onMutate: () => setBusy('pipeline'),
+    onSuccess: async () => {
+      setToast('Atualização solicitada')
+      await invalidateDashboard()
+    },
+    onError: (error: Error) => setToast(`Erro ao atualizar: ${error.message}`),
+    onSettled: () => setBusy(''),
+  })
+
+  const gmailMutation = useMutation({
+    mutationFn: () => fetchJson<any>('/api/import/gmail', { method: 'POST' }),
+    onSuccess: async (body) => {
+      if (Number(body.inserted || 0) > 0) pushImportNotification(body)
+      setToast(`Gmail: ${body.saved ?? 0} salvos / ${body.found ?? 0} encontrados`)
+      await invalidateDashboard()
+    },
+    onError: (error: Error) => setToast(`Erro Gmail: ${error.message}`),
+  })
+
+  const feedbackMutation = useMutation({
+    mutationFn: ({ item, body }: { item: Opportunity; body: any }) => {
+      setBusy(String(item.source_project_id) + (body.status || body.reactions?.join(',') || 'feedback'))
+      return fetchJson('/api/feedback', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ projectId: item.source_project_id, ...body }),
+      })
+    },
+    onSuccess: async (_body, variables) => {
+      setToast(variables.body.status ? 'Status salvo' : 'Reação salva')
+      await invalidateDashboard()
+    },
+    onError: (error: Error) => setToast(`Erro ao salvar: ${error.message}`),
+    onSettled: () => setBusy(''),
+  })
+
   async function runPipeline() {
-    setBusy('pipeline')
-    const response = await fetch('/api/pipeline', { method: 'POST' })
-    setBusy('')
-    setToast(response.ok ? 'Atualização solicitada' : 'Erro ao atualizar')
-    await load()
+    pipelineMutation.mutate()
   }
 
   async function importGmail() {
-    setImporting(true)
-    const response = await fetch('/api/import/gmail', { method: 'POST' })
-    const body = await response.json().catch(() => ({}))
-    setImporting(false)
-    if (response.ok && Number(body.inserted || 0) > 0) pushImportNotification(body)
-    setToast(response.ok ? `Gmail: ${body.saved ?? 0} salvos / ${body.found ?? 0} encontrados` : `Erro Gmail: ${body.error || response.status}`)
-    await load()
+    gmailMutation.mutate()
   }
 
   function pushImportNotification(body: any) {
@@ -116,19 +159,14 @@ export function Dashboard() {
   }
 
   async function updateOpportunity(item: Opportunity, status: string, reason: string, outcome?: string) {
-    setBusy(item.source_project_id + status)
-    const response = await fetch('/api/feedback', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ projectId: item.source_project_id, status, reason, outcome }),
-    })
-    setBusy('')
-    setToast(response.ok ? 'Status salvo' : 'Erro ao salvar status')
-    await load()
+    feedbackMutation.mutate({ item, body: { status, reason, outcome } })
   }
 
   function updateLocalOpportunity(updated: Opportunity) {
-    setItems((current) => current.map((item) => String(item.source_project_id) === String(updated.source_project_id) ? updated : item))
+    queryClient.setQueryData<{ items: Opportunity[] }>(queryKeys.opportunities, (current) => ({
+      items: (current?.items || []).map((item) => String(item.source_project_id) === String(updated.source_project_id) ? updated : item),
+    }))
+    void queryClient.invalidateQueries({ queryKey: queryKeys.status })
   }
 
   async function updateReaction(item: Opportunity, reaction: string) {
@@ -137,19 +175,13 @@ export function Dashboard() {
     if (current.has(reaction)) current.delete(reaction)
     else current.add(reaction)
 
-    setBusy(item.source_project_id + reaction)
-    const response = await fetch('/api/feedback', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        projectId: item.source_project_id,
+    feedbackMutation.mutate({
+      item,
+      body: {
         reactions: [...current],
         reason: `Abel atualizou reações: ${[...current].join(', ') || 'nenhuma'}`,
-      }),
+      },
     })
-    setBusy('')
-    setToast(response.ok ? 'Reação salva' : 'Erro ao salvar reação')
-    await load()
   }
 
   const filtered = useMemo(
@@ -231,7 +263,7 @@ export function Dashboard() {
               onOpenExplorer={() => setPage('explorer')}
             />
           )}
-          {page === 'settings' && <SettingsPage status={status} onImportGmail={importGmail} importing={importing} />}
+          {page === 'settings' && <SettingsPage status={status} onImportGmail={importGmail} importing={gmailMutation.isPending} />}
         </>
       )}
       {toast && <div className="toast">{toast}</div>}
